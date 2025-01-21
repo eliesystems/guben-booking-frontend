@@ -8,7 +8,7 @@ import EventCreateEventLocation from "@/views/Bookables/Events/Form/EventLocatio
 import EventCreateEventOrganizer from "@/views/Bookables/Events/Form/EventOrganizer.vue";
 import EventCreateAttendees from "@/views/Bookables/Events/Form/Attendees.vue";
 import EventCreateAgenda from "@/views/Bookables/Events/Form/Agenda.vue";
-import EventCreateAttachements from "@/views/Bookables/Events/Form/Attachments.vue";
+import EventCreateAttachments from "@/views/Bookables/Events/Form/Attachments.vue";
 import EventCreateImages from "@/views/Bookables/Events/Form/Images.vue";
 import SimpleEventCreator from "@/views/Bookables/Events/SimpleEventCreator.vue";
 import Rooms from "@/views/Bookables/Rooms/Rooms.vue";
@@ -326,7 +326,7 @@ const routes = [
       {
         path: "anhaenge",
         name: "event-create-attachments",
-        component: EventCreateAttachements,
+        component: EventCreateAttachments,
         meta: {
           title: "Anhänge",
           requiresAuth: true,

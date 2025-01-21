@@ -4,7 +4,7 @@
       <v-form ref="form" v-model="valid">
         <v-card>
           <v-card-title class="mx-3">
-            <span v-if="selectedBooking._id" class="text-h5"
+            <span v-if="selectedBooking.id" class="text-h5"
               >Buchung bearbeiten</span
             >
             <span v-else class="text-h5">Neue Buchung anlegen</span>
@@ -37,16 +37,16 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col class="col-3">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    hide-details
-                    label="Preis"
-                    v-model.number="selectedBooking.priceEur"
-                    prefix="€"
-                    type="number"
-                  ></v-text-field>
+                <v-col v-if="selectedBooking._populated && workflow.active">
+                  <v-select
+                    :items="workflow.states"
+                    v-model="selectedBooking._populated.workflowStatus"
+                    chips
+                    small-chips
+                    label="Workflow Status"
+                    item-text="name"
+                    item-value="id"
+                  ></v-select>
                 </v-col>
                 <v-col>
                   <v-checkbox
@@ -71,6 +71,17 @@
                 </v-col>
               </v-row>
               <v-row>
+                <v-col class="col-3">
+                  <v-text-field
+                    background-color="accent"
+                    filled
+                    hide-details
+                    label="Preis"
+                    v-model.number="selectedBooking.priceEur"
+                    prefix="€"
+                    type="number"
+                  ></v-text-field>
+                </v-col>
                 <v-col>
                   <v-select
                     :items="activePaymentApps"
@@ -512,6 +523,10 @@ export default {
     bookables: {
       type: Array,
       required: true,
+    },
+    workflow: {
+      type: Object,
+      required: false,
     },
   },
   data() {

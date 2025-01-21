@@ -9,7 +9,7 @@
             :class="currentView === 'list' ? 'active-button' : ''"
           >
             <v-icon left> mdi-list-box-outline </v-icon>
-            Listenansicht</v-btn
+            Liste</v-btn
           >
           <v-btn
             value="calendar"
@@ -17,8 +17,17 @@
             :class="currentView === 'calendar' ? 'active-button' : ''"
           >
             <v-icon left> mdi-calendar-blank-outline </v-icon>
-            Kalenderansicht</v-btn
+            Kalender</v-btn
           >
+          <v-btn
+            v-if="workflow.active"
+            value="kanban"
+            :color="currentView === 'kanban' ? 'secondary' : ''"
+            :class="currentView === 'kanban' ? 'active-button' : ''"
+          >
+            <v-icon left> mdi-table-column </v-icon>
+            Kanban
+          </v-btn>
         </v-btn-toggle>
 
         <v-text-field
@@ -57,6 +66,17 @@
             @open-delete-dialog="onOpenDeleteDialog"
           ></BookingOverviewCalendar>
         </div>
+
+        <div v-else-if="currentView === 'kanban'">
+          <BookingKanban
+            :bookings="filteredBookings"
+            :loading="loading"
+            @open-booking="onOpenBooking"
+            @open-edit-booking="onOpenEditBooking"
+            @commit-booking="commitBooking"
+          >
+          </BookingKanban>
+        </div>
       </v-col>
     </v-row>
     <v-btn
@@ -75,6 +95,7 @@
       :booking="selectedBooking"
       :open="openEditDialog"
       :bookables="bookables"
+      :workflow="workflow"
       @close="onCloseEditDialog"
     />
     <BookingDeleteConformationDialog
@@ -104,6 +125,8 @@ import BookingPermissionService from "@/services/permissions/BookingPermissionSe
 import BookingDetails from "@/components/Booking/BookingDetails.vue";
 import BookingOverviewCalendar from "@/components/Booking/BookingOverviewCalendar.vue";
 import BookingTable from "@/components/Booking/BookingTable.vue";
+import BookingKanban from "@/components/Booking/BookingKanban.vue";
+import ApiWorkflowService from "@/services/api/ApiWorkflowService";
 
 export default {
   components: {
@@ -113,6 +136,7 @@ export default {
     BookingDeleteConformationDialog,
     AdminLayout,
     BookingEdit,
+    BookingKanban,
   },
   data() {
     return {
@@ -146,6 +170,7 @@ export default {
       bookables: [],
       openBookingDialog: false,
       currentView: "list",
+      workflow: [],
     };
   },
   computed: {
@@ -402,10 +427,15 @@ export default {
       };
       this.fuse = new Fuse(this.api.bookings, options);
     },
+    async fetchWorkflow() {
+      this.workflow = await ApiWorkflowService.getWorkflowStates();
+      console.log("w", this.workflow)
+    }
   },
   created() {
     this.fetchBookings();
     this.fetchBookables();
+    this.fetchWorkflow();
   },
 };
 </script>
