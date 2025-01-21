@@ -238,6 +238,11 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col>
+                  <v-switch v-model="selectedTenant.noreplyStarttls" color="primary" label="StartTLS aktivieren" hide-details></v-switch>
+                </v-col>
+              </v-row>
 
               <h3 class="mt-10">Zahlungsbeleg</h3>
               <v-divider class="mb-5"></v-divider>
@@ -624,7 +629,7 @@
                     label="Vorausbuchungen möglich bis"
                     type="number"
                     suffix="Monate"
-                    v-model="selectedTenant.maxBookingMonths"
+                    v-model="selectedTenant.maxBookingAdvanceInMonths"
                   >
                   </v-text-field>
                 </v-col>
