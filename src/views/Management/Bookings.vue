@@ -40,7 +40,7 @@
               @open-edit-booking="onOpenEditBooking"
               @commit-booking="commitBooking"
               @open-delete-dialog="onOpenDeleteDialog"
-              @reject-booking="rejectBooking"
+              @reject-booking="onOpenRejectDialog"
             />
           </v-skeleton-loader>
         </div>
@@ -53,7 +53,7 @@
             @open-booking="onOpenBooking"
             @open-edit-booking="onOpenEditBooking"
             @commit-booking="commitBooking"
-            @reject-booking="rejectBooking"
+            @reject-booking="onOpenRejectDialog"
             @open-delete-dialog="onOpenDeleteDialog"
           ></BookingOverviewCalendar>
         </div>
@@ -82,6 +82,11 @@
       :open="openDeleteDialog"
       @close="onCloseDeleteDialog"
     />
+    <BookingRejectConformationDialog
+      :to-reject="selectedBooking"
+      :open="openRejectDialog"
+      @close="onCloseRejectDialog"
+    />
     <v-dialog v-model="openBookingDialog" max-width="800px">
       <BookingDetails
         :booking="selectedBooking"
@@ -99,6 +104,7 @@ import { mapActions, mapGetters } from "vuex";
 import ApiBookingService from "@/services/api/ApiBookingService";
 import BookingEdit from "@/components/Booking/BookingEdit";
 import BookingDeleteConformationDialog from "@/components/Booking/BookingDeleteConformationDialog";
+import BookingRejectConformationDialog from "@/components/Booking/BookingRejectConformationDialog";
 import ApiBookablesService from "@/services/api/ApiBookablesService";
 import BookingPermissionService from "@/services/permissions/BookingPermissionService";
 import BookingDetails from "@/components/Booking/BookingDetails.vue";
@@ -111,6 +117,7 @@ export default {
     BookingOverviewCalendar,
     BookingDetails,
     BookingDeleteConformationDialog,
+    BookingRejectConformationDialog,
     AdminLayout,
     BookingEdit,
   },
@@ -142,6 +149,7 @@ export default {
       ],
       openEditDialog: false,
       openDeleteDialog: false,
+      openRejectDialog: false,
       selectedBooking: {},
       bookables: [],
       openBookingDialog: false,
@@ -262,7 +270,7 @@ export default {
         });
     },
     rejectBooking(id) {
-      ApiBookingService.rejectBooking(id)
+      ApiBookingService.rejectBooking(id, this.tenant.id)
         .then((response) => {
           if (response.status === 200) {
             this.fetchBookings();
@@ -293,6 +301,13 @@ export default {
       );
       this.openDeleteDialog = true;
     },
+    onOpenRejectDialog(bookingId) {
+      this.selectedBooking = Object.assign(
+        {},
+        this.api.bookings.find((booking) => booking.id === bookingId)
+      );
+      this.openRejectDialog = true;
+    },
     onCloseEditDialog() {
       this.fetchBookings();
       this.openEditDialog = false;
@@ -300,6 +315,10 @@ export default {
     onCloseDeleteDialog() {
       this.fetchBookings();
       this.openDeleteDialog = false;
+    },
+    onCloseRejectDialog() {
+      this.fetchBookings();
+      this.openRejectDialog = false;
     },
     onCloseBookingDialog() {
       this.openBookingDialog = false;

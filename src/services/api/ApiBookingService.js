@@ -71,13 +71,31 @@ export default {
       }
     );
   },
-  rejectBooking(id) {
-    return ApiClient.get(
-      `api/${store.getters["tenants/tenant"].id}/bookings/${id}/reject`,
+  rejectBooking(id, tenantId, reason) {
+    const t = tenantId || store.getters["tenants/tenant"].id;
+    return ApiClient.post(
+      `api/${t}/bookings/${id}/reject`,
+      { reason: reason },
       {
         withCredentials: true,
       }
     );
+  },
+  requestRejectBooking(id, tenantId, reason) {
+    const t = tenantId || store.getters["tenants/tenant"].id;
+    return ApiClient.post(
+      `api/${t}/bookings/${id}/request-reject`,
+      { reason: reason },
+      {
+        withCredentials: true,
+      }
+    );
+  },
+  releaseBookingHook(id, tenantId, hookId) {
+    const t = tenantId || store.getters["tenants/tenant"].id;
+    return ApiClient.get(`api/${t}/bookings/${id}/hooks/${hookId}/release`, {
+      withCredentials: true,
+    });
   },
   deleteBooking(booking) {
     return ApiClient.delete(
