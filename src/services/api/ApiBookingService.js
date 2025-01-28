@@ -131,4 +131,15 @@ export default {
       withCredentials: true,
     });
   },
+  verifyBookingOwnership(tenantId, bookingId, bookingName) {
+    return ApiClient.get(
+      `api/${tenantId}/bookings/${bookingId}/verify-ownership`,
+      {
+        params: {
+          name: bookingName,
+        },
+        withCredentials: true,
+      }
+    );
+  },
 };

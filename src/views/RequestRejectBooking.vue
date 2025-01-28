@@ -120,20 +120,13 @@ export default {
     async sendRejectRequest() {
       try {
         this.fetching = true;
-        const bookingResponse = await ApiBookingService.getBooking(
+        const bookingResponse = await ApiBookingService.verifyBookingOwnership(
+          this.tenantId,
           this.bookingNumber,
-          this.tenantId
+          this.verificationName
         );
 
-        const booking = bookingResponse.data;
-
-        if (
-          !this.verificationName ||
-          booking.name.trim().toLowerCase() !==
-            this.verificationName.trim().toLowerCase()
-        ) {
-          this.showVerificationError = true;
-        } else {
+        if (bookingResponse.status === 200) {
           this.showVerificationError = false;
           const rejectResponse = await ApiBookingService.requestRejectBooking(
             this.bookingNumber,
@@ -146,7 +139,7 @@ export default {
           }
         }
       } catch (error) {
-        console.error(error);
+        this.showVerificationError = true;
       } finally {
         this.fetching = false;
       }
