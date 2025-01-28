@@ -196,48 +196,219 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col class="">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    dense
-                    label="SMTP-Server"
-                    v-model="selectedTenant.noreplyHost"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="col-md-2">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    dense
-                    label="Port"
-                    v-model="selectedTenant.noreplyPort"
-                  ></v-text-field>
+                <v-col>
+                  <h4 class="mb-2">Email-Versandmethoden </h4>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col class="">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    dense
-                    label="Benutzername"
-                    v-model="selectedTenant.noreplyUser"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    dense
-                    label="Passwort"
-                    v-model="selectedTenant.noreplyPassword"
-                    :append-icon="showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showNoreplyPassword = !showNoreplyPassword"
-                    :type="showNoreplyPassword ? 'text' : 'password'"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
+              <v-expansion-panels>
+                <v-expansion-panel>
+                  <v-expansion-panel-header
+                    color="accent"
+                    expand-icon="mdi-menu-down"
+                    class="panel-header"
+                  >
+                    <template v-slot:default="{ open }">
+                      <v-row no-gutters align="center">
+                        <v-col cols="4">
+                          <span class="text-subtitle-1">
+                            SMTP
+                          </span>
+                        </v-col>
+                        <v-col class="col-2">
+                          <v-fade-transition leave-absolute>
+                            <div v-if="!open">
+                              <v-icon
+                                v-if="!selectedTenant.noreplyUseGraphApi"
+                                color="success"
+                                >mdi-check</v-icon
+                              >
+                              <span
+                                v-if="!selectedTenant.noreplyUseGraphApi"
+                                class="ml-2"
+                                >Aktiv</span
+                              >
+
+                              <v-icon
+                                v-if="selectedTenant.noreplyUseGraphApi"
+                                color="error"
+                                >mdi-close</v-icon
+                              >
+                              <span v-if="selectedTenant.noreplyUseGraphApi" class="ml-2"
+                                >Inaktiv</span
+                              >
+                            </div>
+                          </v-fade-transition>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content class="mt-3">
+                    <v-row>
+                      <v-col class="col-12">
+                        <v-switch
+                          v-model="selectedTenant.noreplyUseGraphApi"
+                          color="primary"
+                          hide-details
+                          :true-value="false"
+                          :false-value="true"
+                          label="SMTP als E-Mail-Versandmethode aktivieren"
+                          class="mt-2"
+                        ></v-switch>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col class="">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          label="SMTP-Server"
+                          v-model="selectedTenant.noreplyHost"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col class="col-md-2">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          label="Port"
+                          v-model="selectedTenant.noreplyPort"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col class="">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          hide-details
+                          label="Benutzername"
+                          v-model="selectedTenant.noreplyUser"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col class="">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          hide-details
+                          label="Passwort"
+                          v-model="selectedTenant.noreplyPassword"
+                          :append-icon="
+                            showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'
+                          "
+                          @click:append="
+                            showNoreplyPassword = !showNoreplyPassword
+                          "
+                          :type="showNoreplyPassword ? 'text' : 'password'"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-switch
+                          v-model="selectedTenant.noreplyStarttls"
+                          color="primary"
+                          label="StartTLS aktivieren"
+                          hide-details
+                        ></v-switch>
+                      </v-col>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+                <v-expansion-panel>
+                  <v-expansion-panel-header
+                    color="accent"
+                    expand-icon="mdi-menu-down"
+                    class="panel-header"
+                  >
+                    <template v-slot:default="{ open }">
+                      <v-row no-gutters align="center">
+                        <v-col cols="4">
+                          <span class="text-subtitle-1"> Graph Api (Office365) </span>
+                        </v-col>
+                        <v-col class="col-2">
+                          <v-fade-transition leave-absolute>
+                            <div v-if="!open">
+                              <v-icon
+                                v-if="selectedTenant.noreplyUseGraphApi"
+                                color="success"
+                                >mdi-check</v-icon
+                              >
+                              <span v-if="selectedTenant.noreplyUseGraphApi" class="ml-2"
+                                >Aktiv</span
+                              >
+
+                              <v-icon
+                                v-if="!selectedTenant.noreplyUseGraphApi"
+                                color="error"
+                                >mdi-close</v-icon
+                              >
+                              <span
+                                v-if="!selectedTenant.noreplyUseGraphApi"
+                                class="ml-2"
+                                >Inaktiv</span
+                              >
+                            </div>
+                          </v-fade-transition>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content class="mt-3">
+                    <v-row>
+                      <v-col class="col-12">
+                        <v-switch
+                          v-model="selectedTenant.noreplyUseGraphApi"
+                          color="primary"
+                          hide-details
+                          label="Graph Api als E-Mail-Versandmethode aktivieren"
+                          class="mt-2"
+                        ></v-switch>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col class="">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          label="Tenant ID"
+                          v-model="selectedTenant.noreplyGraphTenantId"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col class="">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          label="Client ID"
+                          v-model="selectedTenant.noreplyGraphClientId"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col class="">
+                        <v-text-field
+                          background-color="accent"
+                          filled
+                          dense
+                          label="Client Secret"
+                          v-model="selectedTenant.noreplyGraphClientSecret"
+                          :append-icon="
+                            showClientSecret ? 'mdi-eye' : 'mdi-eye-off'
+                          "
+                          @click:append="
+                            showClientSecret = !showClientSecret
+                          "
+                          :type="showClientSecret ? 'text' : 'password'"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
 
               <h3 class="mt-10">Zahlungsbeleg</h3>
               <v-divider class="mb-5"></v-divider>
@@ -386,8 +557,12 @@
                               dense
                               label="Schlüssel"
                               v-model="giroCockpitApp.paymentSecret"
-                              :append-icon="showPaymentSecret ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showPaymentSecret = !showPaymentSecret"
+                              :append-icon="
+                                showPaymentSecret ? 'mdi-eye' : 'mdi-eye-off'
+                              "
+                              @click:append="
+                                showPaymentSecret = !showPaymentSecret
+                              "
                               :type="showPaymentSecret ? 'text' : 'password'"
                             ></v-text-field>
                           </v-col>
@@ -601,8 +776,12 @@
                               dense
                               label="Passwort"
                               v-model="parevaSystem.password"
-                              :append-icon="showParevaPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showParevaPassword = !showParevaPassword"
+                              :append-icon="
+                                showParevaPassword ? 'mdi-eye' : 'mdi-eye-off'
+                              "
+                              @click:append="
+                                showParevaPassword = !showParevaPassword
+                              "
                               :type="showParevaPassword ? 'text' : 'password'"
                             ></v-text-field>
                           </v-col>
@@ -624,7 +803,7 @@
                     label="Vorausbuchungen möglich bis"
                     type="number"
                     suffix="Monate"
-                    v-model="selectedTenant.maxBookingMonths"
+                    v-model="selectedTenant.maxBookingAdvanceInMonths"
                   >
                   </v-text-field>
                 </v-col>
@@ -719,6 +898,8 @@ export default {
       showNoreplyPassword: false,
       showPaymentSecret: false,
       showParevaPassword: false,
+      showClientSecret: false,
+      showRefreshToken: false,
       valid: false,
       originTenantId: null,
       inProgress: false,
@@ -866,7 +1047,7 @@ export default {
     },
 
     replacePaymentApps() {
-      const appIds = this.selectedTenant.applications.map(app => app.id);
+      const appIds = this.selectedTenant.applications.map((app) => app.id);
       const invoiceAppExists = appIds.includes("invoice");
       const giroCockpitAppExists = appIds.includes("giroCockpit");
 
@@ -889,7 +1070,7 @@ export default {
       if (!giroCockpitAppExists) {
         this.selectedTenant.applications.push(this.giroCockpitApp);
       }
-    }
+    },
   },
   mounted() {
     this.initializeGiroCockpit();
