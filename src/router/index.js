@@ -447,7 +447,27 @@ const routes = [
       requiresAuth: false,
     },
     props: true,
-  }
+  },
+  {
+    path: "/booking/request-reject/:tenantId",
+    name: "booking-request-reject",
+    component: lazyLoad("RequestRejectBooking"),
+    meta: {
+      title: "Buchung stornieren",
+      requiresAuth: false,
+    },
+    props: true,
+  },
+  {
+    path: "/booking/verify-reject/:tenantId",
+    name: "booking-request-reject",
+    component: lazyLoad("VerifyRejectBooking"),
+    meta: {
+      title: "Stornierung bestätigen",
+      requiresAuth: false,
+    },
+    props: true,
+  },
 ];
 
 const router = new VueRouter({
