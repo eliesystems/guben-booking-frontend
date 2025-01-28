@@ -17,7 +17,7 @@
         ></v-col
       >
       <v-col class="text-center text-h5">
-        Es konnte keine Buchung gefunden werden.
+        {{ errorMessage[errorCode] || "Es ist ein Fehler aufgetreten" }}
       </v-col>
     </v-row>
   </v-container>
@@ -33,6 +33,12 @@ export default {
       bookingId: undefined,
       noBooking: false,
       inBookingTenant: null,
+      errorMessage: {
+        0: "Die von Ihnen angeforderte Buchung konnte nicht gefunden werden.",
+        1: "Die von Ihnen angeforderte Buchung ist nicht freigegeben.",
+        2: "Die von Ihnen angeforderte Buchung ist bereits bezahlt.",
+      },
+      errorCode: null,
     };
   },
   created() {
@@ -47,8 +53,8 @@ export default {
           }
         })
         .catch((err) => {
+          this.errorCode = err.response.data.code;
           this.noBooking = true;
-          console.log(err);
         });
     } else {
       this.$router.push({ name: "home" });
