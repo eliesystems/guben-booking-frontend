@@ -37,36 +37,28 @@ export default {
       startLoading: "loading/start",
       stopLoading: "loading/stop",
     }),
-    translatePayMethod(value) {
-      switch (value) {
-        case "1":
-          return "Giropay";
-        case "17":
-          return "Giropay";
-        case "18":
-          return "Giropay";
-        case "2":
-          return "eps";
-        case "12":
-          return "iDEAL";
-        case "11":
-          return "Kreditkarte";
-        case "6":
-          return "Lastschrift";
-        case "7":
-          return "Lastschrift";
-        case "26":
-          return "Bluecode";
-        case "33":
-          return "Maestro";
-        case "14":
-          return "PayPal";
-        case "23":
-          return "paydirekt";
-        case "27":
-          return "Sofortüberweisung";
-        default:
-          return "Unbekannt";
+    translatePayMethod(payedWith) {
+      switch (payedWith) {
+      case "CASH":
+        return "Bar";
+      case "TRANSFER":
+        return "Überweisung";
+      case "CREDIT_CARD":
+        return "Kreditkarte";
+      case "DEBIT_CARD":
+        return "EC-Karte";
+      case "PAYPAL":
+        return "PayPal";
+      case "OTHER":
+        return "Sonstiges";
+      case "GIROPAY":
+        return "Giropay";
+      case "APPLE_PAY":
+        return "Apple Pay";
+      case "GOOGLE_PAY":
+        return "Google Pay";
+      default:
+        return "Unbekannt";
       }
     },
     createReceipt(bookingId) {
@@ -174,10 +166,10 @@ export default {
           <v-list-item two-line>
             <v-list-item-content>
               <v-list-item-title class="text-h">
-                Zahlungsart
+                Bezahlt mit
               </v-list-item-title>
               <v-list-item-subtitle>{{
-                translatePayMethod(booking.payMethod)
+                translatePayMethod(booking.payedWith)
               }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

@@ -81,6 +81,15 @@
                   >
                   </v-select>
                 </v-col>
+                <v-col>
+                  <v-select
+                    :items="payedWith"
+                    v-model="selectedBooking.payedWith"
+                    label="Bezahlt mit"
+                    item-text="title"
+                    item-value="type"
+                  ></v-select>
+                </v-col>
               </v-row>
               <v-row>
                 <v-col>
@@ -535,6 +544,48 @@ export default {
       validationRules: {
         mail: [(v) => /.+@.+\..+/.test(v) || "E-Mail muss gültig sein"],
       },
+      payedWith: [
+        {
+          type: "CASH",
+          title: "Bar",
+        },
+        {
+          type: "TRANSFER",
+          title: "Überweisung",
+        },
+        {
+          type: "CREDIT_CARD",
+          title: "Kreditkarte",
+        },
+        {
+          type: "DEBIT_CARD",
+          title: "EC-Karte",
+        },
+        {
+          type: "PAYPAL",
+          title: "PayPal",
+        },
+        {
+          type: "OTHER",
+          title: "Sonstiges",
+        },
+        {
+          type: "GIROPAY",
+          title: "Giropay",
+        },
+        {
+          type: "APPLE_PAY",
+          title: "Apple Pay",
+        },
+        {
+          type: "GOOGLE_PAY",
+          title: "Google Pay",
+        },
+        {
+          type: "UNKNOWN",
+          title: "Unbekannt",
+        },
+      ],
     };
   },
   computed: {

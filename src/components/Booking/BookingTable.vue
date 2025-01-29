@@ -74,8 +74,8 @@
         }).format(item.priceEur)
       }}</span>
     </template>
-    <template v-slot:item.payMethod="{ item }">
-      <span>{{ translatePayMethod(item.payMethod) }}</span>
+    <template v-slot:item.payedWith="{ item }">
+      <span>{{ translatePayMethod(item.payedWith) }}</span>
     </template>
     <template v-slot:item.controls="{ item }">
       <span>
@@ -182,7 +182,7 @@ export default {
         { text: "Preis", value: "priceEur" },
         { text: "Status", value: "isCommitted" },
         { text: "Zahlung", value: "isPayed" },
-        { text: "Zahlungart", value: "payMethod" },
+        { text: "Zahlungart", value: "payedWith" },
         { text: "", value: "controls", sortable: false },
       ],
     };
@@ -202,6 +202,12 @@ export default {
           return "PayPal";
         case "OTHER":
           return "Sonstiges";
+        case "GIROPAY":
+          return "Giropay";
+        case "APPLE_PAY":
+          return "Apple Pay";
+        case "GOOGLE_PAY":
+          return "Google Pay";
         default:
           return "Unbekannt";
       }
