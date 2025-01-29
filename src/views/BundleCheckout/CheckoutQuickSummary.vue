@@ -428,19 +428,26 @@ export default {
       }
 
       switch (finalBooking.paymentMethod) {
-        case "giroCockpit": {
-          const paymentUrl = paymentResponse.data?.paymentData;
-          if (paymentUrl) {
-            window.location.href = paymentUrl;
-          }
-          break;
+      case "giroCockpit": {
+        const paymentUrl = paymentResponse.data?.paymentData;
+        if (paymentUrl) {
+          window.location.href = paymentUrl;
         }
-        case "invoice":
-          await this.routeToStatus(finalBooking, finalBooking.paymentMethod);
-          break;
-        default:
-          await this.routeToStatus(finalBooking);
-          break;
+        break;
+      }
+      case "pmPayment": {
+        const paymentUrl = paymentResponse.data?.paymentData;
+        if (paymentUrl) {
+          window.location.href = paymentUrl;
+        }
+        break;
+      }
+      case "invoice":
+        await this.routeToStatus(finalBooking, finalBooking.paymentMethod);
+        break;
+      default:
+        await this.routeToStatus(finalBooking);
+        break;
       }
     },
 

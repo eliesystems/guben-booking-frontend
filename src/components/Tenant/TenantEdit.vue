@@ -232,7 +232,9 @@
                     dense
                     label="Passwort"
                     v-model="selectedTenant.noreplyPassword"
-                    :append-icon="showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :append-icon="
+                      showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'
+                    "
                     @click:append="showNoreplyPassword = !showNoreplyPassword"
                     :type="showNoreplyPassword ? 'text' : 'password'"
                   ></v-text-field>
@@ -240,7 +242,12 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-switch v-model="selectedTenant.noreplyStarttls" color="primary" label="StartTLS aktivieren" hide-details></v-switch>
+                  <v-switch
+                    v-model="selectedTenant.noreplyStarttls"
+                    color="primary"
+                    label="StartTLS aktivieren"
+                    hide-details
+                  ></v-switch>
                 </v-col>
               </v-row>
 
@@ -391,8 +398,12 @@
                               dense
                               label="Schlüssel"
                               v-model="giroCockpitApp.paymentSecret"
-                              :append-icon="showPaymentSecret ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showPaymentSecret = !showPaymentSecret"
+                              :append-icon="
+                                showPaymentSecret ? 'mdi-eye' : 'mdi-eye-off'
+                              "
+                              @click:append="
+                                showPaymentSecret = !showPaymentSecret
+                              "
                               :type="showPaymentSecret ? 'text' : 'password'"
                             ></v-text-field>
                           </v-col>
@@ -403,6 +414,136 @@
                               prefix="[Buchungsnummer] - "
                               :rules="validationRules.paymentPurposeSuffix"
                               v-model="giroCockpitApp.paymentPurposeSuffix"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                  <v-expansion-panels flat multiple class="mt-8">
+                    <v-expansion-panel>
+                      <v-expansion-panel-header
+                        color="accent"
+                        expand-icon="mdi-menu-down"
+                        class="panel-header"
+                      >
+                        <template v-slot:default="{ open }">
+                          <v-row no-gutters align="center">
+                            <v-col cols="4">
+                              <span class="text-subtitle-1"> pmPayment </span>
+                            </v-col>
+                            <v-col class="col-auto">
+                              <v-fade-transition leave-absolute>
+                                <div class="flex d-inline" v-if="!open">
+                                  <v-icon
+                                    v-if="pmPaymentApp.active"
+                                    color="success"
+                                    >mdi-check</v-icon
+                                  >
+                                  <span v-if="pmPaymentApp.active" class="ml-2"
+                                    >Aktiv</span
+                                  >
+
+                                  <v-icon
+                                    v-if="pmPaymentApp.active === false"
+                                    color="error"
+                                    >mdi-close</v-icon
+                                  >
+                                  <span
+                                    v-if="pmPaymentApp.active === false"
+                                    class="ml-2"
+                                    >Inaktiv</span
+                                  >
+
+                                  <v-icon
+                                    v-if="
+                                      pmPaymentApp.paymentMode === 'test' &&
+                                      pmPaymentApp.active
+                                    "
+                                    color="info"
+                                    class="ml-4"
+                                    >mdi-information-outline</v-icon
+                                  >
+                                  <span
+                                    v-if="
+                                      pmPaymentApp.paymentMode === 'test' &&
+                                      pmPaymentApp.active
+                                    "
+                                    class="ml-2"
+                                    >Testmodus ist aktiv</span
+                                  >
+                                </div>
+                              </v-fade-transition>
+                            </v-col>
+                          </v-row>
+                        </template>
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content class="mt-3">
+                        <v-row>
+                          <v-col class="col-auto">
+                            <v-switch
+                              v-model="pmPaymentApp.active"
+                              color="primary"
+                              hide-details
+                              label="pmPayment als Zahlungsanbieter aktivieren"
+                              class="mt-2"
+                            ></v-switch>
+                          </v-col>
+                          <v-col>
+                            <v-switch
+                              v-model="pmPaymentApp.paymentMode"
+                              color="primary"
+                              hide-details
+                              true-value="test"
+                              false-value="prod"
+                              label="Testmodus"
+                              class="mt-2"
+                            ></v-switch>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              label="Amtlicher Gemeindeschlüssel"
+                              hide-details
+                              v-model="pmPaymentApp.paymentMerchantId"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              label="Verfahren"
+                              v-model="pmPaymentApp.paymentProjectId"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              dense
+                              label="Salt Passwort"
+                              v-model="pmPaymentApp.paymentSecret"
+                              :append-icon="
+                                showPmPaymentSecret ? 'mdi-eye' : 'mdi-eye-off'
+                              "
+                              @click:append="
+                                showPmPaymentSecret = !showPmPaymentSecret
+                              "
+                              :type="showPmPaymentSecret ? 'text' : 'password'"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              prefix="[Buchungsnummer] - "
+                              :rules="validationRules.paymentPurposeSuffix"
+                              v-model="pmPaymentApp.paymentPurposeSuffix"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -606,8 +747,12 @@
                               dense
                               label="Passwort"
                               v-model="parevaSystem.password"
-                              :append-icon="showParevaPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showParevaPassword = !showParevaPassword"
+                              :append-icon="
+                                showParevaPassword ? 'mdi-eye' : 'mdi-eye-off'
+                              "
+                              @click:append="
+                                showParevaPassword = !showParevaPassword
+                              "
                               :type="showParevaPassword ? 'text' : 'password'"
                             ></v-text-field>
                           </v-col>
@@ -724,6 +869,7 @@ export default {
       showNoreplyPassword: false,
       showPaymentSecret: false,
       showParevaPassword: false,
+      showPmPaymentSecret: false,
       valid: false,
       originTenantId: null,
       inProgress: false,
@@ -750,6 +896,16 @@ export default {
         paymentMerchantId: "",
         paymentProjectId: "",
         paymentSecret: "",
+        active: false,
+      },
+      pmPaymentApp: {
+        type: "payment",
+        id: "pmPayment",
+        title: "pmPayment",
+        paymentMerchantId: "",
+        paymentProjectId: "",
+        paymentSecret: "",
+        paymentMode: "",
         active: false,
       },
       invoiceApp: {
@@ -803,6 +959,7 @@ export default {
     tenant(val) {
       this.initializeGiroCockpit();
       this.initializeInvoiceApp();
+      this.initializePmPayment();
       this.originTenantId = val.id;
     },
   },
@@ -848,6 +1005,25 @@ export default {
         };
       }
     },
+    initializePmPayment() {
+      const application = this.tenant.applications?.find(
+        (app) => app.id === "pmPayment"
+      );
+      if (application) {
+        this.pmPaymentApp = application;
+      } else {
+        this.pmPaymentApp = {
+          type: "payment",
+          id: "pmPayment",
+          title: "pmPayment",
+          paymentMerchantId: "",
+          paymentProjectId: "",
+          paymentSecret: "",
+          paymentMode: "",
+          active: false,
+        };
+      }
+    },
 
     initializeInvoiceApp() {
       const application = this.tenant.applications?.find(
@@ -871,9 +1047,10 @@ export default {
     },
 
     replacePaymentApps() {
-      const appIds = this.selectedTenant.applications.map(app => app.id);
+      const appIds = this.selectedTenant.applications.map((app) => app.id);
       const invoiceAppExists = appIds.includes("invoice");
       const giroCockpitAppExists = appIds.includes("giroCockpit");
+      const pmPaymentAppExists = appIds.includes("pmPayment");
 
       this.selectedTenant.applications = this.selectedTenant.applications.map(
         (app) => {
@@ -881,6 +1058,8 @@ export default {
             return this.invoiceApp;
           } else if (app.id === "giroCockpit") {
             return this.giroCockpitApp;
+          } else if (app.id === "pmPayment") {
+            return this.pmPaymentApp;
           } else {
             return app;
           }
@@ -894,11 +1073,16 @@ export default {
       if (!giroCockpitAppExists) {
         this.selectedTenant.applications.push(this.giroCockpitApp);
       }
-    }
+
+      if (!pmPaymentAppExists) {
+        this.selectedTenant.applications.push(this.pmPaymentApp);
+      }
+    },
   },
   mounted() {
     this.initializeGiroCockpit();
     this.initializeInvoiceApp();
+    this.initializePmPayment();
   },
 };
 </script>
