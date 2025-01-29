@@ -188,28 +188,40 @@ export default {
     };
   },
   methods: {
-    translatePayMethod(payMethod) {
-      switch (payMethod) {
-        case "CASH":
-          return "Bar";
-        case "TRANSFER":
-          return "Überweisung";
-        case "CREDIT_CARD":
-          return "Kreditkarte";
-        case "DEBIT_CARD":
-          return "EC-Karte";
-        case "PAYPAL":
-          return "PayPal";
-        case "OTHER":
-          return "Sonstiges";
-        case "GIROPAY":
-          return "Giropay";
-        case "APPLE_PAY":
-          return "Apple Pay";
-        case "GOOGLE_PAY":
-          return "Google Pay";
-        default:
-          return "Unbekannt";
+    translatePayMethod(payedWith) {
+      switch (payedWith) {
+      case "CASH":
+        return "Bar";
+      case "TRANSFER":
+        return "Überweisung";
+      case "CREDIT_CARD":
+        return "Kreditkarte";
+      case "DEBIT_CARD":
+        return "EC-Karte";
+      case "PAYPAL":
+        return "PayPal";
+      case "OTHER":
+        return "Sonstiges";
+      case "GIROPAY":
+        return "Giropay";
+      case "APPLE_PAY":
+        return "Apple Pay";
+      case "GOOGLE_PAY":
+        return "Google Pay";
+      case "EPS":
+        return "EPS";
+      case "IDEAL":
+        return "iDEAL";
+      case "MAESTRO":
+        return "Maestro";
+      case "PAYDIRECT":
+        return "paydirekt";
+      case "SOFORT":
+        return "SOFORT-Überweisung";
+      case "BLUECODE":
+        return "Bluecode";
+      default:
+        return "Unbekannt";
       }
     },
     onOpenBooking(bookingId) {

@@ -57,6 +57,18 @@ export default {
         return "Apple Pay";
       case "GOOGLE_PAY":
         return "Google Pay";
+      case "EPS":
+        return "EPS";
+      case "IDEAL":
+        return "iDEAL";
+      case "MAESTRO":
+        return "Maestro";
+      case "PAYDIRECT":
+        return "paydirekt";
+      case "SOFORT":
+        return "SOFORT-Überweisung";
+      case "BLUECODE":
+        return "Bluecode";
       default:
         return "Unbekannt";
       }

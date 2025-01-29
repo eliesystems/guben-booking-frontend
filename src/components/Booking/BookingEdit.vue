@@ -585,6 +585,30 @@ export default {
           type: "UNKNOWN",
           title: "Unbekannt",
         },
+        {
+          type: "EPS",
+          title: "EPS",
+        },
+        {
+          type: "IDEAL",
+          title: "iDEAL",
+        },
+        {
+          type: "MAESTRO",
+          title: "Maestro",
+        },
+        {
+          type: "PAYDIRECT",
+          title: "paydirekt",
+        },
+        {
+          type: "SOFORT",
+          title: "SOFORT-Überweisung",
+        },
+        {
+          type: "BLUECODE",
+          title: "Bluecode",
+        },
       ],
     };
   },
