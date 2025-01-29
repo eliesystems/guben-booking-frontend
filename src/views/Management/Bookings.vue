@@ -320,7 +320,7 @@ export default {
         lockerInfo: null,
         mail: null,
         name: null,
-        paymentMethod: null,
+        paymentProvider: null,
         payedWith: null,
         phone: null,
         priceEur: 0,

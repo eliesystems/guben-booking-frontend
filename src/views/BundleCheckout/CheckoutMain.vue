@@ -78,14 +78,14 @@ import CheckoutContactDetails from "@/views/BundleCheckout/CheckoutContactDetail
 import ApiCouponService from "@/services/api/ApiCouponService";
 import CheckoutNoPermission from "@/views/BundleCheckout/CheckoutNoPermission.vue";
 import ApiTenantService from "@/services/api/ApiTenantService";
-import CheckoutPaymentMethod from "@/views/BundleCheckout/CheckoutPaymentMethod.vue";
+import CheckoutPaymentProvider from "@/views/BundleCheckout/CheckoutPaymentProvider.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "CheckoutMain",
 
   components: {
-    CheckoutPaymentMethod,
+    CheckoutPaymentProvider,
     CheckoutSignin,
     AdditionalBookables,
     CheckoutQuickSummary,

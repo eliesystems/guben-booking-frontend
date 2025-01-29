@@ -74,7 +74,7 @@
                 <v-col>
                   <v-select
                     :items="activePaymentApps"
-                    v-model="selectedBooking.paymentMethod"
+                    v-model="selectedBooking.paymentProvider"
                     label="Zahlungsmethode"
                     item-text="title"
                     item-value="id"

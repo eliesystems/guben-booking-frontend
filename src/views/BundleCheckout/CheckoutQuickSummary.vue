@@ -363,7 +363,7 @@ export default {
         mail: this.contactDetails.mail,
         phone: this.contactDetails.phone,
         comment: this.contactDetails.comment,
-        paymentMethod: this.selectedPaymentApp,
+        paymentProvider: this.selectedPaymentApp,
         attachmentStatus: [this.leadItem, ...this.subsequentItems].flatMap(
           (item) =>
             item.bookable.attachments.map((attachment) => {
@@ -427,7 +427,7 @@ export default {
         return;
       }
 
-      switch (finalBooking.paymentMethod) {
+      switch (finalBooking.paymentProvider) {
       case "giroCockpit": {
         const paymentUrl = paymentResponse.data?.paymentData;
         if (paymentUrl) {
@@ -443,7 +443,7 @@ export default {
         break;
       }
       case "invoice":
-        await this.routeToStatus(finalBooking, finalBooking.paymentMethod);
+        await this.routeToStatus(finalBooking, finalBooking.paymentProvider);
         break;
       default:
         await this.routeToStatus(finalBooking);
@@ -451,13 +451,13 @@ export default {
       }
     },
 
-    async routeToStatus(booking, paymentMethod = null) {
+    async routeToStatus(booking, paymentProvider = null) {
       await this.$router.push({
         path: "/checkout/status",
         query: {
           id: booking.id,
           tenant: booking.tenant,
-          paymentMethod: paymentMethod,
+          paymentProvider: paymentProvider,
         },
       });
     },
