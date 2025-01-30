@@ -255,7 +255,7 @@ export default {
 
       const paymentStep = {
         title: "Zahlungsmethode",
-        component: "checkout-payment-method",
+        component: "checkout-payment-provider",
         props: {
           activePaymentApps: this.activePaymentApps,
         },
