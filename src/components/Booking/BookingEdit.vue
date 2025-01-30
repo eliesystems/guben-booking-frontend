@@ -83,8 +83,8 @@
                 </v-col>
                 <v-col>
                   <v-select
-                    :items="payedWith"
-                    v-model="selectedBooking.payedWith"
+                    :items="paymentMethod"
+                    v-model="selectedBooking.paymentMethod"
                     label="Bezahlt mit"
                     item-text="title"
                     item-value="type"
@@ -544,7 +544,7 @@ export default {
       validationRules: {
         mail: [(v) => /.+@.+\..+/.test(v) || "E-Mail muss gültig sein"],
       },
-      payedWith: [
+      paymentMethod: [
         {
           type: "CASH",
           title: "Bar",

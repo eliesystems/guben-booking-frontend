@@ -321,7 +321,7 @@ export default {
         mail: null,
         name: null,
         paymentProvider: null,
-        payedWith: null,
+        paymentMethod: null,
         phone: null,
         priceEur: 0,
         street: null,

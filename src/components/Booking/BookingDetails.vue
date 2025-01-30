@@ -37,8 +37,8 @@ export default {
       startLoading: "loading/start",
       stopLoading: "loading/stop",
     }),
-    translatePayMethod(payedWith) {
-      switch (payedWith) {
+    translatePayMethod(paymentMethod) {
+      switch (paymentMethod) {
       case "CASH":
         return "Bar";
       case "TRANSFER":
@@ -181,7 +181,7 @@ export default {
                 Bezahlt mit
               </v-list-item-title>
               <v-list-item-subtitle>{{
-                translatePayMethod(booking.payedWith)
+                translatePayMethod(booking.paymentMethod)
               }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

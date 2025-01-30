@@ -74,8 +74,8 @@
         }).format(item.priceEur)
       }}</span>
     </template>
-    <template v-slot:item.payedWith="{ item }">
-      <span>{{ translatePayMethod(item.payedWith) }}</span>
+    <template v-slot:item.paymentMethod="{ item }">
+      <span>{{ translatePayMethod(item.paymentMethod) }}</span>
     </template>
     <template v-slot:item.controls="{ item }">
       <span>
@@ -182,14 +182,14 @@ export default {
         { text: "Preis", value: "priceEur" },
         { text: "Status", value: "isCommitted" },
         { text: "Zahlung", value: "isPayed" },
-        { text: "Zahlungart", value: "payedWith" },
+        { text: "Zahlungart", value: "paymentMethod" },
         { text: "", value: "controls", sortable: false },
       ],
     };
   },
   methods: {
-    translatePayMethod(payedWith) {
-      switch (payedWith) {
+    translatePayMethod(paymentMethod) {
+      switch (paymentMethod) {
       case "CASH":
         return "Bar";
       case "TRANSFER":
