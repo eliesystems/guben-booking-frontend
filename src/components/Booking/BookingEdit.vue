@@ -37,17 +37,6 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col class="col-3">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    hide-details
-                    label="Preis"
-                    v-model.number="selectedBooking.priceEur"
-                    prefix="€"
-                    type="number"
-                  ></v-text-field>
-                </v-col>
                 <v-col>
                   <v-checkbox
                     label="Ist bezahlt"
@@ -125,31 +114,51 @@
               </v-row>
               <v-divider class="" />
               <v-list>
-                <template v-for="bookableItem in bookableItems">
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title class="d-flex">
-                        <div>{{ bookableItem._bookableUsed.title }}</div>
+                <v-list-item
+                  v-for="bookableItem in bookableItems"
+                  :key="bookableItem.id"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="d-flex">
+                      <v-row class="align-center">
+                        <v-col class="col-auto">
+                          {{ bookableItem._bookableUsed.title }}
+                        </v-col>
                         <v-spacer></v-spacer>
-                        <v-btn
-                          icon
-                          x-small
-                          @click="decreaseAmount(bookableItem)"
-                        >
-                          <v-icon>mdi-minus</v-icon>
-                        </v-btn>
-                        <div class="px-1">{{ bookableItem.amount }}</div>
-                        <v-btn
-                          icon
-                          x-small
-                          @click="increaseAmount(bookableItem)"
-                        >
-                          <v-icon>mdi-plus</v-icon>
-                        </v-btn>
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </template>
+                        <v-col class="col-4">
+                          <v-text-field
+                            v-model="bookableItem._bookableUsed.priceEur"
+                            filled
+                            prefix="€"
+                            background-color="accent"
+                            hide-details
+                            :label="isTimeRelated(bookableItem._bookableUsed) ? 'Preis pro Stunde' : 'Preis pro Stück'"
+                            type="number"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col class="col-auto">
+                          <div class="d-flex">
+                            <v-btn
+                              icon
+                              x-small
+                              @click="decreaseAmount(bookableItem)"
+                            >
+                              <v-icon>mdi-minus</v-icon>
+                            </v-btn>
+                            <div class="px-1">{{ bookableItem.amount }}</div>
+                            <v-btn
+                              icon
+                              x-small
+                              @click="increaseAmount(bookableItem)"
+                            >
+                              <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
               </v-list>
               <div
                 v-if="selectedBooking.bookableItems?.length === 0"
@@ -785,6 +794,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    isTimeRelated(bookable) {
+      return (
+        bookable.isScheduleRelated ||
+        bookable.isTimePeriodRelated ||
+        bookable.isLongRange
+      );
     },
   },
   mounted() {
