@@ -74,12 +74,21 @@
                 <v-col>
                   <v-select
                     :items="activePaymentApps"
-                    v-model="selectedBooking.paymentMethod"
+                    v-model="selectedBooking.paymentProvider"
                     label="Zahlungsmethode"
                     item-text="title"
                     item-value="id"
                   >
                   </v-select>
+                </v-col>
+                <v-col>
+                  <v-select
+                    :items="paymentMethod"
+                    v-model="selectedBooking.paymentMethod"
+                    label="Bezahlt mit"
+                    item-text="title"
+                    item-value="type"
+                  ></v-select>
                 </v-col>
               </v-row>
               <v-row>
@@ -535,6 +544,72 @@ export default {
       validationRules: {
         mail: [(v) => /.+@.+\..+/.test(v) || "E-Mail muss gültig sein"],
       },
+      paymentMethod: [
+        {
+          type: "CASH",
+          title: "Bar",
+        },
+        {
+          type: "TRANSFER",
+          title: "Überweisung",
+        },
+        {
+          type: "CREDIT_CARD",
+          title: "Kreditkarte",
+        },
+        {
+          type: "DEBIT_CARD",
+          title: "EC-Karte",
+        },
+        {
+          type: "PAYPAL",
+          title: "PayPal",
+        },
+        {
+          type: "OTHER",
+          title: "Sonstiges",
+        },
+        {
+          type: "GIROPAY",
+          title: "Giropay",
+        },
+        {
+          type: "APPLE_PAY",
+          title: "Apple Pay",
+        },
+        {
+          type: "GOOGLE_PAY",
+          title: "Google Pay",
+        },
+        {
+          type: "UNKNOWN",
+          title: "Unbekannt",
+        },
+        {
+          type: "EPS",
+          title: "EPS",
+        },
+        {
+          type: "IDEAL",
+          title: "iDEAL",
+        },
+        {
+          type: "MAESTRO",
+          title: "Maestro",
+        },
+        {
+          type: "PAYDIRECT",
+          title: "paydirekt",
+        },
+        {
+          type: "SOFORT",
+          title: "SOFORT-Überweisung",
+        },
+        {
+          type: "BLUECODE",
+          title: "Bluecode",
+        },
+      ],
     };
   },
   computed: {
