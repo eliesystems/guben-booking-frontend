@@ -242,13 +242,6 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-switch
-                    v-model="selectedTenant.noreplyStarttls"
-                    color="primary"
-                    label="StartTLS aktivieren"
-                    hide-details
-                  ></v-switch>
-                <v-col>
                   <h4 class="mb-2">Email-Versandmethoden </h4>
                 </v-col>
               </v-row>
