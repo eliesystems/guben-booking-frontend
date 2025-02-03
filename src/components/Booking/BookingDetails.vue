@@ -164,7 +164,7 @@ export default {
         <v-col>
           <v-list-item two-line>
             <v-list-item-content>
-              <v-list-item-title class="text-h"> Preis </v-list-item-title>
+              <v-list-item-title class="text-h"> Gesamtpreis </v-list-item-title>
               <v-list-item-subtitle>{{
                 Intl.NumberFormat("de-DE", {
                   style: "currency",
@@ -262,6 +262,10 @@ export default {
                   <v-list-item-subtitle
                     >Anzahl: {{ item?.amount }}</v-list-item-subtitle
                   >
+                  <v-list-item-subtitle
+                    >Einzelpreis: {{ item.userGrossPriceEur }} € </v-list-item-subtitle
+                  >
+
                 </v-list-item-content>
               </v-list-item>
               <v-divider v-if="index < receipts.length - 1" :key="index" />
