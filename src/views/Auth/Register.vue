@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <v-container class="text-center">
     <v-card outlined max-width="500" class="mx-auto mt-sm-10">
       <v-card-text class="text-center pa-10">
         <v-img src="@/assets/app-logo.png" max-width="200" class="mx-auto" />
@@ -90,21 +90,39 @@
 
     <v-card elevation="0" max-width="500" class="mx-auto mt-2">
       <v-card-text class="text-right pa-0">
-        <router-link to="/datenschutz">Datenschutz</router-link> |
-        <router-link to="/nutzungsbedingungen">Nutzungsbedingungen</router-link>
+        <a
+          :href="'https://' + Utils.sanitizeUrl(instance?.dataProtectionUrl)"
+          target="_blank"
+        >Datenschutz</a
+        >
+        |
+        <a
+          :href="'https://' + Utils.sanitizeUrl(instance?.legalNoticeUrl)"
+          target="_blank"
+        >Nutzungsbedingungen</a
+        >
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
 import ToastService from "@/services/ToastService";
 import ApiAuthService from "@/services/api/ApiAuthService";
-import { mapActions } from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ApiTenantService from "@/services/api/ApiTenantService";
 import ContactInformation from "@/components/ContactInformation.vue";
+import Utils from "@/utils/Utils";
 
 export default {
+  computed: {
+    Utils() {
+      return Utils
+    },
+    ...mapGetters({
+      instance: "instance/instance",
+    }),
+  },
   components: { ContactInformation },
   data() {
     return {
