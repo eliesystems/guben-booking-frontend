@@ -3,6 +3,7 @@ const namespaced = true;
 
 const state = {
   data: PersistenceService.getFromLocalStorage("tenant") || null,
+  selectedTenant: PersistenceService.getFromLocalStorage("selectedTenant") || null,
 };
 
 const mutations = {
@@ -14,6 +15,10 @@ const mutations = {
     state.data = null;
     PersistenceService.removeFromLocalStorage("tenant");
   },
+  SELECT(state, tenant) {
+    state.selectedTenant = tenant;
+    PersistenceService.writeToLocalStorage("selectedTenant", tenant);
+  },
 };
 
 const actions = {
@@ -23,10 +28,14 @@ const actions = {
   delete({ commit }) {
     commit("DELETE");
   },
+  select({ commit }, tenant) {
+    commit("SELECT", tenant);
+  },
 };
 
 const getters = {
-  tenant: (state) => state.data
+  tenant: (state) => state.data,
+  selectedTenant: (state) => state.selectedTenant,
 };
 
 export default {

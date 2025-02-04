@@ -76,10 +76,6 @@ export default {
     };
   },
 
-  mounted() {
-    this.fetchTenants();
-  },
-
   computed: {
     ...mapGetters({
       instance: "instance/instance",
@@ -134,12 +130,6 @@ export default {
             );
           }
         });
-    },
-    fetchTenants() {
-      ApiTenantService.getTenants(true).then((response) => {
-        console.log(response.data);
-        this.tenants = response.data;
-      });
     },
   },
 };
