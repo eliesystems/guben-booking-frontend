@@ -1,13 +1,13 @@
 import store from "@/store";
 
 export default {
-  login(tenant, id, password) {
+  login(userId, password) {
     const body = {
-      id: id,
+      id: userId,
       password: password,
     };
 
-    return ApiClient.post(`auth/${tenant}/signin`, body, {
+    return ApiClient.post(`auth/signin`, body, {
       withCredentials: true,
     });
   },
