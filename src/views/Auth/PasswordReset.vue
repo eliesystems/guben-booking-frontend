@@ -1,5 +1,5 @@
 <template>
-  <v-container class="text-center  fill-height fluid justify-center">
+  <v-container class="text-center">
     <v-card outlined class="mx-auto mt-sm-10" width="500">
       <v-card-text class="px-10 pb-5">
         <v-img src="@/assets/app-logo.png" max-width="200" class="mx-auto"/>
@@ -46,18 +46,43 @@
         <v-btn  color="primary" elevation="0" @click="resetPassword">Passwort zurücksetzen</v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-card elevation="0" max-width="500" class="mx-auto mt-2">
+      <v-card-text class="text-right pa-0">
+        <a
+          :href="'https://' + Utils.sanitizeUrl(instance?.dataProtectionUrl)"
+          target="_blank"
+        >Datenschutz</a
+        >
+        |
+        <a
+          :href="'https://' + Utils.sanitizeUrl(instance?.legalNoticeUrl)"
+          target="_blank"
+        >Nutzungsbedingungen</a
+        >
+      </v-card-text>
+    </v-card>
   </v-container>
 
 </template>
 
 <script>
 import ApiAuthService from "@/services/api/ApiAuthService";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ToastService from "@/services/ToastService";
 import ApiTenantService from "@/services/api/ApiTenantService";
+import Utils from "@/utils/Utils";
 
 export default {
   name: "PasswordReset",
+  computed: {
+    Utils() {
+      return Utils
+    },
+    ...mapGetters({
+      instance: "instance/instance",
+    }),
+  },
   data() {
     return {
       showPassword: false,
@@ -84,7 +109,7 @@ export default {
         // check if passwords match
         if (this.password === this.passwordRepeat) {
           // call api
-          ApiAuthService.resetPassword(this.id, this.password, this.tenant.id)
+          ApiAuthService.resetPassword(this.id, this.password)
             .then(() => {
               this.addToast(ToastService.createToast("password.reset.success", "success"))
               this.$router.push("/login");

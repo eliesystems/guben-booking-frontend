@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from "vuex";
+import Utils from "@/utils/Utils";
 
 export default {
   name: "ContactInformation",
@@ -7,13 +8,10 @@ export default {
     return {};
   },
 
-  methods: {
-    sanitizeUrl(url) {
-      return url?.replace(/(^\w+:|^)\/\//, "");
-    },
-  },
-
   computed: {
+    Utils() {
+      return Utils;
+    },
     ...mapGetters({
       instance: "instance/instance",
     }),
@@ -27,9 +25,9 @@ export default {
       Dieser Service wird bereitgestellt vom {{ instance?.contactAddress }}.
       Weitere Informationen und Kontaktmöglichkeiten finden Sie unter
       <a
-        :href="'https://' + sanitizeUrl(instance?.contactUrl)"
+        :href="'https://' + Utils.sanitizeUrl(instance?.contactUrl)"
         target="_blank"
-        >{{ sanitizeUrl(instance?.contactUrl) }}</a
+        >{{ Utils.sanitizeUrl(instance?.contactUrl) }}</a
       >.</small
     >
   </p>

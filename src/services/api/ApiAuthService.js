@@ -1,5 +1,3 @@
-import store from "@/store";
-
 export default {
   login(tenant, id, password) {
     const body = {
@@ -39,7 +37,7 @@ export default {
       { withCredentials: true }
     );
   },
-  resetPassword(id, password, tenantId) {
+  resetPassword(id, password) {
     const body = {
       id: id,
       password: password,
@@ -56,7 +54,7 @@ export default {
     };
 
     return ApiClient.post(
-      `auth/${store.getters["tenants/currentTenant"].id}/reset`,
+      "auth/reset",
       body,
       { withCredentials: true }
     );
