@@ -94,7 +94,7 @@ export default {
       updateTenant: "tenants/update",
     }),
     signin() {
-      ApiAuthService.login(this.tenant.id, this.id, this.password)
+      ApiAuthService.login(this.id, this.password)
         .then((response) => {
           if (response.status === 200) {
             return new Promise((resolve, reject) => {
