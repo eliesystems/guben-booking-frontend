@@ -93,7 +93,7 @@ export default {
       updateTenant: "tenants/update",
     }),
     sanitizeUrl(url) {
-      return url.replace(/(^\w+:|^)\/\//, "");
+      return url?.replace(/(^\w+:|^)\/\//, "");
     },
     signin() {
       this.updateTenant(this.tenant);
