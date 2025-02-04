@@ -10,7 +10,7 @@
       <img
         alt="Smart City Booking"
         src="@/assets/app-logo.png"
-        style="max-height: 50px; width: auto; max-width: 250px;"
+        style="max-height: 50px; width: auto; max-width: 250px"
       />
       <v-spacer></v-spacer>
       <span v-if="isProduction !== 'true'" class="font-weight-bold"
@@ -74,7 +74,6 @@
           </v-list-item-group>
         </v-list>
       </v-menu>
-
     </v-app-bar>
 
     <v-navigation-drawer
@@ -93,19 +92,21 @@
             item-value="id"
             solo
             flat
-            class="subtitle-1 font-weight-medium primary--text "
+            class="subtitle-1 font-weight-medium primary--text"
           >
             <template v-slot:prepend>
-              <v-icon class="primary v-btn--rounded" color="white">mdi-home-account</v-icon>
+              <v-icon class="primary v-btn--rounded" color="white"
+                >mdi-home-account</v-icon
+              >
             </template>
             <template v-slot:prepend-item>
-              <v-list-item class="my-2">
-                Mandant auswählen:
-              </v-list-item>
+              <v-list-item class="my-2"> Mandant auswählen: </v-list-item>
               <v-divider></v-divider>
             </template>
             <template v-slot:selection="{ item }">
-              <span class="subtitle-1 font-weight-medium primary--text">{{item.name}}</span>
+              <span class="subtitle-1 font-weight-medium primary--text">{{
+                item.name
+              }}</span>
             </template>
           </v-select>
 
@@ -158,7 +159,7 @@ import ApiTenantService from "@/services/api/ApiTenantService";
 export default {
   data: () => ({
     drawer: false,
-    isProduction: process.env.VUE_APP_IS_PRODUCTION ,
+    isProduction: process.env.VUE_APP_IS_PRODUCTION,
     profileItems: [
       {
         title: "Einstellungen",
@@ -268,6 +269,7 @@ export default {
     ...mapActions({
       addToast: "toasts/add",
       deleteUser: "user/delete",
+      selectTenant: "tenants/select",
     }),
     logout() {
       ApiAuthService.logout()
@@ -293,16 +295,15 @@ export default {
       user: "user/user",
       tenant: "tenants/tenant",
       isAuthorized: "user/isAuthorized",
+      getCurrentTenant: "tenants/currentTenant",
     }),
     currentTenant: {
       get: function () {
-        return this.tenant
+        return this.getCurrentTenant;
       },
       set: function (newValue) {
-        //toDo - add working routes
-        console.log("want to go to " + newValue);
-        this.$router.push("/admin/dashboard");
-      }
+        this.selectTenant(newValue);
+      },
     },
     navItems() {
       // reduce items to only those that are allowed for the current user

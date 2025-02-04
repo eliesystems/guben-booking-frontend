@@ -1,16 +1,22 @@
 <template>
   <AdminLayout>
     <v-row gutters align="center" justify="center">
-      <v-col v-for="tenant in tenants" :key="tenant" cols="12" md="3" class="d-flex flex-column">
+      <v-col
+        v-for="tenant in tenants"
+        :key="tenant"
+        cols="12"
+        md="3"
+        class="d-flex flex-column"
+      >
         <v-card
           max-height="200px"
           outlined
-          :elevation="tenant.id === 'diz'? 0 : 1"
-          :color="tenant.id === 'diz'? 'grey lighten-4' : ''"
-          @click="openTenant(tenant.id)"
-        ><!-- toDO - dynamically check for activ tenant -->
-          <v-card-title class='primary--text'>
-            {{tenant.name}}
+          :elevation="tenant.id === 'diz' ? 0 : 1"
+          :color="tenant.id === 'diz' ? 'grey lighten-4' : ''"
+          @click="selectTenant(tenant.id)"
+          ><!-- toDO - dynamically check for activ tenant -->
+          <v-card-title class="primary--text">
+            {{ tenant.name }}
           </v-card-title>
         </v-card>
       </v-col>
@@ -20,7 +26,7 @@
 
 <script>
 import AdminLayout from "@/layouts/Admin";
-import ApiTenantService from "@/services/api/ApiTenantService";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "HomeView",
@@ -30,26 +36,21 @@ export default {
   data() {
     return {
       loading: true,
-      tenants: [],
     };
   },
+  computed: {
+    ...mapGetters({
+      tenants: "tenants/tenants",
+      currentTenant: "tenants/currentTenant",
+    }),
+  },
   methods: {
-    fetchTenants() {
-      ApiTenantService.getTenants(true).then((response) => {
-        this.tenants = response.data;
-      });
-    },
-    openTenant(tenantId){
-      //toDo - add working routes
-      console.log("want to go to " + tenantId);
-      this.$router.push("/admin/dashboard");
+    ...mapActions({
+      select: "tenants/select",
+    }),
+    selectTenant(tenantId) {
+      this.select(tenantId);
     },
   },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false
-    }, 2000);
-    this.fetchTenants();
-  }
 };
 </script>
