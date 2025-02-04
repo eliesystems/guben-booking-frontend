@@ -9,7 +9,7 @@ export default {
 
   methods: {
     sanitizeUrl(url) {
-      return url.replace(/(^\w+:|^)\/\//, "");
+      return url?.replace(/(^\w+:|^)\/\//, "");
     },
   },
 

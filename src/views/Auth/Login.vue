@@ -76,10 +76,6 @@ export default {
     };
   },
 
-  mounted() {
-    this.fetchTenants();
-  },
-
   computed: {
     ...mapGetters({
       instance: "instance/instance",
@@ -93,7 +89,7 @@ export default {
       updateTenant: "tenants/update",
     }),
     sanitizeUrl(url) {
-      return url.replace(/(^\w+:|^)\/\//, "");
+      return url?.replace(/(^\w+:|^)\/\//, "");
     },
     signin() {
       this.updateTenant(this.tenant);
@@ -134,12 +130,6 @@ export default {
             );
           }
         });
-    },
-    fetchTenants() {
-      ApiTenantService.getTenants(true).then((response) => {
-        console.log(response.data);
-        this.tenants = response.data;
-      });
     },
   },
 };
