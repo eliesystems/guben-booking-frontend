@@ -23,11 +23,12 @@ export default {
 
   methods: {
     ...mapActions({
-      updateTenant: "tenants/update",
+      setTenants: "tenants/setTenants",
     }),
     async fetchTenants() {
       try {
-        await this.updateTenant(await ApiTenantService.getTenants(true));
+        const response = await ApiTenantService.getTenants(true);
+        await this.setTenants(response.data);
       } catch (error) {
         console.error(error);
       }
