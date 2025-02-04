@@ -48,7 +48,7 @@ const routes = [
     name: "dashboard",
     component: Home,
     meta: {
-      title: "Dashboard",
+      title: "Mandantenauswahl",
       requiresAuth: true,
       interfaceName: "dashboard",
       public: true,

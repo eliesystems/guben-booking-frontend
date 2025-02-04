@@ -10,7 +10,7 @@
       <img
         alt="Smart City Booking"
         src="@/assets/app-logo.png"
-        style="max-height: 50px; width: auto; max-width: 250px;"
+        style="max-height: 50px; width: auto; max-width: 250px"
       />
       <v-spacer></v-spacer>
       <span v-if="isProduction !== 'true'" class="font-weight-bold"
@@ -74,7 +74,6 @@
           </v-list-item-group>
         </v-list>
       </v-menu>
-
     </v-app-bar>
 
     <v-navigation-drawer
@@ -85,17 +84,31 @@
     >
       <div class="v-navigation-drawer__content">
         <v-list dense nav class="py-0" rounded>
-          <v-list-item class="my-2">
-            <v-list-item-avatar>
-              <v-icon class="primary" color="white">mdi-home-account</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title
-                class="subtitle-1 font-weight-medium primary--text"
-                >{{ tenant.name }}</v-list-item-title
+          <v-select
+            v-model="currentTenant"
+            color="primary"
+            :items="tenants"
+            item-text="name"
+            item-value="id"
+            solo
+            flat
+            class="subtitle-1 font-weight-medium primary--text"
+          >
+            <template v-slot:prepend>
+              <v-icon class="primary v-btn--rounded" color="white"
+                >mdi-home-account</v-icon
               >
-            </v-list-item-content>
-          </v-list-item>
+            </template>
+            <template v-slot:prepend-item>
+              <v-list-item class="my-2"> Mandant auswählen: </v-list-item>
+              <v-divider></v-divider>
+            </template>
+            <template v-slot:selection="{ item }">
+              <span class="subtitle-1 font-weight-medium primary--text">{{
+                item.name
+              }}</span>
+            </template>
+          </v-select>
 
           <v-divider class="mt-2 mb-2"></v-divider>
           <div v-for="parentItem in navItems" :key="parentItem.header">
@@ -141,11 +154,12 @@ import { mapActions, mapGetters } from "vuex";
 import ToastService from "@/services/ToastService";
 import ApiAuthService from "@/services/api/ApiAuthService";
 import { RolePermission } from "@/entities/role";
+import ApiTenantService from "@/services/api/ApiTenantService";
 
 export default {
   data: () => ({
     drawer: false,
-    isProduction: process.env.VUE_APP_IS_PRODUCTION ,
+    isProduction: process.env.VUE_APP_IS_PRODUCTION,
     profileItems: [
       {
         title: "Einstellungen",
@@ -247,12 +261,15 @@ export default {
         ],
       },
     ],
+    //currentTenant: "",
+    tenants: [],
   }),
   components: {},
   methods: {
     ...mapActions({
       addToast: "toasts/add",
       deleteUser: "user/delete",
+      selectTenant: "tenants/select",
     }),
     logout() {
       ApiAuthService.logout()
@@ -267,13 +284,27 @@ export default {
     darkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
+    fetchTenants() {
+      ApiTenantService.getTenants(true).then((response) => {
+        this.tenants = response.data;
+      });
+    },
   },
   computed: {
     ...mapGetters({
       user: "user/user",
       tenant: "tenants/tenant",
       isAuthorized: "user/isAuthorized",
+      getCurrentTenant: "tenants/currentTenant",
     }),
+    currentTenant: {
+      get: function () {
+        return this.getCurrentTenant;
+      },
+      set: function (newValue) {
+        this.selectTenant(newValue);
+      },
+    },
     navItems() {
       // reduce items to only those that are allowed for the current user
       return this.items
@@ -295,6 +326,7 @@ export default {
   },
   mounted() {
     this.drawer = !this.$vuetify.breakpoint.mdAndDown;
+    this.fetchTenants();
   },
 };
 </script>
