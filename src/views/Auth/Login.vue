@@ -1,8 +1,7 @@
 <template>
-  <div class="text-center">
-    <v-card outlined max-width="500" class="mx-auto mt-sm-15">
-      <v-card-text class="text-center pa-10"
-        ><v-img src="@/assets/app-logo.png" max-width="200" class="mx-auto" />
+    <div class="text-center">
+      <v-card outlined max-width="500" class="mx-auto mt-sm-10">
+        <v-card-text class="text-center pa-10"><v-img src="@/assets/app-logo.png" max-width="200" class="mx-auto"/>
 
         <h2 class="mt-8 mb-2">Anmeldung</h2>
         <p class="subtitle-2 mb-10">Mit Ihrem Account anmelden.</p>
@@ -47,8 +46,24 @@
         <v-btn color="primary" elevation="0" @click="signin">Anmelden</v-btn>
       </v-card-actions>
     </v-card>
-
-    <v-card elevation="0" max-width="500" class="mx-auto mt-2">
+          <v-text-field outlined hide-details label="Email Adresse" placeholder="jemand@domain.de" prepend-inner-icon="mdi-email" class="mb-5"
+                        v-model="id"></v-text-field>
+          <v-text-field outlined hide-details label="Passwort" placeholder="Ihr Passwort" v-model="password"
+                        :type="showPassword ? 'text' : 'password'"
+                        prepend-inner-icon="mdi-key"
+                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="showPassword = !showPassword"></v-text-field>
+          <div class="text-left mt-2 mb-5"><a href="/password/reset">Passwort vergessen?</a></div>
+          <ContactInformation/>
+        </v-card-text>
+        <v-card-actions class="px-10 pb-5">
+          <v-btn to="/registrieren" outlined>Konto erstellen</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" elevation="0" @click="signin">Anmelden</v-btn>
+        </v-card-actions>
+      </v-card>
+      
+      <v-card elevation="0" max-width="500" class="mx-auto mt-2">
       <v-card-text class="text-right pa-0">
         <a
           :href="'https://' + sanitizeUrl(instance?.dataProtectionUrl)"
