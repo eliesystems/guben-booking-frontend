@@ -85,17 +85,29 @@
     >
       <div class="v-navigation-drawer__content">
         <v-list dense nav class="py-0" rounded>
-          <v-list-item class="my-2">
-            <v-list-item-avatar>
-              <v-icon class="primary" color="white">mdi-home-account</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title
-                class="subtitle-1 font-weight-medium primary--text"
-                >{{ tenant.name }}</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
+          <v-select
+            v-model="currentTenant"
+            color="primary"
+            :items="tenants"
+            item-text="name"
+            item-value="id"
+            solo
+            flat
+            class="subtitle-1 font-weight-medium primary--text "
+          >
+            <template v-slot:prepend>
+              <v-icon class="primary v-btn--rounded" color="white">mdi-home-account</v-icon>
+            </template>
+            <template v-slot:prepend-item>
+              <v-list-item class="my-2">
+                Mandant auswählen:
+              </v-list-item>
+              <v-divider></v-divider>
+            </template>
+            <template v-slot:selection="{ item }">
+              <span class="subtitle-1 font-weight-medium primary--text">{{item.name}}</span>
+            </template>
+          </v-select>
 
           <v-divider class="mt-2 mb-2"></v-divider>
           <div v-for="parentItem in navItems" :key="parentItem.header">
@@ -141,6 +153,7 @@ import { mapActions, mapGetters } from "vuex";
 import ToastService from "@/services/ToastService";
 import ApiAuthService from "@/services/api/ApiAuthService";
 import { RolePermission } from "@/entities/role";
+import ApiTenantService from "@/services/api/ApiTenantService";
 
 export default {
   data: () => ({
@@ -247,6 +260,8 @@ export default {
         ],
       },
     ],
+    //currentTenant: "",
+    tenants: [],
   }),
   components: {},
   methods: {
@@ -267,6 +282,11 @@ export default {
     darkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
+    fetchTenants() {
+      ApiTenantService.getTenants(true).then((response) => {
+        this.tenants = response.data;
+      });
+    },
   },
   computed: {
     ...mapGetters({
@@ -274,6 +294,16 @@ export default {
       tenant: "tenants/tenant",
       isAuthorized: "user/isAuthorized",
     }),
+    currentTenant: {
+      get: function () {
+        return this.tenant
+      },
+      set: function (newValue) {
+        //toDo - add working routes
+        console.log("want to go to " + newValue);
+        this.$router.push("/admin/dashboard");
+      }
+    },
     navItems() {
       // reduce items to only those that are allowed for the current user
       return this.items
@@ -295,6 +325,7 @@ export default {
   },
   mounted() {
     this.drawer = !this.$vuetify.breakpoint.mdAndDown;
+    this.fetchTenants();
   },
 };
 </script>
