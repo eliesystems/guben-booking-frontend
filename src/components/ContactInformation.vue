@@ -14,7 +14,7 @@ export default {
 </script>
 
 <template>
-  <p class="text-left mt-5">
+  <p class="text-left">
     <small v-if="contactDetails.address" >Dieser Service wird bereitgestellt vom {{ contactDetails.address }}. Weitere
       Informationen und Kontaktmöglichkeiten finden Sie unter <a :href="contactDetails.url"
                                                                  target="_blank">{{ contactDetails.url }}</a>.</small>
