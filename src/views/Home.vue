@@ -3,7 +3,7 @@
     <v-row gutters align="center" justify="center">
       <v-col
         v-for="tenant in tenants"
-        :key="tenant"
+        :key="tenant.id"
         cols="12"
         md="3"
         class="d-flex flex-column"
@@ -11,8 +11,8 @@
         <v-card
           max-height="200px"
           outlined
-          :elevation="tenant.id === 'diz' ? 0 : 1"
-          :color="tenant.id === 'diz' ? 'grey lighten-4' : ''"
+          :elevation="tenant.id === currentTenant ? 0 : 1"
+          :color="tenant.id === currentTenant ? 'grey lighten-4' : ''"
           @click="selectTenant(tenant.id)"
           ><!-- toDO - dynamically check for activ tenant -->
           <v-card-title class="primary--text">
