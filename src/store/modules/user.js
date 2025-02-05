@@ -27,8 +27,7 @@ const actions = {
 };
 
 const getters = {
-  user: (state) => state.data,
-  tenant: (state) => state.data.tenant,
+  user: (state) => state.data.user,
   isLoggedIn: () => !_.isNil(state.data),
   isAuthorized: (state) => (ifce) => {
     if (state.data && state.data.permissions) {
