@@ -1,3 +1,4 @@
+import store from "@/store";
 import PersistenceService from "@/services/PersistenceService";
 const namespaced = true;
 
@@ -30,12 +31,10 @@ const getters = {
   tenant: (state) => state.data.tenant,
   isLoggedIn: () => !_.isNil(state.data),
   isAuthorized: (state) => (ifce) => {
-    if (
-      state.data &&
-      state.data.permissions &&
-      state.data.permissions.adminInterfaces
-    ) {
-      return state.data.permissions.adminInterfaces.includes(ifce);
+    if (state.data && state.data.permissions) {
+      const t = store.getters["tenants/currentTenant"];
+      const adIfces = state.data.permissions.find((p) => p.tenantId === t);
+      return adIfces.adminInterfaces.includes(ifce);
     }
     return false;
   },
