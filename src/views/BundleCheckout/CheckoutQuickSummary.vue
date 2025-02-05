@@ -456,7 +456,7 @@ export default {
         path: "/checkout/status",
         query: {
           id: booking.id,
-          tenant: booking.tenant,
+          tenant: booking.tenantId,
           paymentProvider: paymentProvider,
         },
       });

@@ -29,7 +29,7 @@ export default {
       withCredentials: true,
     });
   },
-  me(tenant, populatePermissions) {
+  me(populatePermissions) {
     return ApiClient.get(
       `auth/me?populatePermissions=${populatePermissions ? 1 : 0}`,
       { withCredentials: true }

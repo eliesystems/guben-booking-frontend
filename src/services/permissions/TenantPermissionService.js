@@ -11,7 +11,7 @@ class TenantPermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
-    return permissions.manageTenants.create;
+    return permissions.manageTenants?.create;
   }
 
   static allowUpdate(tenant) {
@@ -21,8 +21,8 @@ class TenantPermissionService {
     );
     if (!permissions) return false;
     return (
-      permissions.manageTenants.updateAny ||
-      (permissions.manageTenants.updateOwn &&
+      permissions.manageTenants?.updateAny ||
+      (permissions.manageTenants?.updateOwn &&
         TenantPermissionService.isOwner(tenant))
     );
   }
@@ -34,8 +34,8 @@ class TenantPermissionService {
     );
     if (!permissions) return false;
     return (
-      permissions.manageTenants.deleteAny ||
-      (permissions.manageTenants.deleteOwn &&
+      permissions.manageTenants?.deleteAny ||
+      (permissions.manageTenants?.deleteOwn &&
         TenantPermissionService.isOwner(tenant))
     );
   }
