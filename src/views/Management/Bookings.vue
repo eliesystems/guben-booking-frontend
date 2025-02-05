@@ -159,7 +159,7 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading/isLoading",
-      tenant: "tenants/tenant",
+      tenantId: "tenants/currentTenantId",
     }),
     BookingPermissionService() {
       return BookingPermissionService;
@@ -270,7 +270,7 @@ export default {
         });
     },
     rejectBooking(id) {
-      ApiBookingService.rejectBooking(id, this.tenant.id)
+      ApiBookingService.rejectBooking(id, this.tenantId)
         .then((response) => {
           if (response.status === 200) {
             this.fetchBookings();
@@ -326,7 +326,7 @@ export default {
     onOpenCreateBookings() {
       this.selectedBooking = {
         id: null,
-        tenant: this.tenant,
+        tenant: this.tenantId,
         assignedUserId: null,
         attachments: [],
         bookableItems: [],
@@ -350,7 +350,7 @@ export default {
         vatIncludedEur: null,
         zipCode: null,
       };
-      this.selectedBooking.tenant = this.tenant.id;
+      this.selectedBooking.tenant = this.tenantId;
       this.openEditDialog = true;
     },
     translatePayMethod(value) {

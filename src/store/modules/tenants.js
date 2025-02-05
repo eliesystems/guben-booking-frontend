@@ -4,7 +4,7 @@ const namespaced = true;
 const state = {
   data: PersistenceService.getFromLocalStorage("tenant") || null,
   tenants: PersistenceService.getFromLocalStorage("tenants") || null,
-  currentTenant: PersistenceService.getFromLocalStorage("currentTenant") || null,
+  currentTenantId: PersistenceService.getFromLocalStorage("currentTenantId") || null,
 };
 
 const mutations = {
@@ -21,8 +21,8 @@ const mutations = {
     PersistenceService.writeToLocalStorage("tenants", tenants);
   },
   SELECT(state, tenant) {
-    state.currentTenant = tenant;
-    PersistenceService.writeToLocalStorage("currentTenant", tenant);
+    state.currentTenantId = tenant;
+    PersistenceService.writeToLocalStorage("currentTenantId", tenant);
   },
 };
 
@@ -43,7 +43,11 @@ const actions = {
 
 const getters = {
   tenants: (state) => state.tenants,
-  currentTenant: (state) => state.currentTenant,
+  currentTenantId: (state) => state.currentTenantId,
+  currentTenant: (state) => {
+    if (!state.data) return null;
+    return state.tenants.find((t) => t.id === state.currentTenantId);
+  },
 };
 
 export default {

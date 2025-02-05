@@ -6,7 +6,7 @@ class TenantPermissionService {
     return tenant.ownerUserId === user.state.data.user.id;
   }
   static allowCreate() {
-    const tenantId = store.getters["tenants/currentTenant"];
+    const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.find(
       (p) => p.tenantId === tenantId
     );
@@ -15,7 +15,7 @@ class TenantPermissionService {
   }
 
   static allowUpdate(tenant) {
-    const tenantId = store.getters["tenants/currentTenant"];
+    const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.find(
       (p) => p.tenantId === tenantId
     );
@@ -28,7 +28,7 @@ class TenantPermissionService {
   }
 
   static allowDelete(tenant) {
-    const tenantId = store.getters["tenants/currentTenant"];
+    const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.find(
       (p) => p.tenantId === tenantId
     );

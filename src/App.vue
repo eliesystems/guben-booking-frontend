@@ -47,7 +47,6 @@ export default {
     ...mapGetters({
       toasts: "toasts/all",
       user: "user/user",
-      tenant: "tenants/tenant",
       instance: "instance/instance",
     }),
   },

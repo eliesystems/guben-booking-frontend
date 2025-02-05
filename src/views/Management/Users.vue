@@ -153,7 +153,7 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading/isLoading",
-      tenant: "tenants/tenant",
+      tenantId: "tenants/currentTenantId",
     }),
     UserPermissionService() {
       return UserPermissionService;
@@ -180,7 +180,7 @@ export default {
       ApiUsersService.getUsers()
         .then((response) => {
           this.api.users = response.data.filter(
-            (users) => users.tenant === this.tenant.id
+            (users) => users.tenant === this.tenantId
           );
         })
         .finally(() => {

@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tenant: "tenants/tenant",
+      tenantId: "tenants/currentTenantId",
     }),
     eventName: {
       get() {
@@ -374,7 +374,7 @@ export default {
         </v-col>
         <v-col cols="12">
           <ChooseFile
-            :tenant="tenant.id"
+            :tenant="tenantId"
             v-model="teaserImage"
             background-color="accent"
             label="Titelbild der Veranstaltung"

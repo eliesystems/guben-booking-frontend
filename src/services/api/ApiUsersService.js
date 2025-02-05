@@ -1,7 +1,7 @@
 import store from "@/store";
 export default {
   getUsers() {
-    return ApiClient.get(`api/${store.getters["tenants/currentTenant"]}/users`, {
+    return ApiClient.get(`api/${store.getters["tenants/currentTenantId"]}/users`, {
       withCredentials: true,
     });
   },
@@ -12,32 +12,32 @@ export default {
     }
 
     return ApiClient.get(
-      `api/${store.getters["tenants/currentTenant"]}/users/ids${queryParams}`,
+      `api/${store.getters["tenants/currentTenantId"]}/users/ids${queryParams}`,
       { withCredentials: true }
     );
   },
   getUser() {
     return ApiClient.get(
-      `auth/${store.getters["tenants/currentTenant"]}/me?populatePermissions=1`,
+      `auth/${store.getters["tenants/currentTenantId"]}/me?populatePermissions=1`,
       { withCredentials: true }
     );
   },
   submitUser(user) {
     return ApiClient.put(
-      `api/${store.getters["tenants/currentTenant"]}/users`,
+      `api/${store.getters["tenants/currentTenantId"]}/users`,
       user,
       { withCredentials: true }
     );
   },
   deleteUser(user) {
     return ApiClient.delete(
-      `api/${store.getters["tenants/currentTenant"]}/users/${user.id}`,
+      `api/${store.getters["tenants/currentTenantId"]}/users/${user.id}`,
       { withCredentials: true }
     );
   },
   updateMe(user) {
     return ApiClient.put(
-      `api/${store.getters["tenants/currentTenant"]}/user`,
+      `api/${store.getters["tenants/currentTenantId"]}/user`,
       user,
       { withCredentials: true }
     );

@@ -293,9 +293,8 @@ export default {
   computed: {
     ...mapGetters({
       user: "user/user",
-      tenant: "tenants/tenant",
       isAuthorized: "user/isAuthorized",
-      getCurrentTenant: "tenants/currentTenant",
+      getCurrentTenant: "tenants/currentTenantId",
     }),
     currentTenant: {
       get: function () {
