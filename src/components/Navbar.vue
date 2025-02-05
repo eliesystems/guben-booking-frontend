@@ -251,6 +251,17 @@ export default {
         header: null,
         pages: [
           {
+            title: "Instanz verwalten",
+            link: "instanz",
+            icon: "mdi-home-edit-outline",
+            interfaceName: "events", //toDo - add interfaceName for instances
+          },
+        ],
+      },
+      {
+        header: null,
+        pages: [
+          {
             title: "Einstellungen",
             link: "einstellungen",
             icon: "mdi-cog-outline",
@@ -298,6 +309,7 @@ export default {
     }),
     currentTenant: {
       get: function () {
+        console.log(this.getCurrentTenant)
         return this.getCurrentTenant;
       },
       set: function (newValue) {

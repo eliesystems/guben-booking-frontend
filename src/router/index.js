@@ -56,6 +56,16 @@ const routes = [
     },
   },
   {
+    path: "/admin/instanz",
+    name: "instances",
+    component: Instances,
+    meta: {
+      title: "Instanz verwalten",
+      requiresAuth: true,
+      interfaceName: "instance",
+    },
+  },
+  {
     path: "/admin/mandanten",
     name: "tenants",
     component: Tenants,
