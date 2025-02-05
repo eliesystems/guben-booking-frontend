@@ -7,38 +7,15 @@ class UserPermissionService {
   }
 
   static allowCreate() {
-    const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
-      (p) => p.tenantId === tenantId
-    );
-    if (!permissions) return false;
-    return permissions.manageUsers.create;
+    return true;
   }
 
   static allowUpdate(userObject) {
-    const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
-      (p) => p.tenantId === tenantId
-    );
-    if (!permissions) return false;
-    return (
-      permissions.manageUsers.updateAny ||
-      (permissions.manageUsers.updateOwn &&
-        UserPermissionService.isSelf(userObject))
-    );
+    return true;
   }
 
   static allowDelete(userObject) {
-    const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
-      (p) => p.tenantId === tenantId
-    );
-    if (!permissions) return false;
-    return (
-      permissions.manageUsers.deleteAny ||
-      (permissions.manageUsers.deleteOwn &&
-        UserPermissionService.isSelf(userObject))
-    );
+    return true;
   }
 }
 

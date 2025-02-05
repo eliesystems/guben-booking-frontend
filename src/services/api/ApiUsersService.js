@@ -1,7 +1,6 @@
-import store from "@/store";
 export default {
   getUsers() {
-    return ApiClient.get(`api/${store.getters["tenants/currentTenantId"]}/users`, {
+    return ApiClient.get(`api/users`, {
       withCredentials: true,
     });
   },
@@ -11,35 +10,22 @@ export default {
       queryParams = `?filterRoles=${filterRoles.join(",")}`;
     }
 
-    return ApiClient.get(
-      `api/${store.getters["tenants/currentTenantId"]}/users/ids${queryParams}`,
-      { withCredentials: true }
-    );
+    return ApiClient.get(`api/users/ids${queryParams}`, {
+      withCredentials: true,
+    });
   },
-  getUser() {
-    return ApiClient.get(
-      `auth/${store.getters["tenants/currentTenantId"]}/me?populatePermissions=1`,
-      { withCredentials: true }
-    );
+  getUser(userId) {
+    return ApiClient.get(`api/users/${userId}`, {
+      withCredentials: true,
+    });
   },
   submitUser(user) {
-    return ApiClient.put(
-      `api/${store.getters["tenants/currentTenantId"]}/users`,
-      user,
-      { withCredentials: true }
-    );
+    return ApiClient.put("api/users", user, { withCredentials: true });
   },
   deleteUser(user) {
-    return ApiClient.delete(
-      `api/${store.getters["tenants/currentTenantId"]}/users/${user.id}`,
-      { withCredentials: true }
-    );
+    return ApiClient.delete(`api/users/${user.id}`, { withCredentials: true });
   },
   updateMe(user) {
-    return ApiClient.put(
-      `api/${store.getters["tenants/currentTenantId"]}/user`,
-      user,
-      { withCredentials: true }
-    );
+    return ApiClient.put(`api/user`, user, { withCredentials: true });
   },
 };
