@@ -1,29 +1,42 @@
 import user from "@/store/modules/user";
+import store from "@/store";
 
 class UserPermissionService {
   static isSelf(userObject) {
-    return (
-      userObject.id === user.state.data.id &&
-      userObject.tenant === user.state.data.tenant
-    );
+    return userObject.id === user.state.data.user.id;
   }
 
   static allowCreate() {
-    return user.state.data.permissions.manageUsers.create;
+    const tenantId = store.getters["tenants/currentTenant"];
+    const permissions = user.state.data.permissions.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
+    return permissions.manageUsers.create;
   }
 
   static allowUpdate(userObject) {
+    const tenantId = store.getters["tenants/currentTenant"];
+    const permissions = user.state.data.permissions.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
     return (
-      user.state.data.permissions.manageUsers.updateAny ||
-      (user.state.data.permissions.manageUsers.updateOwn &&
+      permissions.manageUsers.updateAny ||
+      (permissions.manageUsers.updateOwn &&
         UserPermissionService.isSelf(userObject))
     );
   }
 
   static allowDelete(userObject) {
+    const tenantId = store.getters["tenants/currentTenant"];
+    const permissions = user.state.data.permissions.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
     return (
-      user.state.data.permissions.manageUsers.deleteAny ||
-      (user.state.data.permissions.manageUsers.deleteOwn &&
+      permissions.manageUsers.deleteAny ||
+      (permissions.manageUsers.deleteOwn &&
         UserPermissionService.isSelf(userObject))
     );
   }

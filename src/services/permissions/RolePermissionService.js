@@ -1,30 +1,41 @@
 import user from "@/store/modules/user";
+import store from "@/store";
 
 class RolePermissionService {
   static isOwner(role) {
-    return (
-      role.ownerUserId === user.state.data.id &&
-      role.ownerTenant === user.state.data.tenant
-    );
+    return role.ownerUserId === user.state.data.user.id;
   }
 
   static allowCreate() {
-    return user.state.data.permissions.manageRoles.create;
+    const tenantId = store.getters["tenants/currentTenant"];
+    const permissions = user.state.data.permissions.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
+    return permissions.manageRoles.create;
   }
 
   static allowUpdate(role) {
+    const tenantId = store.getters["tenants/currentTenant"];
+    const permissions = user.state.data.permissions.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
     return (
-      user.state.data.permissions.manageRoles.updateAny ||
-      (user.state.data.permissions.manageRoles.updateOwn &&
-        RolePermissionService.isOwner(role))
+      permissions.manageRoles.updateAny ||
+      (permissions.manageRoles.updateOwn && RolePermissionService.isOwner(role))
     );
   }
 
   static allowDelete(role) {
+    const tenantId = store.getters["tenants/currentTenant"];
+    const permissions = user.state.data.permissions.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
     return (
-      user.state.data.permissions.manageRoles.deleteAny ||
-      (user.state.data.permissions.manageRoles.deleteOwn &&
-        RolePermissionService.isOwner(role))
+      permissions.manageRoles.deleteAny ||
+      (permissions.manageRoles.deleteOwn && RolePermissionService.isOwner(role))
     );
   }
 }
