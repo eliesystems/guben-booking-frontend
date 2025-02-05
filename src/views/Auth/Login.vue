@@ -26,6 +26,7 @@
           prepend-inner-icon="mdi-key"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="showPassword = !showPassword"
+          @keyup.enter="signin"
         ></v-text-field>
         <div class="text-left mt-2 mb-5">
           <a href="/password/reset">Passwort vergessen?</a>
@@ -80,7 +81,7 @@ export default {
 
   computed: {
     Utils() {
-      return Utils
+      return Utils;
     },
     ...mapGetters({
       instance: "instance/instance",
