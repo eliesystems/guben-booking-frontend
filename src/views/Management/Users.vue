@@ -2,6 +2,36 @@
   <AdminLayout>
     <v-row gutters align="stretch" class="mb-16">
       <v-col cols="12" class="mx-xs-auto d-flex flex-column" height="100%">
+        <v-row>
+          <v-col>
+            <v-select
+              outlined
+              dense
+              v-model="newUserId"
+              :items="api.users"
+              item-text="id"
+              item-value="id"
+              clearable
+            ></v-select>
+          </v-col>
+          <v-col>
+            <v-select
+              outlined
+              dense
+              multiple
+              v-model="newRoleIds"
+              :items="api.roles"
+              item-text="name"
+              item-value="id"
+              clearable
+              small-chips
+            ></v-select>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn color="primary" @click="addTenantUser">Hinzufügen</v-btn>
+          </v-col>
+        </v-row>
+
         <v-data-table
           :headers="headers"
           :items="members"
@@ -15,14 +45,57 @@
           loading-text="Daten werden geladen..."
         >
           <template v-slot:item.roles="{ item }">
-            <v-chip-group>
-              <v-chip small v-for="(roleId, i) in item.roles" :key="i">{{
-                getRoleById(roleId)?.name
-              }}</v-chip>
-            </v-chip-group>
+            <v-chip
+              small
+              close
+              v-for="(roleId, i) in item.roles"
+              :key="i"
+              class="mr-1"
+              @click:close="removeTenantUserRole(item.userId, roleId)"
+              >{{ getRoleById(roleId)?.name }}</v-chip
+            >
           </template>
           <template v-slot:item._isOwner="{ item }">
             <v-checkbox readonly v-model="item._isOwner"></v-checkbox>
+          </template>
+          <template v-slot:item.controls="{ item }">
+            <span v-if="item.id !== 'super-admin'">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn icon v-bind="attrs" v-on="on" small>
+                    <v-icon>mdi-dots-horizontal</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item link @click="removeTenantUser(item.userId)">
+                    <v-list-item-icon>
+                      <v-icon>mdi-close</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Benutzer entfernen</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    link
+                    @click="addTenantOwner(item.userId)"
+                    v-if="item._isOwner !== true"
+                  >
+                    <v-list-item-icon>
+                      <v-icon>mdi-shield-crown</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Zum Besitzer machen</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    link
+                    @click="removeTenantOwner(item.userId)"
+                    v-if="item._isOwner === true"
+                  >
+                    <v-list-item-icon>
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Zum Mitglied machen</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </span>
           </template>
         </v-data-table>
       </v-col>
@@ -35,6 +108,7 @@ import AdminLayout from "@/layouts/Admin.vue";
 import { mapActions, mapGetters } from "vuex";
 import ApiUsersService from "@/services/api/ApiUsersService";
 import ApiRolesService from "@/services/api/ApiRolesService";
+import ApiTenantService from "@/services/api/ApiTenantService";
 
 export default {
   components: {
@@ -42,6 +116,8 @@ export default {
   },
   data() {
     return {
+      newUserId: null,
+      newRoleIds: [],
       api: {
         users: [],
         roles: [],
@@ -62,6 +138,7 @@ export default {
           align: "start",
           value: "_isOwner",
         },
+        { text: "", value: "controls", sortable: false },
       ],
     };
   },
@@ -96,6 +173,7 @@ export default {
     ...mapActions({
       startLoading: "loading/start",
       stopLoading: "loading/stop",
+      replaceTenant: "tenants/replace",
     }),
     async fetchRoles() {
       const response = await ApiRolesService.getRoles(this.currentTenantId);
@@ -109,6 +187,56 @@ export default {
       this.api.users = response.data;
 
       await this.stopLoading("fetch-users");
+    },
+    async removeTenantUser(userId) {
+      const response = await ApiTenantService.removeTenantUser(
+        this.tenantId,
+        userId
+      );
+
+      const updatedTenant = response.data;
+      await this.replaceTenant(updatedTenant);
+    },
+    async addTenantUser() {
+      const response = await ApiTenantService.addTenantUser(
+        this.tenantId,
+        this.newUserId,
+        this.newRoleIds
+      );
+
+      this.newUserId = null;
+      this.newRoleIds = [];
+
+      const updatedTenant = response.data;
+      await this.replaceTenant(updatedTenant);
+    },
+    async removeTenantUserRole(userId, roleId) {
+      const response = await ApiTenantService.removeTenantUserRole(
+        this.tenantId,
+        userId,
+        roleId
+      );
+
+      const updatedTenant = response.data;
+      await this.replaceTenant(updatedTenant);
+    },
+    async addTenantOwner(userId) {
+      const response = await ApiTenantService.addTenantOwner(
+        this.tenantId,
+        userId
+      );
+
+      const updatedTenant = response.data;
+      await this.replaceTenant(updatedTenant);
+    },
+    async removeTenantOwner(userId) {
+      const response = await ApiTenantService.removeTenantOwner(
+        this.tenantId,
+        userId
+      );
+
+      const updatedTenant = response.data;
+      await this.replaceTenant(updatedTenant);
     },
     getRoleById(roleId) {
       const role = this.api.roles.find((role) => role.id === roleId);
