@@ -47,12 +47,10 @@ export default {
     ...mapGetters({
       toasts: "toasts/all",
       user: "user/user",
-      tenant: "tenants/tenant",
       instance: "instance/instance",
     }),
   },
   async mounted() {
-    console.log("App.vue mounted");
     await this.updateInstance(await ApiInstanceService.getPublicInstance());
   },
 };

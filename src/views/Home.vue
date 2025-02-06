@@ -41,7 +41,7 @@ export default {
   computed: {
     ...mapGetters({
       tenants: "tenants/tenants",
-      currentTenant: "tenants/currentTenant",
+      currentTenant: "tenants/currentTenantId",
     }),
   },
   methods: {

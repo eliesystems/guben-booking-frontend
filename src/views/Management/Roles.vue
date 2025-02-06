@@ -138,8 +138,6 @@ export default {
           value: "name",
         },
         { text: "Admin-Bereiche", value: "adminInterfaces" },
-        { text: "Benutzer", value: "manageUsers" },
-        { text: "Mandanten", value: "manageTenants" },
         { text: "Ressourcen", value: "manageBookables" },
         { text: "Buchungen", value: "manageBookings" },
         { text: "Rollen", value: "manageRoles" },

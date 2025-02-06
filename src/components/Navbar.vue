@@ -174,6 +174,7 @@ export default {
             title: "Übersicht",
             link: "dashboard",
             icon: "mdi-view-dashboard-outline",
+            showAlways: true,
           },
         ],
       },
@@ -303,9 +304,8 @@ export default {
   computed: {
     ...mapGetters({
       user: "user/user",
-      tenant: "tenants/tenant",
       isAuthorized: "user/isAuthorized",
-      getCurrentTenant: "tenants/currentTenant",
+      getCurrentTenant: "tenants/currentTenantId",
     }),
     currentTenant: {
       get: function () {

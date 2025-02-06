@@ -413,7 +413,7 @@ export default {
     async processPayment(booking) {
       const response = await ApiPaymentService.payments(
         booking.id,
-        booking.tenant
+        booking.tenantId
       );
       if (response.status !== 200) throw new Error("Payment processing failed");
       return response;
@@ -456,7 +456,7 @@ export default {
         path: "/checkout/status",
         query: {
           id: booking.id,
-          tenant: booking.tenant,
+          tenant: booking.tenantId,
           paymentProvider: paymentProvider,
         },
       });

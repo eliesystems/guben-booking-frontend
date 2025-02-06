@@ -27,13 +27,14 @@ const actions = {
 };
 
 const getters = {
-  user: (state) => state.data,
-  tenant: (state) => state.data.tenant,
+  user: (state) => state.data.user,
   isLoggedIn: () => !_.isNil(state.data),
   isAuthorized: (state) => (ifce) => {
     if (state.data && state.data.permissions) {
-      const t = store.getters["tenants/currentTenant"];
+      const t = store.getters["tenants/currentTenantId"];
       const adIfces = state.data.permissions.find((p) => p.tenantId === t);
+      if(adIfces.isOwner) return true;
+      if(!adIfces) return false;
       return adIfces.adminInterfaces.includes(ifce);
     }
     return false;

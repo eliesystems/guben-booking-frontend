@@ -4,7 +4,8 @@ const namespaced = true;
 const state = {
   data: PersistenceService.getFromLocalStorage("tenant") || null,
   tenants: PersistenceService.getFromLocalStorage("tenants") || null,
-  currentTenant: PersistenceService.getFromLocalStorage("currentTenant") || null,
+  currentTenantId:
+    PersistenceService.getFromLocalStorage("currentTenantId") || null,
 };
 
 const mutations = {
@@ -21,8 +22,14 @@ const mutations = {
     PersistenceService.writeToLocalStorage("tenants", tenants);
   },
   SELECT(state, tenant) {
-    state.currentTenant = tenant;
-    PersistenceService.writeToLocalStorage("currentTenant", tenant);
+    state.currentTenantId = tenant;
+    PersistenceService.writeToLocalStorage("currentTenantId", tenant);
+  },
+  REPLACE(state, tenant) {
+    const index = state.tenants.findIndex((t) => t.id === tenant.id);
+    if (index !== -1) {
+      state.tenants.splice(index, 1, tenant);
+    }
   },
 };
 
@@ -39,11 +46,18 @@ const actions = {
   select({ commit }, tenant) {
     commit("SELECT", tenant);
   },
+  replace({ commit }, tenant) {
+    commit("REPLACE", tenant);
+  },
 };
 
 const getters = {
   tenants: (state) => state.tenants,
-  currentTenant: (state) => state.currentTenant,
+  currentTenantId: (state) => state.currentTenantId,
+  currentTenant: (state) => {
+    if (!state.data) return null;
+    return state.tenants.find((t) => t.id === state.currentTenantId);
+  },
 };
 
 export default {

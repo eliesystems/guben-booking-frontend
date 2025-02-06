@@ -150,7 +150,7 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading/isLoading",
-      tenant: "tenants/tenant",
+      tenant: "tenants/currentTenant",
     }),
     createDisabled() {
       return !this.BookablePermissionService.allowCreate();

@@ -340,8 +340,8 @@ export default {
 
     async fetchMe() {
       try {
-        const { data } = await ApiAuthService.me(this.tenant, true);
-        this.me = data;
+        const { data } = await ApiAuthService.me(true);
+        this.me = data.user;
         this.contactDetails.mail = this.me.id;
         this.contactDetails.name = this.me.firstName + " " + this.me.lastName;
         this.contactDetails.phone = this.me.phone;
