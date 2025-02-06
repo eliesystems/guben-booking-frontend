@@ -151,7 +151,8 @@
       </v-col>
     </v-row>
 
-    {{instance}}
+    ownerIds -->  {{instance.ownerUserIds}}
+
   </AdminLayout>
 </template>
 
@@ -193,20 +194,12 @@ export default {
       this.instance.noreplyGraphClientId = newConfig.noreplyGraphClientId;
       this.instance.noreplyGraphClientSecret = newConfig.noreplyGraphClientSecret;
     },
-
-
-    updateData() {
-      console.log("called updateData");
-      this.instance.contactAddress = this.tempContactAddress;
-      this.instance.contactUrl = this.tempContactUrl;
-      this.instance.dataProtectionUrl = this.tempDataProtectionUrl;
-      this.instance.tempLegalNoticeUrl = this.tempLegalNoticeUrl;
+    async updateInstance() {
+      console.log("try to update Instance...");
+      this.instance = await ApiInstanceService.updateInstance(this.instance)
 
 
       //toDo - add function in ApiInstanceService
-    },
-
-    updateInstance(){
 
     },
     async fetchInstance() {
