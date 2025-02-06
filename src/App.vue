@@ -51,7 +51,6 @@ export default {
     }),
   },
   async mounted() {
-    console.log("App.vue mounted");
     await this.updateInstance(await ApiInstanceService.getPublicInstance());
   },
 };

@@ -481,14 +481,14 @@ function isLoggedIn() {
 }
 
 function isAuthorized(ifce) {
-  console.log("isAuthorized", ifce);
   return store.getters["user/isAuthorized"](ifce);
 }
 
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     const hasSession = await ApiAuthService.me()
-      .then(() => {
+      .then((response) => {
+        store.dispatch("user/update", response.data);
         return true;
       })
       .catch(() => {
