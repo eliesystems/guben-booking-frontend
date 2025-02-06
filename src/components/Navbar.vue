@@ -175,6 +175,7 @@ export default {
             title: "Übersicht",
             link: "dashboard",
             icon: "mdi-view-dashboard-outline",
+            showAlways: true,
           },
         ],
       },
