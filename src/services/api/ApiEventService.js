@@ -15,7 +15,7 @@ export default {
   addEvent(addTickets = false, tenant) {
     const t = tenant || store.getters["tenants/currentTenantId"];
     const formData = { ...store.state.events.form };
-    formData.tenant = t;
+    formData.tenantId = t;
     return ApiClient.put(`api/${t}/events?withTickets=${addTickets}`, formData, { withCredentials: true })
   },
   deleteEvent(id, tenant) {

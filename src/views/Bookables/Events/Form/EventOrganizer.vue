@@ -83,7 +83,7 @@
               </v-col>
               <v-col cols="12">
                 <ChooseFile
-                  :tenant="tenantId"
+                  :tenant-id="tenantId"
                   v-model="contactPersonImage"
                   images-only
                   background-color="accent"
@@ -152,7 +152,7 @@
                     </v-col>
                     <v-col cols="12" md="6">
                       <ChooseFile
-                        :tenant="tenantId"
+                        :tenant-id="tenantId"
                         v-model="speaker.image"
                         images-only
                         background-color="accent"

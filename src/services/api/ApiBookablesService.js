@@ -16,7 +16,7 @@ export default {
     const bookablesForm = store.getters["bookables/form"];
     const t = tenant || store.getters["tenants/currentTenantId"];
     const formData = { ...bookablesForm };
-    formData.tenant = t;
+    formData.tenantId = t;
 
     if (formData.priceEur && typeof formData.priceEur === "string") {
       formData.priceEur = formData.priceEur.replace(",", ".");
@@ -37,6 +37,8 @@ export default {
     formData.specialOpeningHours = formData.specialOpeningHours.filter(
       (item) => item.date !== null
     );
+
+    console.log(formData);
 
     return ApiClient.put(`api/${t}/bookables`, formData, {
       withCredentials: true,
@@ -84,22 +86,22 @@ export default {
         });
     });
   },
-  getRelatedOpeningHours(bookableId, tenant) {
-    const t = tenant || store.getters["tenants/currentTenantId"];
+  getRelatedOpeningHours(bookableId, tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     return ApiClient.get(`api/${t}/bookables/${bookableId}/openingHours`, {
       withCredentials: true,
     });
   },
-  getBookableAvailability(bookableId, tenant, startDate, endDate, amount) {
+  getBookableAvailability(bookableId, tenantId, startDate, endDate, amount) {
     return ApiClient.get(
-      `api/${tenant}/bookables/${bookableId}/availability?startDate=${startDate}&endDate=${endDate}&amount=${amount}`,
+      `api/${tenantId}/bookables/${bookableId}/availability?startDate=${startDate}&endDate=${endDate}&amount=${amount}`,
       {
         withCredentials: true,
       }
     );
   },
-  async publicBookableCountCheck(tenant) {
-    const t = tenant || store.getters["tenants/currentTenantId"];
+  async publicBookableCountCheck(tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     return (
       await ApiClient.get(`api/${t}/bookables/count/check`, {
         withCredentials: true,

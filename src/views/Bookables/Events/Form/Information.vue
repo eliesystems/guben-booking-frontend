@@ -24,7 +24,7 @@
 
             <v-col cols="12">
               <ChooseFile
-                :tenant="tenantId"
+                :tenant-id="tenantId"
                 v-model="teaserImage"
                 background-color="accent"
                 label="Titelbild der Veranstaltung"
