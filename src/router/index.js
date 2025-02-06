@@ -20,11 +20,12 @@ import Roles from "@/views/Management/Roles";
 import store from "@/store/index";
 import ToastService from "@/services/ToastService";
 import Tickets from "@/views/Bookables/Tickets/Tickets";
-import Bookings from "@/views/Management/Bookings";
+import Bookings from "@/views/Bookings.vue";
 import Settings from "@/views/Settings";
 import EditBookable from "@/views/Bookables/EditBookable";
 import ApiAuthService from "@/services/api/ApiAuthService";
-import Coupons from "@/views/Management/Coupons";
+import Coupons from "@/views/Coupons.vue";
+import Instances from "@/views/Management/Instances.vue";
 
 Vue.use(VueRouter);
 
@@ -52,6 +53,16 @@ const routes = [
       requiresAuth: true,
       interfaceName: "dashboard",
       public: true,
+    },
+  },
+  {
+    path: "/admin/instanz",
+    name: "instances",
+    component: Instances,
+    meta: {
+      title: "Instanz verwalten",
+      requiresAuth: true,
+      interfaceName: "instance",
     },
   },
   {

@@ -115,7 +115,7 @@
 
 <script>
 import AdminLayout from "@/layouts/Admin.vue";
-import CouponEdit from "../../components/Coupon/CouponEdit.vue";
+import CouponEdit from "../components/Coupon/CouponEdit.vue";
 import { mapActions, mapGetters } from "vuex";
 import ApiCouponService from "@/services/api/ApiCouponService";
 import CouponDeleteConformationDialog from "@/components/Coupon/CouponDeleteConformationDialog.vue";

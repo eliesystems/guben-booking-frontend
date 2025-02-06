@@ -153,7 +153,6 @@
 import { mapActions, mapGetters } from "vuex";
 import ToastService from "@/services/ToastService";
 import ApiAuthService from "@/services/api/ApiAuthService";
-import { RolePermission } from "@/entities/role";
 import ApiTenantService from "@/services/api/ApiTenantService";
 
 export default {
@@ -200,6 +199,11 @@ export default {
             icon: "mdi-account-group-outline",
             interfaceName: "roles",
           },
+        ],
+      },
+      {
+        header: "Buchungsplattform",
+        pages: [
           {
             title: "Buchungen",
             link: "buchungen",
@@ -212,11 +216,6 @@ export default {
             icon: "mdi-ticket-percent-outline",
             interfaceName: "coupons",
           },
-        ],
-      },
-      {
-        header: "Buchungsplattform",
-        pages: [
           {
             title: "Veranstaltungsorte",
             link: "veranstaltungsorte",
@@ -246,6 +245,17 @@ export default {
             link: "veranstaltungen",
             icon: "mdi-calendar",
             interfaceName: "events",
+          },
+        ],
+      },
+      {
+        header: null,
+        pages: [
+          {
+            title: "Instanz verwalten",
+            link: "instanz",
+            icon: "mdi-home-edit-outline",
+            interfaceName: "events", //toDo - add interfaceName for instances
           },
         ],
       },
@@ -299,6 +309,7 @@ export default {
     }),
     currentTenant: {
       get: function () {
+        console.log(this.getCurrentTenant)
         return this.getCurrentTenant;
       },
       set: function (newValue) {
