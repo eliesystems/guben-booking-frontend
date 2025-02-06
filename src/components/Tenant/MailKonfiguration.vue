@@ -3,7 +3,7 @@
     <v-row>
       <v-col class="">
         <v-card
-          v-if="!!selectedTenant.genericMailTemplate"
+          v-if="!!selectedMailConfig.genericMailTemplate"
           flat
           height="100"
         >
@@ -44,7 +44,8 @@
           dense
           label="E-Mail-Adresse"
           :rules="validationRules.mail"
-          v-model="selectedTenant.noreplyMail"
+          v-model="selectedMailConfig.noreplyMail"
+          @input="changeData"
         ></v-text-field>
       </v-col>
       <v-col>
@@ -53,7 +54,8 @@
           filled
           dense
           label="Anzeigename"
-          v-model="selectedTenant.noreplyDisplayName"
+          v-model="selectedMailConfig.noreplyDisplayName"
+          @input="changeData"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -65,7 +67,8 @@
           filled
           dense
           label="SMTP-Server"
-          v-model="selectedTenant.noreplyHost"
+          v-model="selectedMailConfig.noreplyHost"
+          @input="changeData"
         ></v-text-field>
       </v-col>
       <v-col class="col-md-2">
@@ -74,7 +77,8 @@
           filled
           dense
           label="Port"
-          v-model="selectedTenant.noreplyPort"
+          v-model="selectedMailConfig.noreplyPort"
+          @input="changeData"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -86,7 +90,8 @@
           filled
           dense
           label="Benutzername"
-          v-model="selectedTenant.noreplyUser"
+          v-model="selectedMailConfig.noreplyUser"
+          @input="changeData"
         ></v-text-field>
       </v-col>
       <v-col class="">
@@ -95,7 +100,8 @@
           filled
           dense
           label="Passwort"
-          v-model="selectedTenant.noreplyPassword"
+          v-model="selectedMailConfig.noreplyPassword"
+          @input="changeData"
           :append-icon="
                       showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'
                     "
@@ -128,22 +134,22 @@
                 <v-fade-transition leave-absolute>
                   <div v-if="!open">
                     <v-icon
-                      v-if="!selectedTenant.noreplyUseGraphApi"
+                      v-if="!selectedMailConfig.noreplyUseGraphApi"
                       color="success"
                     >mdi-check</v-icon
                     >
                     <span
-                      v-if="!selectedTenant.noreplyUseGraphApi"
+                      v-if="!selectedMailConfig.noreplyUseGraphApi"
                       class="ml-2"
                     >Aktiv</span
                     >
 
                     <v-icon
-                      v-if="selectedTenant.noreplyUseGraphApi"
+                      v-if="selectedMailConfig.noreplyUseGraphApi"
                       color="error"
                     >mdi-close</v-icon
                     >
-                    <span v-if="selectedTenant.noreplyUseGraphApi" class="ml-2"
+                    <span v-if="selectedMailConfig.noreplyUseGraphApi" class="ml-2"
                     >Inaktiv</span
                     >
                   </div>
@@ -156,13 +162,14 @@
           <v-row>
             <v-col class="col-12">
               <v-switch
-                v-model="selectedTenant.noreplyUseGraphApi"
+                v-model="selectedMailConfig.noreplyUseGraphApi"
                 color="primary"
                 hide-details
                 :true-value="false"
                 :false-value="true"
                 label="SMTP als E-Mail-Versandmethode aktivieren"
                 class="mt-2"
+                @change="changeData"
               ></v-switch>
             </v-col>
           </v-row>
@@ -173,7 +180,8 @@
                 filled
                 dense
                 label="SMTP-Server"
-                v-model="selectedTenant.noreplyHost"
+                v-model="selectedMailConfig.noreplyHost"
+                @input="changeData"
               ></v-text-field>
             </v-col>
             <v-col class="col-md-2">
@@ -182,7 +190,8 @@
                 filled
                 dense
                 label="Port"
-                v-model="selectedTenant.noreplyPort"
+                v-model="selectedMailConfig.noreplyPort"
+                @input="changeData"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -194,7 +203,8 @@
                 dense
                 hide-details
                 label="Benutzername"
-                v-model="selectedTenant.noreplyUser"
+                v-model="selectedMailConfig.noreplyUser"
+                @input="changeData"
               ></v-text-field>
             </v-col>
             <v-col class="">
@@ -204,7 +214,8 @@
                 dense
                 hide-details
                 label="Passwort"
-                v-model="selectedTenant.noreplyPassword"
+                v-model="selectedMailConfig.noreplyPassword"
+                @input="changeData"
                 :append-icon="
                             showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'
                           "
@@ -218,7 +229,8 @@
           <v-row>
             <v-col>
               <v-switch
-                v-model="selectedTenant.noreplyStarttls"
+                v-model="selectedMailConfig.noreplyStarttls"
+                @change="changeData"
                 color="primary"
                 label="StartTLS aktivieren"
                 hide-details
@@ -242,21 +254,21 @@
                 <v-fade-transition leave-absolute>
                   <div v-if="!open">
                     <v-icon
-                      v-if="selectedTenant.noreplyUseGraphApi"
+                      v-if="selectedMailConfig.noreplyUseGraphApi"
                       color="success"
                     >mdi-check</v-icon
                     >
-                    <span v-if="selectedTenant.noreplyUseGraphApi" class="ml-2"
+                    <span v-if="selectedMailConfig.noreplyUseGraphApi" class="ml-2"
                     >Aktiv</span
                     >
 
                     <v-icon
-                      v-if="!selectedTenant.noreplyUseGraphApi"
+                      v-if="!selectedMailConfig.noreplyUseGraphApi"
                       color="error"
                     >mdi-close</v-icon
                     >
                     <span
-                      v-if="!selectedTenant.noreplyUseGraphApi"
+                      v-if="!selectedMailConfig.noreplyUseGraphApi"
                       class="ml-2"
                     >Inaktiv</span
                     >
@@ -270,11 +282,12 @@
           <v-row>
             <v-col class="col-12">
               <v-switch
-                v-model="selectedTenant.noreplyUseGraphApi"
+                v-model="selectedMailConfig.noreplyUseGraphApi"
                 color="primary"
                 hide-details
                 label="Graph Api als E-Mail-Versandmethode aktivieren"
                 class="mt-2"
+                @change="changeData"
               ></v-switch>
             </v-col>
           </v-row>
@@ -285,7 +298,8 @@
                 filled
                 dense
                 label="Tenant ID"
-                v-model="selectedTenant.noreplyGraphTenantId"
+                v-model="selectedMailConfig.noreplyGraphTenantId"
+                @input="changeData"
               ></v-text-field>
             </v-col>
             <v-col class="">
@@ -294,7 +308,8 @@
                 filled
                 dense
                 label="Client ID"
-                v-model="selectedTenant.noreplyGraphClientId"
+                v-model="selectedMailConfig.noreplyGraphClientId"
+                @input="changeData"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -305,7 +320,8 @@
                 filled
                 dense
                 label="Client Secret"
-                v-model="selectedTenant.noreplyGraphClientSecret"
+                v-model="selectedMailConfig.noreplyGraphClientSecret"
+                @input="changeData"
                 :append-icon="
                             showClientSecret ? 'mdi-eye' : 'mdi-eye-off'
                           "
@@ -324,9 +340,9 @@
 
 <script>
 export default {
-  name: "TenantMailKonfiguration",
+  name: "MailKonfiguration",
   props: {
-    tenant: {
+    mailConfig: {
       type: Object,
       required: true,
     }
@@ -344,12 +360,17 @@ export default {
     }
   },
   computed: {
-    selectedTenant: {
+    selectedMailConfig: {
       get() {
-        return this.tenant;
+        return this.mailConfig;
       },
     },
   },
+  methods: {
+    changeData() {
+      this.$emit("update", this.selectedMailConfig)
+    }
+  }
 }
 </script>
 

@@ -139,7 +139,10 @@
               </v-row>
               <h3 class="mt-10">E-Mail-Konfiguration</h3>
               <v-divider class="mb-5"></v-divider>
-              <TenantMailKonfiguration :tenant="selectedTenant"/>
+              <MailKonfiguration
+                :mail-config="tenantMailConfig"
+                @update="updateMailConfig"
+              />
 
               <h3 class="mt-10">Zahlungsbeleg</h3>
               <v-divider class="mb-5"></v-divider>
@@ -741,11 +744,11 @@
 
 <script>
 import ApiTenantService from "@/services/api/ApiTenantService";
-import TenantMailKonfiguration from "@/components/Tenant/TenantMailKonfiguration.vue";
+import MailKonfiguration from "@/components/Tenant/MailKonfiguration.vue";
 
 export default {
   name: "TenantEdit",
-  components: {TenantMailKonfiguration},
+  components: {MailKonfiguration},
   props: {
     open: {
       type: Boolean,
@@ -826,6 +829,24 @@ export default {
         return this.tenant;
       },
     },
+    tenantMailConfig: {
+      get() {
+        return {
+          mailTemplate: this.selectedTenant.genericMailTemplate,
+          noreplyMail: this.selectedTenant.noreplyMail,
+          noreplyDisplayName: this.selectedTenant.noreplyDisplayName,
+          noreplyHost: this.selectedTenant.noreplyHost,
+          noreplyPort: this.selectedTenant.noreplyPort,
+          noreplyUser: this.selectedTenant.noreplyUser,
+          noreplyPassword: this.selectedTenant.noreplyPassword,
+          noreplyUseGraphApi: this.selectedTenant.noreplyUseGraphApi,
+          noreplyStarttls: this.selectedTenant.noreplyStarttls,
+          noreplyGraphTenantId: this.selectedTenant.noreplyGraphTenantId,
+          noreplyGraphClientId: this.selectedTenant.noreplyGraphClientId,
+          noreplyGraphClientSecret: this.selectedTenant.noreplyGraphClientSecret,
+        };
+      },
+    },
     parevaSystem: {
       get() {
         return (
@@ -858,6 +879,20 @@ export default {
     },
   },
   methods: {
+    updateMailConfig(newConfig){
+      this.selectedTenant.noreplyDisplayName = newConfig.noreplyDisplayName;
+      this.selectedTenant.noreplyMail = newConfig.noreplyMail;
+      this.selectedTenant.noreplyDisplayName = newConfig.noreplyDisplayName;
+      this.selectedTenant.noreplyHost = newConfig.noreplyHost;
+      this.selectedTenant.noreplyPort = newConfig.noreplyPort;
+      this.selectedTenant.noreplyUser = newConfig.noreplyUser;
+      this.selectedTenant.noreplyPassword = newConfig.noreplyPassword;
+      this.selectedTenant.noreplyUseGraphApi = newConfig.noreplyUseGraphApi;
+      this.selectedTenant.noreplyStarttls = newConfig.noreplyStarttls;
+      this.selectedTenant.noreplyGraphTenantId = newConfig.noreplyGraphTenantId;
+      this.selectedTenant.noreplyGraphClientId = newConfig.noreplyGraphClientId;
+      this.selectedTenant.noreplyGraphClientSecret = newConfig.noreplyGraphClientSecret;
+    },
     closeDialog() {
       this.$emit("close");
     },
