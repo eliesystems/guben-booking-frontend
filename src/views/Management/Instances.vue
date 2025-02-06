@@ -130,6 +130,38 @@
       </v-col>
     </v-row>
 
+    <!-- Besitzer -->
+    <v-row no-gutters align="center" justify="center" class="mt-10">
+      <v-col class="mx-xs-auto" cols="12" sm="10">
+        <p class="text-h4">Besitzer</p>
+      </v-col>
+    </v-row>
+    <v-row no-gutters align="center" justify="center">
+      <v-col class="mx-xs-auto" cols="12" sm="10">
+        <p class="text-subtitle-1">Besitzer Ihrer Instanz</p>
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters align="center" justify="center" class="mt-5">
+      <v-col class="mx-xs-auto" cols="12" sm="10">
+        <v-card outlined class="mx-auto pa-2">
+          <v-list dense>
+              <v-list-item
+                v-for="(item, i) in instance.ownerUserIds"
+                :key="i"
+              >
+                <v-list-item-icon>
+                  <v-icon> mdi-account</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <v-row justify="space-between" align="center">
       <v-col class="col-auto text-right mt-2">
         <v-btn
@@ -150,9 +182,6 @@
         </v-btn>
       </v-col>
     </v-row>
-
-    ownerIds -->  {{instance.ownerUserIds}}
-
   </AdminLayout>
 </template>
 
@@ -176,7 +205,7 @@ export default {
       tempContactUrl: "",
       tempDataProtectionUrl: "",
       tempLegalNoticeUrl: "",
-
+      //selectedOwner: null;
     }
   },
   methods: {
