@@ -350,7 +350,7 @@ export default {
         vatIncludedEur: null,
         zipCode: null,
       };
-      this.selectedBooking.tenant = this.tenantId;
+      this.selectedBooking.tenantId = this.tenantId;
       this.openEditDialog = true;
     },
     translatePayMethod(value) {

@@ -30,7 +30,7 @@
                     filled
                     hide-details
                     label="Mandant"
-                    v-model="selectedBooking.tenant"
+                    v-model="selectedBooking.tenantId"
                     readonly
                     disabled
                   ></v-text-field>
@@ -863,7 +863,7 @@ export default {
     async fetchActivePaymentApps() {
       try {
         const response = await ApiTenantService.getTenantActivePaymentApps(
-          this.booking.tenant
+          this.booking.tenantId
         );
         this.activePaymentApps = response.data;
       } catch (error) {

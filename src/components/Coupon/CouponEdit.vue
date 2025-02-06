@@ -361,7 +361,7 @@ export default {
           this.selectedCoupon.validTo = null;
         }
 
-        this.selectedCoupon.tenant = this.tenantId;
+        this.selectedCoupon.tenantId = this.tenantId;
 
         await ApiCouponService.submitCoupon(undefined, this.selectedCoupon)
           .then((response) => {

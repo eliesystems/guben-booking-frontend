@@ -1,7 +1,7 @@
 const namespaced = true;
 const defaultState = {
   id: null,
-  tenant: "",
+  tenantId: "",
   information: {
     name: "",
     teaserText: "",

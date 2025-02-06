@@ -24,6 +24,7 @@ export default {
     ...mapActions({
       updateValue: "events/updateForm",
       clearForm: "events/clearForm",
+      addToast: "toasts/add",
     }),
     removeFlags(item) {
       this.flags.splice(this.flags.indexOf(item), 1);
@@ -374,7 +375,7 @@ export default {
         </v-col>
         <v-col cols="12">
           <ChooseFile
-            :tenant="tenantId"
+            :tenant-id="tenantId"
             v-model="teaserImage"
             background-color="accent"
             label="Titelbild der Veranstaltung"
