@@ -171,9 +171,9 @@ export default {
         header: null,
         pages: [
           {
-            title: "Übersicht",
+            title: "Mandanten",
             link: "dashboard",
-            icon: "mdi-view-dashboard-outline",
+            icon: "mdi-view-dashboard",
             showAlways: true,
           },
         ],
@@ -182,7 +182,7 @@ export default {
         header: "Verwaltung",
         pages: [
           {
-            title: "Mandanten",
+            title: "Mandant verwalten",
             link: "mandanten",
             icon: "mdi-domain",
             interfaceName: "tenants",
@@ -309,7 +309,7 @@ export default {
     }),
     currentTenant: {
       get: function () {
-        console.log(this.getCurrentTenant)
+        console.log(this.getCurrentTenant);
         return this.getCurrentTenant;
       },
       set: function (newValue) {

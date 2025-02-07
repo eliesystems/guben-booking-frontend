@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <v-row gutters align="center" justify="center">
+    <v-row gutters>
       <v-col
         v-for="tenant in tenants"
         :key="tenant.id"
@@ -11,13 +11,14 @@
         <v-card
           max-height="200px"
           outlined
-          :elevation="tenant.id === currentTenant ? 0 : 1"
+          flat
           :color="tenant.id === currentTenant ? 'grey lighten-4' : ''"
           @click="selectTenant(tenant.id)"
+          class="fill-height pt-7 rounded"
           ><!-- toDO - dynamically check for activ tenant -->
-          <v-card-title class="primary--text">
+          <v-card-text class="primary--text">
             {{ tenant.name }}
-          </v-card-title>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -48,8 +49,9 @@ export default {
     ...mapActions({
       select: "tenants/select",
     }),
-    selectTenant(tenantId) {
-      this.select(tenantId);
+    async selectTenant(tenantId) {
+      await this.select(tenantId);
+      await this.$router.push({ name: "bookings" });
     },
   },
 };

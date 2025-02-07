@@ -49,7 +49,7 @@ const routes = [
     name: "dashboard",
     component: Home,
     meta: {
-      title: "Mandantenauswahl",
+      title: "Meine Mandanten",
       requiresAuth: true,
       interfaceName: "dashboard",
       public: true,
