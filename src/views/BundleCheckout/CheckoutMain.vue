@@ -26,11 +26,12 @@
             </template>
           </v-stepper-header>
         </v-stepper>
-
         <v-row>
           <v-col
             v-if="step < steps.length"
-            :class="leadItem.bookable ? 'col-md-7' : 'col-md'"
+            :class="
+              leadItem.bookable && !preventBooking ? 'col-md-7' : 'col-md'
+            "
           >
             <component
               :is="steps[step - 1].component"
@@ -39,7 +40,7 @@
               v-on="steps[step - 1].events"
             ></component>
           </v-col>
-          <v-col v-if="leadItem.bookable" class="col-md">
+          <v-col v-if="leadItem.bookable && !preventBooking" class="col-md">
             <checkout-quick-summary
               v-if="!loading && leadItem.bookable"
               :lead-item="leadItem"
@@ -152,6 +153,7 @@ export default {
     }),
     async init() {
       await this.fetchMe();
+      await this.getCheckoutPermissions();
       await this.fetchLeadBookable();
       await this.fetchSubsequentBookables();
       await this.validateItems();
@@ -361,6 +363,20 @@ export default {
       }
     },
 
+    async getCheckoutPermissions() {
+      try {
+        await ApiCheckoutService.getCheckoutPermissions(
+          this.tenant,
+          this.leadItem.bookableId
+        );
+        this.preventBooking = false;
+      } catch (error) {
+        this.preventBooking = true;
+        this.loginRequired = error.response.status === 401;
+        this.bookingPermission = error.response.status !== 403;
+      }
+    },
+
     async fetchLeadBookable() {
       try {
         const response = await ApiBookablesService.getBookable(
@@ -370,26 +386,15 @@ export default {
 
         if (response.data.id) {
           this.leadItem.bookable = response.data;
-          this.preventBooking = false;
-
           if (
             this.leadItem.bookable.permittedRoles?.length > 0 ||
             this.leadItem.bookable.permittedUsers?.length > 0
           ) {
             this.loginRequired = true;
           }
-        } else {
-          this.preventBooking = true;
-          this.loginRequired = false;
         }
       } catch (error) {
-        this.loginRequired = error.response.status === 401;
-        this.bookingPermission = error.response.status !== 403;
-        if (!this.bookingPermission) {
-          this.step = 1;
-        }
         this.leadItem.bookable = null;
-        this.preventBooking = true;
       }
     },
 

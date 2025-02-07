@@ -987,7 +987,7 @@ export default {
       this.permittedUsers.splice(this.permittedUsers.indexOf(item), 1);
     },
     removePermittedRole(item) {
-      this.permittedRoles.splice(this.freeBookingUsers.indexOf(item), 1);
+      this.permittedRoles.splice(this.permittedRoles.indexOf(item), 1);
     },
     removeFreeBookingUser(item) {
       this.freeBookingUsers.splice(this.freeBookingUsers.indexOf(item), 1);
