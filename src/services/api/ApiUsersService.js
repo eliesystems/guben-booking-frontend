@@ -1,8 +1,9 @@
 export default {
-  getUsers() {
-    return ApiClient.get(`api/users`, {
+  async getUsers() {
+    const response = await ApiClient.get(`api/users`, {
       withCredentials: true,
     });
+    return response.data;
   },
   getUserIds(filterRoles) {
     let queryParams = "";
