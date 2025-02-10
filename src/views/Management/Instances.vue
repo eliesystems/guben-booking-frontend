@@ -249,7 +249,7 @@ export default {
       this.instance = await ApiInstanceService.updateInstance(this.instance);
     },
     async fetchInstance() {
-      this.instance =  await ApiInstanceService.getInstance();
+      this.instance =  await ApiInstanceService.getInstance(false);
     },
     async fetchUsers() {
       this.availableUserIds = await ApiUsersService.getUsers();

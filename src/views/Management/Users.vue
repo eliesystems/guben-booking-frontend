@@ -116,8 +116,13 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       newUserId: null,
       newRoleIds: [],
+      tenant: {
+        users: [],
+        ownerUserIds: [],
+      },
       api: {
         users: [],
         roles: [],
@@ -146,7 +151,6 @@ export default {
     ...mapGetters({
       loading: "loading/isLoading",
       tenantId: "tenants/currentTenantId",
-      tenant: "tenants/currentTenant",
     }),
     members() {
       const members = this.tenant.users.map((userRef) => ({
@@ -173,8 +177,19 @@ export default {
     ...mapActions({
       startLoading: "loading/start",
       stopLoading: "loading/stop",
-      replaceTenant: "tenants/replace",
     }),
+    async fetchTenant() {
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.getTenant(this.tenantId);
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async fetchRoles() {
       const response = await ApiRolesService.getRoles(this.currentTenantId);
       this.api.roles = response.data;
@@ -183,60 +198,88 @@ export default {
     async fetchUsers() {
       await this.startLoading("fetch-users");
 
-      const response = await ApiUsersService.getUsers();
-      this.api.users = response.data;
+      const users = await ApiUsersService.getUsers();
+      this.api.users = users;
 
       await this.stopLoading("fetch-users");
     },
     async removeTenantUser(userId) {
-      const response = await ApiTenantService.removeTenantUser(
-        this.tenantId,
-        userId
-      );
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.removeTenantUser(
+          this.tenantId,
+          userId
+        );
 
-      const updatedTenant = response.data;
-      await this.replaceTenant(updatedTenant);
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async addTenantUser() {
-      const response = await ApiTenantService.addTenantUser(
-        this.tenantId,
-        this.newUserId,
-        this.newRoleIds
-      );
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.addTenantUser(
+          this.tenantId,
+          this.newUserId,
+          this.newRoleIds
+        );
 
-      this.newUserId = null;
-      this.newRoleIds = [];
+        this.newUserId = null;
+        this.newRoleIds = [];
 
-      const updatedTenant = response.data;
-      await this.replaceTenant(updatedTenant);
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async removeTenantUserRole(userId, roleId) {
-      const response = await ApiTenantService.removeTenantUserRole(
-        this.tenantId,
-        userId,
-        roleId
-      );
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.removeTenantUserRole(
+          this.tenantId,
+          userId,
+          roleId
+        );
 
-      const updatedTenant = response.data;
-      await this.replaceTenant(updatedTenant);
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async addTenantOwner(userId) {
-      const response = await ApiTenantService.addTenantOwner(
-        this.tenantId,
-        userId
-      );
-
-      const updatedTenant = response.data;
-      await this.replaceTenant(updatedTenant);
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.addTenantOwner(
+          this.tenantId,
+          userId
+        );
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async removeTenantOwner(userId) {
-      const response = await ApiTenantService.removeTenantOwner(
-        this.tenantId,
-        userId
-      );
-
-      const updatedTenant = response.data;
-      await this.replaceTenant(updatedTenant);
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.removeTenantOwner(
+          this.tenantId,
+          userId
+        );
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
     getRoleById(roleId) {
       const role = this.api.roles.find((role) => role.id === roleId);
@@ -244,6 +287,7 @@ export default {
     },
   },
   async created() {
+    await this.fetchTenant();
     await this.fetchRoles();
     await this.fetchUsers();
   },

@@ -2,27 +2,22 @@
   <v-container>
     <v-form ref="form" v-model="valid">
       <h3>Allgemeine Informationen</h3>
+      <v-progress-linear
+        :active="isLoading"
+        indeterminate
+        color="primary"
+      ></v-progress-linear>
       <v-divider class="mb-5"></v-divider>
       <v-row>
         <v-col>
           <v-text-field
-            v-if="selectedTenant._id"
             background-color="accent"
             filled
             dense
             label="ID"
             readonly
             disabled
-            v-model="selectedTenant.id"
-          ></v-text-field>
-          <v-text-field
-            v-else
-            background-color="accent"
-            filled
-            dense
-            label="ID"
-            :rules="validationRules.required"
-            v-model="selectedTenant.id"
+            v-model="tenant.id"
           ></v-text-field>
         </v-col>
         <v-col>
@@ -32,7 +27,7 @@
             dense
             label="Name"
             :rules="validationRules.required"
-            v-model="selectedTenant.name"
+            v-model="tenant.name"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -44,7 +39,7 @@
             dense
             label="Kontakt Person"
             :rules="validationRules.required"
-            v-model="selectedTenant.contactName"
+            v-model="tenant.contactName"
           ></v-text-field>
         </v-col>
         <v-col>
@@ -54,7 +49,7 @@
             dense
             label="Adresse"
             :rules="validationRules.required"
-            v-model="selectedTenant.location"
+            v-model="tenant.location"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -67,7 +62,7 @@
             label="E-Mail Adresse"
             :rules="validationRules.mail"
             type="mail"
-            v-model="selectedTenant.mail"
+            v-model="tenant.mail"
           ></v-text-field>
         </v-col>
         <v-col>
@@ -77,7 +72,7 @@
             dense
             label="Telefonummer"
             :rules="validationRules.required"
-            v-model="selectedTenant.phone"
+            v-model="tenant.phone"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -90,7 +85,7 @@
             label="Website"
             :rules="validationRules.required"
             type="text"
-            v-model="selectedTenant.website"
+            v-model="tenant.website"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -105,7 +100,7 @@
             label="Link zur Detailseite (Buchungsobjekt)"
             placeholder="https://..."
             :rules="validationRules.weblink"
-            v-model="selectedTenant.bookableDetailLink"
+            v-model="tenant.bookableDetailLink"
             suffix="?bkid=[ID]"
           >
           </v-text-field>
@@ -120,7 +115,7 @@
             label="Link zur Detailseite (Event)"
             placeholder="https://..."
             :rules="validationRules.weblink"
-            v-model="selectedTenant.eventDetailLink"
+            v-model="tenant.eventDetailLink"
             suffix="?bkid=[ID]"
           >
           </v-text-field>
@@ -137,7 +132,7 @@
       <v-divider class="mb-5"></v-divider>
       <v-row>
         <v-col>
-          <v-card v-if="!!selectedTenant.receiptTemplate" flat height="100">
+          <v-card v-if="!!tenant.receiptTemplate" flat height="100">
             <v-snackbar
               :timeout="-1"
               :value="true"
@@ -167,7 +162,7 @@
             filled
             dense
             label="Belegnummer Präfix"
-            v-model="selectedTenant.receiptNumberPrefix"
+            v-model="tenant.receiptNumberPrefix"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -181,7 +176,7 @@
             label="Ergänzung zum Verwendungszweck"
             prefix="[Buchungsnummer] - "
             :rules="validationRules.paymentPurposeSuffix"
-            v-model="selectedTenant.paymentPurposeSuffix"
+            v-model="tenant.paymentPurposeSuffix"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -626,13 +621,13 @@
             label="Vorausbuchungen möglich bis"
             type="number"
             suffix="Monate"
-            v-model="selectedTenant.maxBookingAdvanceInMonths"
+            v-model="tenant.maxBookingAdvanceInMonths"
           >
           </v-text-field>
         </v-col>
       </v-row>
       <v-switch
-        v-model="selectedTenant.enablePublicStatusView"
+        v-model="tenant.enablePublicStatusView"
         color="primary"
         hint="Sofern aktiviert, kann der Status einer Buchung öffentlich abgefragt werden."
         persistent-hint
@@ -689,18 +684,14 @@
 <script>
 import ApiTenantService from "@/services/api/ApiTenantService";
 import MailKonfiguration from "@/components/Tenant/MailKonfiguration.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "TenantEdit",
-  components: {MailKonfiguration},
-  props: {
-    tenant: {
-      type: Object,
-      required: true,
-    },
-  },
+  components: { MailKonfiguration },
   data() {
     return {
+      isLoading: false,
       showNoreplyPassword: false,
       showPaymentSecret: false,
       showParevaPassword: false,
@@ -756,49 +747,46 @@ export default {
         daysUntilPaymentDue: null,
         active: false,
       },
+      tenant: {},
     };
   },
   computed: {
-    selectedTenant: {
-      get() {
-        return this.tenant;
-      },
-    },
+    ...mapGetters({
+      tenantId: "tenants/currentTenantId",
+    }),
     tenantMailConfig: {
       get() {
         return {
-          mailTemplate: this.selectedTenant.genericMailTemplate,
-          noreplyMail: this.selectedTenant.noreplyMail,
-          noreplyDisplayName: this.selectedTenant.noreplyDisplayName,
-          noreplyHost: this.selectedTenant.noreplyHost,
-          noreplyPort: this.selectedTenant.noreplyPort,
-          noreplyUser: this.selectedTenant.noreplyUser,
-          noreplyPassword: this.selectedTenant.noreplyPassword,
-          noreplyUseGraphApi: this.selectedTenant.noreplyUseGraphApi,
-          noreplyStarttls: this.selectedTenant.noreplyStarttls,
-          noreplyGraphTenantId: this.selectedTenant.noreplyGraphTenantId,
-          noreplyGraphClientId: this.selectedTenant.noreplyGraphClientId,
-          noreplyGraphClientSecret: this.selectedTenant.noreplyGraphClientSecret,
+          mailTemplate: this.tenant.genericMailTemplate,
+          noreplyMail: this.tenant.noreplyMail,
+          noreplyDisplayName: this.tenant.noreplyDisplayName,
+          noreplyHost: this.tenant.noreplyHost,
+          noreplyPort: this.tenant.noreplyPort,
+          noreplyUser: this.tenant.noreplyUser,
+          noreplyPassword: this.tenant.noreplyPassword,
+          noreplyUseGraphApi: this.tenant.noreplyUseGraphApi,
+          noreplyStarttls: this.tenant.noreplyStarttls,
+          noreplyGraphTenantId: this.tenant.noreplyGraphTenantId,
+          noreplyGraphClientId: this.tenant.noreplyGraphClientId,
+          noreplyGraphClientSecret: this.tenant.noreplyGraphClientSecret,
         };
       },
     },
     parevaSystem: {
       get() {
         return (
-          this.selectedTenant.applications?.find(
-            (app) => app.id === "pareva"
-          ) || {}
+          this.tenant.applications?.find((app) => app.id === "pareva") || {}
         );
       },
     },
     eventCreationMode: {
       get() {
-        const mode = this.selectedTenant.defaultEventCreationMode;
+        const mode = this.tenant.defaultEventCreationMode;
         return mode === "simple";
       },
       set(value) {
         this.$set(
-          this.selectedTenant,
+          this.tenant,
           "defaultEventCreationMode",
           value ? "simple" : "detailed"
         );
@@ -814,19 +802,30 @@ export default {
     },
   },
   methods: {
-    updateMailConfig(newConfig){
-      this.selectedTenant.noreplyDisplayName = newConfig.noreplyDisplayName;
-      this.selectedTenant.noreplyMail = newConfig.noreplyMail;
-      this.selectedTenant.noreplyDisplayName = newConfig.noreplyDisplayName;
-      this.selectedTenant.noreplyHost = newConfig.noreplyHost;
-      this.selectedTenant.noreplyPort = newConfig.noreplyPort;
-      this.selectedTenant.noreplyUser = newConfig.noreplyUser;
-      this.selectedTenant.noreplyPassword = newConfig.noreplyPassword;
-      this.selectedTenant.noreplyUseGraphApi = newConfig.noreplyUseGraphApi;
-      this.selectedTenant.noreplyStarttls = newConfig.noreplyStarttls;
-      this.selectedTenant.noreplyGraphTenantId = newConfig.noreplyGraphTenantId;
-      this.selectedTenant.noreplyGraphClientId = newConfig.noreplyGraphClientId;
-      this.selectedTenant.noreplyGraphClientSecret = newConfig.noreplyGraphClientSecret;
+    async fetchTenant() {
+      try {
+        this.isLoading = true;
+        const response = await ApiTenantService.getTenant(this.tenantId);
+        this.tenant = response.data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    updateMailConfig(newConfig) {
+      this.tenant.noreplyDisplayName = newConfig.noreplyDisplayName;
+      this.tenant.noreplyMail = newConfig.noreplyMail;
+      this.tenant.noreplyDisplayName = newConfig.noreplyDisplayName;
+      this.tenant.noreplyHost = newConfig.noreplyHost;
+      this.tenant.noreplyPort = newConfig.noreplyPort;
+      this.tenant.noreplyUser = newConfig.noreplyUser;
+      this.tenant.noreplyPassword = newConfig.noreplyPassword;
+      this.tenant.noreplyUseGraphApi = newConfig.noreplyUseGraphApi;
+      this.tenant.noreplyStarttls = newConfig.noreplyStarttls;
+      this.tenant.noreplyGraphTenantId = newConfig.noreplyGraphTenantId;
+      this.tenant.noreplyGraphClientId = newConfig.noreplyGraphClientId;
+      this.tenant.noreplyGraphClientSecret = newConfig.noreplyGraphClientSecret;
     },
     closeDialog() {
       this.$emit("close");
@@ -835,10 +834,9 @@ export default {
       if (this.$refs.form.validate()) {
         this.replacePaymentApps();
         this.inProgress = true;
-        delete this.selectedTenant._id;
 
         try {
-          await ApiTenantService.submitTenant(this.selectedTenant);
+          await ApiTenantService.submitTenant(this.tenant);
           this.inProgress = false;
           this.closeDialog();
         } catch (e) {
@@ -911,39 +909,38 @@ export default {
     },
 
     replacePaymentApps() {
-      const appIds = this.selectedTenant.applications.map((app) => app.id);
+      const appIds = this.tenant.applications.map((app) => app.id);
       const invoiceAppExists = appIds.includes("invoice");
       const giroCockpitAppExists = appIds.includes("giroCockpit");
       const pmPaymentAppExists = appIds.includes("pmPayment");
 
-      this.selectedTenant.applications = this.selectedTenant.applications.map(
-        (app) => {
-          if (app.id === "invoice") {
-            return this.invoiceApp;
-          } else if (app.id === "giroCockpit") {
-            return this.giroCockpitApp;
-          } else if (app.id === "pmPayment") {
-            return this.pmPaymentApp;
-          } else {
-            return app;
-          }
+      this.tenant.applications = this.tenant.applications.map((app) => {
+        if (app.id === "invoice") {
+          return this.invoiceApp;
+        } else if (app.id === "giroCockpit") {
+          return this.giroCockpitApp;
+        } else if (app.id === "pmPayment") {
+          return this.pmPaymentApp;
+        } else {
+          return app;
         }
-      );
+      });
 
       if (!invoiceAppExists) {
-        this.selectedTenant.applications.push(this.invoiceApp);
+        this.tenant.applications.push(this.invoiceApp);
       }
 
       if (!giroCockpitAppExists) {
-        this.selectedTenant.applications.push(this.giroCockpitApp);
+        this.tenant.applications.push(this.giroCockpitApp);
       }
 
       if (!pmPaymentAppExists) {
-        this.selectedTenant.applications.push(this.pmPaymentApp);
+        this.tenant.applications.push(this.pmPaymentApp);
       }
     },
   },
   mounted() {
+    this.fetchTenant();
     this.initializeGiroCockpit();
     this.initializeInvoiceApp();
     this.initializePmPayment();

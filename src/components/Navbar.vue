@@ -52,7 +52,7 @@
             <v-list-item
               v-for="(item, i) in profileItems"
               :key="i"
-              :to="item.link"
+              :to="{ name: item.link }"
             >
               <v-list-item-icon>
                 <v-icon>{{ item.icon }}</v-icon>
@@ -122,7 +122,7 @@
               :key="item.title"
               link
               class="my-2"
-              :to="item.link"
+              :to="{ name: item.link }"
               exact
               active-class="active-item secondary"
             >
@@ -162,7 +162,7 @@ export default {
     profileItems: [
       {
         title: "Einstellungen",
-        link: "einstellungen",
+        link: "settings",
         icon: "mdi-cog-outline",
       },
     ],
@@ -179,24 +179,24 @@ export default {
         ],
       },
       {
-        header: "Verwaltung",
+        header: "Mandant",
         pages: [
           {
             title: "Mandant verwalten",
-            link: "mandanten",
+            link: "tenants",
             icon: "mdi-domain",
             interfaceName: "tenants",
           },
           {
-            title: "Benutzer",
-            link: "benutzer",
-            icon: "mdi-account-outline",
+            title: "Mandant Benutzer",
+            link: "user",
+            icon: "mdi-account-group-outline",
             interfaceName: "users",
           },
           {
-            title: "Rollen",
-            link: "rollen",
-            icon: "mdi-account-group-outline",
+            title: "Mandant Rollen",
+            link: "roles",
+            icon: "mdi-account-key-outline",
             interfaceName: "roles",
           },
         ],
@@ -206,31 +206,31 @@ export default {
         pages: [
           {
             title: "Buchungen",
-            link: "buchungen",
+            link: "bookings",
             icon: "mdi-book-outline",
             interfaceName: "bookings",
           },
           {
             title: "Gutscheine",
-            link: "gutscheine",
+            link: "coupons",
             icon: "mdi-ticket-percent-outline",
             interfaceName: "coupons",
           },
           {
             title: "Veranstaltungsorte",
-            link: "veranstaltungsorte",
+            link: "event-locations",
             icon: "mdi-map-marker-outline",
             interfaceName: "locations",
           },
           {
             title: "Räume",
-            link: "raeume",
+            link: "rooms",
             icon: "mdi-door",
             interfaceName: "rooms",
           },
           {
             title: "Ressourcen",
-            link: "ressourcen",
+            link: "resources",
             icon: "mdi-hammer-wrench",
             interfaceName: "resources",
           },
@@ -242,20 +242,26 @@ export default {
           },
           {
             title: "Veranstaltungen",
-            link: "veranstaltungen",
+            link: "events",
             icon: "mdi-calendar",
             interfaceName: "events",
           },
         ],
       },
       {
-        header: null,
+        header: "System",
         pages: [
           {
             title: "Instanz verwalten",
-            link: "instanz",
+            link: "instances",
             icon: "mdi-home-edit-outline",
-            interfaceName: "events", //toDo - add interfaceName for instances
+            interfaceName: "instance",
+          },
+          {
+            title: "Benutzer",
+            link: "instance-users",
+            icon: "mdi-account-group-outline",
+            interfaceName: "instance",
           },
         ],
       },
@@ -264,7 +270,7 @@ export default {
         pages: [
           {
             title: "Einstellungen",
-            link: "einstellungen",
+            link: "settings",
             icon: "mdi-cog-outline",
             interfaceName: "settings",
             showAlways: true,
@@ -309,7 +315,6 @@ export default {
     }),
     currentTenant: {
       get: function () {
-        console.log(this.getCurrentTenant);
         return this.getCurrentTenant;
       },
       set: function (newValue) {

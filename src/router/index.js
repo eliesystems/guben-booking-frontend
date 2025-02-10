@@ -26,6 +26,7 @@ import EditBookable from "@/views/Bookables/EditBookable";
 import ApiAuthService from "@/services/api/ApiAuthService";
 import Coupons from "@/views/Coupons.vue";
 import Instances from "@/views/Management/Instances.vue";
+import InstanceUsers from "@/views/Management/InstanceUsers.vue";
 
 Vue.use(VueRouter);
 
@@ -61,6 +62,16 @@ const routes = [
     component: Instances,
     meta: {
       title: "Instanz verwalten",
+      requiresAuth: true,
+      interfaceName: "instance",
+    },
+  },
+  {
+    path: "/admin/instanz/benutzer",
+    name: "instance-users",
+    component: InstanceUsers,
+    meta: {
+      title: "Benutzer",
       requiresAuth: true,
       interfaceName: "instance",
     },
@@ -358,7 +369,7 @@ const routes = [
   },
   {
     path: "/admin/einstellungen",
-    name: "einstellungen",
+    name: "settings",
     component: Settings,
     meta: {
       title: "Einstellungen",

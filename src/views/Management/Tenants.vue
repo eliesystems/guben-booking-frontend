@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <TenantEdit :tenant="currentTenant" />
+    <TenantEdit/>
 
     <!--
     <DeleteConformationDialog
