@@ -140,6 +140,22 @@
       <v-col class="mx-xs-auto" cols="12" sm="10">
         <p class="text-subtitle-1">Besitzer Ihrer Instanz</p>
       </v-col>
+      <v-col class="mx-xs-auto" cols="12" sm="10">
+        <v-autocomplete
+          hide-details
+          placeholder="Besitzer Hinzufügen"
+          clearable
+          v-model="selectedOwner"
+          :items="availableUserIds"
+        >
+          <template v-slot:append-outer>
+            <v-btn small color="primary" @click="addOwner">
+              <v-icon left> mdi-plus</v-icon>
+              Hinzufügen
+            </v-btn>
+          </template>
+        </v-autocomplete>
+      </v-col>
     </v-row>
 
     <v-row no-gutters align="center" justify="center" class="mt-5">
@@ -154,7 +170,7 @@
                   <v-icon> mdi-account</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title v-text="item"></v-list-item-title>
+                  <v-list-item-title>{{item}}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
           </v-list>
@@ -205,7 +221,8 @@ export default {
       tempContactUrl: "",
       tempDataProtectionUrl: "",
       tempLegalNoticeUrl: "",
-      //selectedOwner: null;
+      selectedOwner: null,
+      availableUserIds: ["test.testperson@e-c-crew.de"], //toDo - fill this...
     }
   },
   methods: {
@@ -223,13 +240,12 @@ export default {
       this.instance.noreplyGraphClientId = newConfig.noreplyGraphClientId;
       this.instance.noreplyGraphClientSecret = newConfig.noreplyGraphClientSecret;
     },
+    addOwner(){
+      this.instance.ownerUserIds.push(this.selectedOwner);
+    },
     async updateInstance() {
       console.log("try to update Instance...");
-      this.instance = await ApiInstanceService.updateInstance(this.instance)
-
-
-      //toDo - add function in ApiInstanceService
-
+      this.instance = await ApiInstanceService.updateInstance(this.instance);
     },
     async fetchInstance() {
       this.instance =  await ApiInstanceService.getInstance();
