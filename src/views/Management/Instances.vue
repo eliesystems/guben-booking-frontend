@@ -215,8 +215,6 @@ import AdminLayout from "@/layouts/Admin.vue";
 import ApiInstanceService from "@/services/api/ApiInstanceService";
 import MailKonfiguration from "@/components/Tenant/MailKonfiguration.vue";
 import ApiUsersService from "@/services/api/ApiUsersService";
-import OwnerDeleteConformationDialog from "@/components/User/ownerDeleteConformationDialog.vue";
-import BookingDeleteConformationDialog from "@/components/Booking/BookingDeleteConformationDialog.vue";
 
 export default {
   name: "Instances",
