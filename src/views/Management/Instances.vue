@@ -259,7 +259,7 @@ export default {
     instanceMailConfig: {
       get() {
         return {
-          mailTemplate: this.instance.mailTemplate,
+          genericMailTemplate: this.instance.mailTemplate,
           noreplyMail: this.instance.noreplyMail,
           noreplyDisplayName: this.instance.noreplyDisplayName,
           noreplyHost: this.instance.noreplyHost,
