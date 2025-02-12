@@ -163,6 +163,10 @@
             </template>
           </v-autocomplete>
           <v-list dense>
+            <v-list-item-group
+              v-model="selectedUser"
+              color="primary"
+            >
               <v-list-item
                 v-for="(item, i) in instance.ownerUserIds"
                 :key="i"
@@ -173,7 +177,11 @@
                 <v-list-item-content>
                   <v-list-item-title>{{item}}</v-list-item-title>
                 </v-list-item-content>
+                <v-list-item-icon>
+                  <v-icon @click="removeOwner(item)"> mdi-delete</v-icon>
+                </v-list-item-icon>
               </v-list-item>
+            </v-list-item-group>
           </v-list>
         </v-card>
       </v-col>
@@ -207,6 +215,8 @@ import AdminLayout from "@/layouts/Admin.vue";
 import ApiInstanceService from "@/services/api/ApiInstanceService";
 import MailKonfiguration from "@/components/Tenant/MailKonfiguration.vue";
 import ApiUsersService from "@/services/api/ApiUsersService";
+import OwnerDeleteConformationDialog from "@/components/User/ownerDeleteConformationDialog.vue";
+import BookingDeleteConformationDialog from "@/components/Booking/BookingDeleteConformationDialog.vue";
 
 export default {
   name: "Instances",
@@ -224,7 +234,8 @@ export default {
       tempDataProtectionUrl: "",
       tempLegalNoticeUrl: "",
       selectedOwner: null,
-      availableUserIds: null,//["test.testperson@e-c-crew.de"], //toDo - fill this...
+      availableUserIds: null,
+      selectedUser: null,
     }
   },
   methods: {
@@ -244,6 +255,12 @@ export default {
     },
     addOwner(){
       this.instance.ownerUserIds.push(this.selectedOwner);
+      this.selectedOwner = null;
+    },
+    removeOwner(userId){
+      this.instance.ownerUserIds.splice(
+        this.instance.ownerUserIds.indexOf(userId)
+      );
     },
     async updateInstance() {
       this.instance = await ApiInstanceService.updateInstance(this.instance);
