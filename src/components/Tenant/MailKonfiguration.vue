@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="showValidation">
       <v-col class="">
         <v-card
-          v-if="!!selectedMailConfig.genericMailTemplate"
+          v-if="!!selectedMailConfig.mailTemplate"
           flat
           height="100"
         >
@@ -43,7 +43,7 @@
           filled
           dense
           label="E-Mail-Adresse"
-          :rules="validationRules.mail"
+          :rules="showValidation? validationRules.mail : []"
           v-model="selectedMailConfig.noreplyMail"
           @input="changeData"
         ></v-text-field>
@@ -345,6 +345,10 @@ export default {
     mailConfig: {
       type: Object,
       required: true,
+    },
+    showValidation: {
+      type: Boolean,
+      default: true,
     }
   },
   data() {

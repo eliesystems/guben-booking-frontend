@@ -27,6 +27,7 @@ import ApiAuthService from "@/services/api/ApiAuthService";
 import Coupons from "@/views/Coupons.vue";
 import Instances from "@/views/Management/Instances.vue";
 import InstanceUsers from "@/views/Management/InstanceUsers.vue";
+import InstanceTenants from "@/views/Management/InstanceTenants.vue";
 
 Vue.use(VueRouter);
 
@@ -67,6 +68,16 @@ const routes = [
     },
   },
   {
+    path: "/admin/instanz/mandanten",
+    name: "instance-tenants",
+    component: InstanceTenants,
+    meta: {
+      title: "Mandanten",
+      requiresAuth: true,
+      interfaceName: "instance",
+    },
+  },
+  {
     path: "/admin/instanz/benutzer",
     name: "instance-users",
     component: InstanceUsers,
@@ -78,7 +89,7 @@ const routes = [
   },
   {
     path: "/admin/mandanten",
-    name: "tenants",
+    name: "tenant",
     component: Tenants,
     meta: {
       title: "Mandanten",

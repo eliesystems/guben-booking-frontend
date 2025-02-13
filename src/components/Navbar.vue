@@ -85,32 +85,29 @@
       <div class="v-navigation-drawer__content">
         <v-list dense nav class="py-0" rounded>
           <v-select
+            rounded
+            dense
+            filled
+            prepend-inner-icon="mdi-home-account"
+            background-color="accent"
             v-model="currentTenant"
-            color="primary"
             :items="tenants"
             item-text="name"
             item-value="id"
-            solo
-            flat
-            class="subtitle-1 font-weight-medium primary--text"
+            class="subtitle-1 font-weight-medium primary--text mt-2"
           >
-            <template v-slot:prepend>
-              <v-icon class="primary v-btn--rounded" color="white"
-                >mdi-home-account</v-icon
-              >
-            </template>
             <template v-slot:prepend-item>
               <v-list-item class="my-2"> Mandant auswählen: </v-list-item>
               <v-divider></v-divider>
             </template>
             <template v-slot:selection="{ item }">
-              <span class="subtitle-1 font-weight-medium primary--text">{{
+              <span class="subtitle-1 font-weight-medium primary--text ml-2">{{
                 item.name
               }}</span>
             </template>
           </v-select>
 
-          <v-divider class="mt-2 mb-2"></v-divider>
+          <v-divider></v-divider>
           <div v-for="parentItem in navItems" :key="parentItem.header">
             <v-subheader
               v-if="parentItem.header"
@@ -183,7 +180,7 @@ export default {
         pages: [
           {
             title: "Mandant verwalten",
-            link: "tenants",
+            link: "tenant",
             icon: "mdi-domain",
             interfaceName: "tenants",
           },
@@ -255,6 +252,12 @@ export default {
             title: "Instanz verwalten",
             link: "instances",
             icon: "mdi-home-edit-outline",
+            interfaceName: "instance",
+          },
+          {
+            title: "Mandanten",
+            link: "instance-tenants",
+            icon: "mdi-domain",
             interfaceName: "instance",
           },
           {

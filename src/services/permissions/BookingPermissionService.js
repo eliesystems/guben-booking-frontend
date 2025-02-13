@@ -12,6 +12,8 @@ class BookingPermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return permissions.manageBookings.create;
   }
 
@@ -21,6 +23,8 @@ class BookingPermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return (
       permissions.manageBookings.updateAny ||
       (permissions.manageBookings.updateOwn &&
@@ -34,6 +38,8 @@ class BookingPermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return (
       permissions.manageBookings.deleteAny ||
       (permissions.manageBookings.deleteOwn &&

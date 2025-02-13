@@ -22,21 +22,38 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-btn
+      color="primary"
+      fixed
+      large
+      bottom
+      right
+      rounded
+      @click="onOpenCreateTenant()"
+      class="v-btn"
+      :disabled="createDisabled"
+    >
+      <v-icon>mdi-plus</v-icon> Mandanten anlegen
+    </v-btn>
+    <TenantCreate :open="openCreateDialog" @close="onCloseCreateDialog" />
   </AdminLayout>
 </template>
 
 <script>
 import AdminLayout from "@/layouts/Admin";
 import { mapActions, mapGetters } from "vuex";
+import TenantCreate from "@/components/Tenant/TenantCreate.vue";
 
 export default {
   name: "HomeView",
   components: {
+    TenantCreate,
     AdminLayout,
   },
   data() {
     return {
       loading: true,
+      openCreateDialog: false,
     };
   },
   computed: {
@@ -44,6 +61,9 @@ export default {
       tenants: "tenants/tenants",
       currentTenant: "tenants/currentTenantId",
     }),
+    createDisabled() {
+      return false;
+    },
   },
   methods: {
     ...mapActions({
@@ -52,6 +72,12 @@ export default {
     async selectTenant(tenantId) {
       await this.select(tenantId);
       await this.$router.push({ name: "bookings" });
+    },
+    onOpenCreateTenant() {
+      this.openCreateDialog = true;
+    },
+    onCloseCreateDialog() {
+      this.openCreateDialog = false;
     },
   },
 };

@@ -667,7 +667,7 @@
       </v-row>
     </v-form>
 
-    <div class="flex">
+    <div class="flex mt-12">
       <v-spacer />
       <v-btn
         class="mb-5"
@@ -684,7 +684,7 @@
 <script>
 import ApiTenantService from "@/services/api/ApiTenantService";
 import MailKonfiguration from "@/components/Tenant/MailKonfiguration.vue";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "TenantEdit",
@@ -802,6 +802,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions({ addToast: "toasts/add" }),
     async fetchTenant() {
       try {
         this.isLoading = true;
@@ -827,9 +828,6 @@ export default {
       this.tenant.noreplyGraphClientId = newConfig.noreplyGraphClientId;
       this.tenant.noreplyGraphClientSecret = newConfig.noreplyGraphClientSecret;
     },
-    closeDialog() {
-      this.$emit("close");
-    },
     async submitChanges() {
       if (this.$refs.form.validate()) {
         this.replacePaymentApps();
@@ -838,8 +836,15 @@ export default {
         try {
           await ApiTenantService.submitTenant(this.tenant);
           this.inProgress = false;
-          this.closeDialog();
+          await this.addToast({
+            message: "Änderungen wurden erfolgreich gespeichert.",
+            type: "success",
+          });
         } catch (e) {
+          await this.addToast({
+            message: "Fehler beim Speichern der Änderungen.",
+            type: "error",
+          });
           this.inProgress = false;
         }
       } else {

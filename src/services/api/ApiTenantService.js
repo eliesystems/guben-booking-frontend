@@ -7,6 +7,9 @@ export default {
   submitTenant(tenant) {
     return ApiClient.put("api/tenants", tenant, { withCredentials: true });
   },
+  createTenant(tenant) {
+    return ApiClient.post("api/tenants", tenant, { withCredentials: true });
+  },
   deleteTenant(tenant) {
     return ApiClient.delete(`api/tenants/${tenant.id}`, {
       withCredentials: true,

@@ -34,6 +34,7 @@ const getters = {
       const t = store.getters["tenants/currentTenantId"];
       const adIfces = state.data.permissions.find((p) => p.tenantId === t);
       if(!adIfces) return false;
+      if(adIfces.isOwner) return true;
       return adIfces.adminInterfaces.includes(ifce);
     }
     return false;

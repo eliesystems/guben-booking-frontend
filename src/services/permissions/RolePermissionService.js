@@ -12,6 +12,7 @@ class RolePermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
     return permissions.manageRoles.create;
   }
 
@@ -21,6 +22,7 @@ class RolePermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
     return (
       permissions.manageRoles.updateAny ||
       (permissions.manageRoles.updateOwn && RolePermissionService.isOwner(role))
@@ -33,6 +35,7 @@ class RolePermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
     return (
       permissions.manageRoles.deleteAny ||
       (permissions.manageRoles.deleteOwn && RolePermissionService.isOwner(role))

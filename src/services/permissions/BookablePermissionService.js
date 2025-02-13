@@ -14,6 +14,8 @@ class BookablePermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return permissions.manageBookables.create;
   }
 
@@ -23,6 +25,8 @@ class BookablePermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return (
       permissions.manageBookables.updateAny ||
       (permissions.manageBookables.updateOwn &&
@@ -36,6 +40,8 @@ class BookablePermissionService {
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return (
       permissions.manageBookables.deleteAny ||
       (permissions.manageBookables.deleteOwn &&

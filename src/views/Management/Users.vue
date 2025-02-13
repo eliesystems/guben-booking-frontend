@@ -4,15 +4,18 @@
       <v-col cols="12" class="mx-xs-auto d-flex flex-column" height="100%">
         <v-row>
           <v-col>
-            <v-select
+            <v-autocomplete
               outlined
               dense
+              hide-details
+              placeholder="Benutzer"
+              clearable
               v-model="newUserId"
               :items="api.users"
               item-text="id"
               item-value="id"
-              clearable
-            ></v-select>
+            >
+            </v-autocomplete>
           </v-col>
           <v-col>
             <v-select
