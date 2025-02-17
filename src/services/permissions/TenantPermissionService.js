@@ -7,7 +7,7 @@ class TenantPermissionService {
   }
   static allowCreate() {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -16,7 +16,7 @@ class TenantPermissionService {
 
   static allowUpdate(tenant) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -29,7 +29,7 @@ class TenantPermissionService {
 
   static allowDelete(tenant) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;

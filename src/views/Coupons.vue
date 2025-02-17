@@ -173,9 +173,15 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading/isLoading",
+      tenantId: "tenants/currentTenantId",
     }),
     CouponPermissionService() {
       return CouponPermissionService;
+    },
+  },
+  watch: {
+    tenantId() {
+      this.fetchCoupons();
     },
   },
   methods: {

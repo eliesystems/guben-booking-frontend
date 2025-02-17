@@ -152,9 +152,15 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading/isLoading",
+      tenantId: "tenants/currentTenantId",
     }),
     RolePermissionService() {
       return RolePermissionService;
+    },
+  },
+  watch: {
+    tenantId() {
+      this.fetchRoles();
     },
   },
   methods: {

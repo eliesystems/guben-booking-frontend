@@ -1,5 +1,6 @@
 import store from "@/store";
 import PersistenceService from "@/services/PersistenceService";
+
 const namespaced = true;
 
 const state = {
@@ -32,13 +33,18 @@ const getters = {
   isAuthorized: (state) => (ifce) => {
     if (state.data && state.data.permissions) {
       const t = store.getters["tenants/currentTenantId"];
-      const adIfces = state.data.permissions.find((p) => p.tenantId === t);
+      const adIfces = state.data.permissions.tenants.find((p) => p.tenantId === t);
       if(!adIfces) return false;
-      if(adIfces.isOwner) return true;
       return adIfces.adminInterfaces.includes(ifce);
     }
     return false;
   },
+  allowToCreateTenants: (state) => {
+    if (state.data && state.data.permissions) {
+      return state.data.permissions.allowCreateTenant;
+    }
+    return false;
+  }
 };
 
 export default {

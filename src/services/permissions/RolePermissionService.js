@@ -8,7 +8,7 @@ class RolePermissionService {
 
   static allowCreate() {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -18,7 +18,7 @@ class RolePermissionService {
 
   static allowUpdate(role) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -31,7 +31,7 @@ class RolePermissionService {
 
   static allowDelete(role) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;

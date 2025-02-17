@@ -8,7 +8,7 @@ class CouponPermissionService {
 
   static allowCreate() {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -19,7 +19,7 @@ class CouponPermissionService {
 
   static allowUpdate(coupon) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -34,7 +34,7 @@ class CouponPermissionService {
 
   static allowDelete(coupon) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;

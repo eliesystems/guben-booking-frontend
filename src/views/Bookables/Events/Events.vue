@@ -151,6 +151,7 @@ export default {
     ...mapGetters({
       loading: "loading/isLoading",
       tenant: "tenants/currentTenant",
+      tenantId: "tenants/currentTenantId",
     }),
     createDisabled() {
       return !this.BookablePermissionService.allowCreate();
@@ -194,6 +195,12 @@ export default {
             new Date(a.information.startDate)
           );
         });
+    },
+  },
+  watch: {
+    tenantId() {
+      this.fetchEvents();
+      this.fetchFilterTags();
     },
   },
   methods: {

@@ -23,6 +23,7 @@
       </v-col>
     </v-row>
     <v-btn
+      v-if="allowCreate"
       color="primary"
       fixed
       large
@@ -60,6 +61,7 @@ export default {
     ...mapGetters({
       tenants: "tenants/tenants",
       currentTenant: "tenants/currentTenantId",
+      allowCreate: "user/allowToCreateTenants",
     }),
     createDisabled() {
       return false;

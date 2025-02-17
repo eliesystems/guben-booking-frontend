@@ -51,9 +51,11 @@
             <v-chip
               small
               close
+              class="mr-1 black--text"
+              color="secondary"
               v-for="(roleId, i) in item.roles"
               :key="i"
-              class="mr-1"
+
               @click:close="removeTenantUserRole(item.userId, roleId)"
               >{{ getRoleById(roleId)?.name }}</v-chip
             >
@@ -174,6 +176,13 @@ export default {
         }));
 
       return [...members, ...shadowMembers];
+    },
+  },
+  watch: {
+    async tenantId() {
+      await this.fetchTenant();
+      await this.fetchRoles();
+      await this.fetchUsers();
     },
   },
   methods: {

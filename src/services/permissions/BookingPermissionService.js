@@ -8,7 +8,7 @@ class BookingPermissionService {
 
   static allowCreate() {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -19,7 +19,7 @@ class BookingPermissionService {
 
   static allowUpdate(booking) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;
@@ -34,7 +34,7 @@ class BookingPermissionService {
 
   static allowDelete(booking) {
     const tenantId = store.getters["tenants/currentTenantId"];
-    const permissions = user.state.data.permissions.find(
+    const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
     );
     if (!permissions) return false;

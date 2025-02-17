@@ -203,6 +203,12 @@ export default {
       return results.map((result) => result.item);
     },
   },
+  watch: {
+    tenantId() {
+      this.fetchBookings();
+      this.fetchBookables();
+    },
+  },
   methods: {
     ...mapActions({
       addToast: "toasts/add",
