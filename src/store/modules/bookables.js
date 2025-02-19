@@ -4,7 +4,7 @@ import uniqueId from "lodash/uniqueId";
 const state = {
   form: {
     id: null,
-    tenant: "",
+    tenantId: "",
     type: "",
     title: "",
     description: "",
@@ -65,7 +65,7 @@ const mutations = {
   CLEAR(state) {
     state.form = {
       id: null,
-      tenant: "",
+      tenantId: "",
       type: "",
       title: "",
       description: "",

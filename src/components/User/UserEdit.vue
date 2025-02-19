@@ -20,18 +20,6 @@
                   v-model="selectedUser.id"
                 ></v-text-field>
               </v-col>
-              <v-col>
-                <v-text-field
-                  background-color="accent"
-                  filled
-                  hide-details
-                  label="Mandant"
-                  required
-                  v-model="selectedUser.tenant"
-                  readonly
-                  disabled
-                ></v-text-field>
-              </v-col>
             </v-row>
             <v-row>
               <v-col>
@@ -111,25 +99,6 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-select
-                  v-model="selectedUser.roles"
-                  :items="roles"
-                  item-text="name"
-                  item-value="id"
-                  chips
-                  background-color="accent"
-                  filled
-                  label="Rollen"
-                  multiple
-                >
-                  <template #selection="{ item }">
-                    <v-chip color="secondary" text-color="black">{{
-                      item.name
-                    }}</v-chip>
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col>
                 <v-checkbox
                   label="Verifiziert"
                   v-model="selectedUser.isVerified"
@@ -161,7 +130,6 @@
 <script>
 import ApiUsersService from "@/services/api/ApiUsersService";
 import { mapActions } from "vuex";
-import ApiRolesService from "@/services/api/ApiRolesService";
 
 export default {
   name: "UserEdit",
@@ -172,10 +140,6 @@ export default {
     },
     user: {
       type: Object,
-      required: true,
-    },
-    roles: {
-      type: Array,
       required: true,
     },
   },
@@ -208,11 +172,15 @@ export default {
       this.$emit("close");
     },
     async submitChanges() {
-      this.inProgress = true;
-      delete this.selectedUser._id;
-      await ApiUsersService.submitUser(this.selectedUser);
-      this.inProgress = false;
-      this.closeDialog();
+      try {
+        this.inProgress = true;
+        await ApiUsersService.submitUser(this.selectedUser);
+        this.closeDialog();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.inProgress = false;
+      }
     },
   },
 };

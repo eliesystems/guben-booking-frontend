@@ -49,7 +49,7 @@
               @open-edit-booking="onOpenEditBooking"
               @commit-booking="commitBooking"
               @open-delete-dialog="onOpenDeleteDialog"
-              @reject-booking="rejectBooking"
+              @reject-booking="onOpenRejectDialog"
             />
           </v-skeleton-loader>
         </div>
@@ -62,7 +62,7 @@
             @open-booking="onOpenBooking"
             @open-edit-booking="onOpenEditBooking"
             @commit-booking="commitBooking"
-            @reject-booking="rejectBooking"
+            @reject-booking="onOpenRejectDialog"
             @open-delete-dialog="onOpenDeleteDialog"
           ></BookingOverviewCalendar>
         </div>
@@ -103,6 +103,11 @@
       :open="openDeleteDialog"
       @close="onCloseDeleteDialog"
     />
+    <BookingRejectConformationDialog
+      :to-reject="selectedBooking"
+      :open="openRejectDialog"
+      @close="onCloseRejectDialog"
+    />
     <v-dialog v-model="openBookingDialog" max-width="800px">
       <BookingDetails
         :booking="selectedBooking"
@@ -118,8 +123,9 @@ import Fuse from "fuse.js";
 import AdminLayout from "@/layouts/Admin.vue";
 import { mapActions, mapGetters } from "vuex";
 import ApiBookingService from "@/services/api/ApiBookingService";
-import BookingEdit from "@/components/Booking/BookingEdit";
-import BookingDeleteConformationDialog from "@/components/Booking/BookingDeleteConformationDialog";
+import BookingEdit from "@/components/Booking/BookingEdit.vue";
+import BookingDeleteConformationDialog from "@/components/Booking/BookingDeleteConformationDialog.vue";
+import BookingRejectConformationDialog from "@/components/Booking/BookingRejectConformationDialog.vue";
 import ApiBookablesService from "@/services/api/ApiBookablesService";
 import BookingPermissionService from "@/services/permissions/BookingPermissionService";
 import BookingDetails from "@/components/Booking/BookingDetails.vue";
@@ -134,6 +140,7 @@ export default {
     BookingOverviewCalendar,
     BookingDetails,
     BookingDeleteConformationDialog,
+    BookingRejectConformationDialog,
     AdminLayout,
     BookingEdit,
     BookingKanban,
@@ -166,6 +173,7 @@ export default {
       ],
       openEditDialog: false,
       openDeleteDialog: false,
+      openRejectDialog: false,
       selectedBooking: {},
       bookables: [],
       openBookingDialog: false,
@@ -176,7 +184,7 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading/isLoading",
-      tenant: "tenants/tenant",
+      tenantId: "tenants/currentTenantId",
     }),
     BookingPermissionService() {
       return BookingPermissionService;
@@ -218,6 +226,12 @@ export default {
 
       const results = this.fuse.search(searchQuery);
       return results.map((result) => result.item);
+    },
+  },
+  watch: {
+    tenantId() {
+      this.fetchBookings();
+      this.fetchBookables();
     },
   },
   methods: {
@@ -287,7 +301,7 @@ export default {
         });
     },
     rejectBooking(id) {
-      ApiBookingService.rejectBooking(id)
+      ApiBookingService.rejectBooking(id, this.tenantId)
         .then((response) => {
           if (response.status === 200) {
             this.fetchBookings();
@@ -318,6 +332,13 @@ export default {
       );
       this.openDeleteDialog = true;
     },
+    onOpenRejectDialog(bookingId) {
+      this.selectedBooking = Object.assign(
+        {},
+        this.api.bookings.find((booking) => booking.id === bookingId)
+      );
+      this.openRejectDialog = true;
+    },
     onCloseEditDialog() {
       this.fetchBookings();
       this.openEditDialog = false;
@@ -326,31 +347,41 @@ export default {
       this.fetchBookings();
       this.openDeleteDialog = false;
     },
+    onCloseRejectDialog() {
+      this.fetchBookings();
+      this.openRejectDialog = false;
+    },
     onCloseBookingDialog() {
       this.openBookingDialog = false;
     },
     onOpenCreateBookings() {
       this.selectedBooking = {
-        tenant: this.tenant,
+        id: null,
+        tenant: this.tenantId,
         assignedUserId: null,
-        timeBegin: Date.now(),
-        timeEnd: Date.now(),
+        attachments: [],
         bookableItems: [],
-        couponCode: null,
-        name: null,
-        company: null,
-        street: null,
-        zipCode: null,
-        location: null,
-        email: null,
-        phone: null,
         comment: null,
-        priceEur: 0,
+        company: null,
+        couponCode: null,
         isCommitted: false,
         isPayed: false,
-        attachmentStatus: [],
+        location: null,
+        lockerInfo: null,
+        mail: null,
+        name: null,
+        paymentProvider: null,
+        paymentMethod: null,
+        phone: null,
+        priceEur: 0,
+        street: null,
+        timeBegin: Date.now(),
+        timeCreated: Date.now(),
+        timeEnd: null,
+        vatIncludedEur: null,
+        zipCode: null,
       };
-      this.selectedBooking.tenant = this.tenant.id;
+      this.selectedBooking.tenantId = this.tenantId;
       this.openEditDialog = true;
     },
     translatePayMethod(value) {
@@ -429,7 +460,6 @@ export default {
     },
     async fetchWorkflow() {
       this.workflow = await ApiWorkflowService.getWorkflowStates();
-      console.log("w", this.workflow)
     }
   },
   created() {
@@ -440,7 +470,7 @@ export default {
 };
 </script>
 
-<style scoped lanf="scss">
+<style scoped lang="scss">
 .search-field {
   border-radius: 15px;
 }

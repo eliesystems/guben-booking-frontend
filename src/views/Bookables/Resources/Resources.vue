@@ -109,6 +109,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      tenantId: "tenants/currentTenantId",
+    }),
     createDisabled() {
       return !this.BookablePermissionService.allowCreate();
     },
@@ -133,6 +136,12 @@ export default {
       }
 
       return this.api.resources;
+    },
+  },
+  watch: {
+    tenantId() {
+      this.fetchResources();
+      this.fetchFilterTags();
     },
   },
   methods: {

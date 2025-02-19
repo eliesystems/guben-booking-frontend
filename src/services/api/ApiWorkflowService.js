@@ -1,9 +1,9 @@
 import store from "@/store";
 export default {
-  async getWorkflow(tenant) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+  async getWorkflow(tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
-      const workflow = await ApiClient.get(`api/${tenantId}/workflow`, {
+      const workflow = await ApiClient.get(`api/${t}/workflow`, {
         withCredentials: true,
       });
       return workflow.data;
@@ -11,22 +11,23 @@ export default {
       console.error(error);
     }
   },
-  async getWorkflowStates(tenant) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+  async getWorkflowStates(tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
-      const workflow = await ApiClient.get(`api/${tenantId}/workflow/states`, {
+      const workflow = await ApiClient.get(`api/${t}/workflow/states`, {
         withCredentials: true,
       });
+      console.log(workflow);
       return workflow.data;
     } catch (error) {
       console.error(error);
     }
   },
-  async createWorkflow(workflow, tenant) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+  async createWorkflow(workflow, tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
       const newWorkflow = await ApiClient.post(
-        `api/${tenantId}/workflow`,
+        `api/${t}/workflow`,
         workflow,
         {
           withCredentials: true,
@@ -38,11 +39,11 @@ export default {
     }
   },
 
-  async updateWorkflow(workflow, tenant) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+  async updateWorkflow(workflow, tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
       const updatedWorkflow = await ApiClient.put(
-        `api/${tenantId}/workflow`,
+        `api/${t}/workflow`,
         workflow,
         {
           withCredentials: true,
@@ -55,12 +56,12 @@ export default {
   },
   async updateTask(
     { taskId, operation, destination, newIndex, oldIndex },
-    tenant
+    tenantId
   ) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
       const workflow = await ApiClient.put(
-        `api/${tenantId}/workflow/task`,
+        `api/${t}/workflow/task`,
         {
           taskId: taskId,
           operation: operation,
@@ -78,11 +79,11 @@ export default {
     }
   },
 
-  async archiveTask({ taskId }, tenant) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+  async archiveTask({ taskId }, tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
       const workflow = await ApiClient.put(
-        `api/${tenantId}/workflow/archive`,
+        `api/${t}/workflow/archive`,
         {
           taskId: taskId,
         },
@@ -96,10 +97,10 @@ export default {
     }
   },
 
-  async getBacklog(tenant) {
-    let tenantId = tenant || store.getters["tenants/tenant"].id;
+  async getBacklog(tenantId) {
+    const t = tenantId || store.getters["tenants/currentTenantId"];
     try {
-      const backlog = await ApiClient.get(`api/${tenantId}/workflow/backlog`, {
+      const backlog = await ApiClient.get(`api/${t}/workflow/backlog`, {
         withCredentials: true,
       });
       return backlog.data;

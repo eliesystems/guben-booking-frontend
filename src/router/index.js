@@ -20,11 +20,14 @@ import Roles from "@/views/Management/Roles";
 import store from "@/store/index";
 import ToastService from "@/services/ToastService";
 import Tickets from "@/views/Bookables/Tickets/Tickets";
-import Bookings from "@/views/Management/Bookings";
+import Bookings from "@/views/Bookings.vue";
 import Settings from "@/views/Settings";
 import EditBookable from "@/views/Bookables/EditBookable";
 import ApiAuthService from "@/services/api/ApiAuthService";
-import Coupons from "@/views/Management/Coupons";
+import Coupons from "@/views/Coupons.vue";
+import Instances from "@/views/Management/Instances.vue";
+import InstanceUsers from "@/views/Management/InstanceUsers.vue";
+import InstanceTenants from "@/views/Management/InstanceTenants.vue";
 
 Vue.use(VueRouter);
 
@@ -48,15 +51,45 @@ const routes = [
     name: "dashboard",
     component: Home,
     meta: {
-      title: "Dashboard",
+      title: "Ihre Mandanten",
       requiresAuth: true,
       interfaceName: "dashboard",
       public: true,
     },
   },
   {
+    path: "/admin/instanz",
+    name: "instances",
+    component: Instances,
+    meta: {
+      title: "Instanz verwalten",
+      requiresAuth: true,
+      interfaceName: "instance",
+    },
+  },
+  {
+    path: "/admin/instanz/mandanten",
+    name: "instance-tenants",
+    component: InstanceTenants,
+    meta: {
+      title: "Mandanten",
+      requiresAuth: true,
+      interfaceName: "instance",
+    },
+  },
+  {
+    path: "/admin/instanz/benutzer",
+    name: "instance-users",
+    component: InstanceUsers,
+    meta: {
+      title: "Benutzer",
+      requiresAuth: true,
+      interfaceName: "instance",
+    },
+  },
+  {
     path: "/admin/mandanten",
-    name: "tenants",
+    name: "tenant",
     component: Tenants,
     meta: {
       title: "Mandanten",
@@ -347,7 +380,7 @@ const routes = [
   },
   {
     path: "/admin/einstellungen",
-    name: "einstellungen",
+    name: "settings",
     component: Settings,
     meta: {
       title: "Einstellungen",
@@ -447,7 +480,27 @@ const routes = [
       requiresAuth: false,
     },
     props: true,
-  }
+  },
+  {
+    path: "/booking/request-reject/:tenantId",
+    name: "booking-request-reject",
+    component: lazyLoad("RequestRejectBooking"),
+    meta: {
+      title: "Buchung stornieren",
+      requiresAuth: false,
+    },
+    props: true,
+  },
+  {
+    path: "/booking/verify-reject/:tenantId",
+    name: "booking-request-reject",
+    component: lazyLoad("VerifyRejectBooking"),
+    meta: {
+      title: "Stornierung bestätigen",
+      requiresAuth: false,
+    },
+    props: true,
+  },
 ];
 
 const router = new VueRouter({
@@ -461,14 +514,14 @@ function isLoggedIn() {
 }
 
 function isAuthorized(ifce) {
-  console.log("isAuthorized", ifce);
   return store.getters["user/isAuthorized"](ifce);
 }
 
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     const hasSession = await ApiAuthService.me()
-      .then(() => {
+      .then((response) => {
+        store.dispatch("user/update", response.data);
         return true;
       })
       .catch(() => {

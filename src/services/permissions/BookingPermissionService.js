@@ -1,29 +1,48 @@
 import user from "@/store/modules/user";
+import store from "@/store";
 
 class BookingPermissionService {
   static isOwner(booking) {
-    return (
-      booking.assignedUserId === user.state.data.id &&
-      booking.tenant === user.state.data.tenant
-    );
+    return booking.assignedUserId === user.state.data.user.id;
   }
 
   static allowCreate() {
-    return user.state.data.permissions.manageBookings.create;
+    const tenantId = store.getters["tenants/currentTenantId"];
+    const permissions = user.state.data.permissions.tenants.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
+    return permissions.manageBookings.create;
   }
 
   static allowUpdate(booking) {
+    const tenantId = store.getters["tenants/currentTenantId"];
+    const permissions = user.state.data.permissions.tenants.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return (
-      user.state.data.permissions.manageBookings.updateAny ||
-      (user.state.data.permissions.manageBookings.updateOwn &&
+      permissions.manageBookings.updateAny ||
+      (permissions.manageBookings.updateOwn &&
         BookingPermissionService.isOwner(booking))
     );
   }
 
   static allowDelete(booking) {
+    const tenantId = store.getters["tenants/currentTenantId"];
+    const permissions = user.state.data.permissions.tenants.find(
+      (p) => p.tenantId === tenantId
+    );
+    if (!permissions) return false;
+    if(permissions.isOwner) return true;
+
     return (
-      user.state.data.permissions.manageBookings.deleteAny ||
-      (user.state.data.permissions.manageBookings.deleteOwn &&
+      permissions.manageBookings.deleteAny ||
+      (permissions.manageBookings.deleteOwn &&
         BookingPermissionService.isOwner(booking))
     );
   }

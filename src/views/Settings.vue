@@ -373,7 +373,7 @@
     <v-row no-gutters align="center" justify="center">
       <v-col class="mx-xs-auto" cols="12" sm="6">
         <p class="text-subtitle-1">
-          Einstellungen zum schützen deines Accounts
+          Einstellungen zum Schützen Ihres Accounts
         </p>
       </v-col>
     </v-row>
