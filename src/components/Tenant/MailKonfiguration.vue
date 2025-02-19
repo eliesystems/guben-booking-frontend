@@ -61,57 +61,6 @@
     </v-row>
 
     <v-row>
-      <v-col class="">
-        <v-text-field
-          background-color="accent"
-          filled
-          dense
-          label="SMTP-Server"
-          v-model="selectedMailConfig.noreplyHost"
-          @input="changeData"
-        ></v-text-field>
-      </v-col>
-      <v-col class="col-md-2">
-        <v-text-field
-          background-color="accent"
-          filled
-          dense
-          label="Port"
-          v-model="selectedMailConfig.noreplyPort"
-          @input="changeData"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col class="">
-        <v-text-field
-          background-color="accent"
-          filled
-          dense
-          label="Benutzername"
-          v-model="selectedMailConfig.noreplyUser"
-          @input="changeData"
-        ></v-text-field>
-      </v-col>
-      <v-col class="">
-        <v-text-field
-          background-color="accent"
-          filled
-          dense
-          label="Passwort"
-          v-model="selectedMailConfig.noreplyPassword"
-          @input="changeData"
-          :append-icon="
-                      showNoreplyPassword ? 'mdi-eye' : 'mdi-eye-off'
-                    "
-          @click:append="showNoreplyPassword = !showNoreplyPassword"
-          :type="showNoreplyPassword ? 'text' : 'password'"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-
-    <v-row>
       <v-col>
         <h4 class="mb-2">E-Mail-Versandmethoden </h4>
       </v-col>

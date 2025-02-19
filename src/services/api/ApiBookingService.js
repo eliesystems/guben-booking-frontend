@@ -46,7 +46,6 @@ export default {
   },
   storeBooking(booking) {
     const cleansedBooking = Object.assign(new Object(), booking);
-    delete cleansedBooking._populated;
     return ApiClient.put(
       `api/${store.getters["tenants/currentTenantId"]}/bookings`,
       cleansedBooking,

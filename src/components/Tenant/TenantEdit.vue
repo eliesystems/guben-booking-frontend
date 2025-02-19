@@ -665,6 +665,121 @@
           </v-switch>
         </v-col>
       </v-row>
+      <h3 class="mb-5 mt-5">Workflow</h3>
+      <v-divider class="mb-5"></v-divider>
+      <v-row>
+        <v-col>
+          <v-expansion-panels flat multiple>
+            <v-expansion-panel>
+              <v-expansion-panel-header
+                color="accent"
+                expand-icon="mdi-menu-down"
+                class="penal-header"
+              >
+                <template v-slot:default="{ open }">
+                  <v-row no-gutters align="center">
+                    <v-col cols="4">
+                      <span class="text-subtitle-1"> Workflow </span>
+                    </v-col>
+                    <v-col class="col-2">
+                      <v-fade-transition leave-absolute>
+                        <div v-if="!open">
+                          <v-icon v-if="workflow.active" color="success"
+                            >mdi-check</v-icon
+                          >
+                          <span v-if="workflow.active" class="ml-2">Aktiv</span>
+
+                          <v-icon v-if="workflow.active === false" color="error"
+                            >mdi-close</v-icon
+                          >
+                          <span v-if="workflow.active === false" class="ml-2"
+                            >Inaktiv</span
+                          >
+                        </div>
+                      </v-fade-transition>
+                    </v-col>
+                  </v-row>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content class="mt-3">
+                <v-row>
+                  <v-col class="col-12">
+                    <v-switch
+                      v-model="workflow.active"
+                      color="primary"
+                      hide-details
+                      label="Workflow aktivieren"
+                      class="mt-2"
+                    ></v-switch>
+                  </v-col>
+                </v-row>
+
+                <div v-for="(status, idx) in workflow.states" :key="status.id">
+                  <v-row>
+                    <v-col class="col-2 d-flex align-center justify-center">
+                      <v-btn
+                        v-if="idx !== 0"
+                        color="primary"
+                        @click="moveUp(idx)"
+                        class="mt-2"
+                        icon
+                      >
+                        <v-icon>mdi-arrow-up</v-icon>
+                      </v-btn>
+                      <v-btn
+                        v-if="idx !== workflow.states.length - 1"
+                        color="primary"
+                        @click="moveDown(idx)"
+                        class="mt-2"
+                        icon
+                      >
+                        <v-icon>mdi-arrow-down</v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col class="d-flex justify-center">
+                      <v-text-field
+                        class="mx-1"
+                        background-color="accent"
+                        hide-details
+                        filled
+                        dense
+                        label="Statusname"
+                        v-model="workflow.states[idx].name"
+                      ></v-text-field>
+                      <v-text-field
+                        class="mx-1"
+                        background-color="accent"
+                        hide-details
+                        filled
+                        dense
+                        label="Benachrichtigung an"
+                        v-model="workflow.states[idx].actions[0].sendTo"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col class="col-auto d-flex align-center justify-center">
+                      <v-btn
+                        color="error"
+                        @click="removeStatus(idx)"
+                        icon
+                        depressed
+                      >
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-divider class="my-2" />
+                </div>
+                <div class="d-flex justify-center">
+                  <v-btn @click="addStatus" class="mt-4" outlined>
+                    Workflow-Status hinzufügen
+                  </v-btn>
+                </div>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+      </v-row>
     </v-form>
 
     <div class="flex mt-12">
@@ -685,6 +800,8 @@
 import ApiTenantService from "@/services/api/ApiTenantService";
 import MailKonfiguration from "@/components/Tenant/MailKonfiguration.vue";
 import { mapActions, mapGetters } from "vuex";
+import ApiWorkflowService from "@/services/api/ApiWorkflowService";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "TenantEdit",
@@ -747,6 +864,10 @@ export default {
         daysUntilPaymentDue: null,
         active: false,
       },
+      workflow: {
+        active: false,
+        states: [],
+      },
       tenant: {},
     };
   },
@@ -794,11 +915,14 @@ export default {
     },
   },
   watch: {
-    tenant(val) {
-      this.initializeGiroCockpit();
-      this.initializeInvoiceApp();
-      this.initializePmPayment();
-      this.originTenantId = val.id;
+    async tenant(val) {
+      if (val) {
+        this.initializeGiroCockpit();
+        this.initializeInvoiceApp();
+        this.initializePmPayment();
+        this.originTenantId = val.id;
+        await this.fetchWorkflow();
+      }
     },
   },
   methods: {
@@ -835,6 +959,17 @@ export default {
 
         try {
           await ApiTenantService.submitTenant(this.tenant);
+          if (this.workflow.id) {
+            await ApiWorkflowService.updateWorkflow(
+              this.workflow,
+              this.tenant.id
+            );
+          } else {
+            await ApiWorkflowService.createWorkflow(
+              this.workflow,
+              this.tenant.id
+            );
+          }
           this.inProgress = false;
           await this.addToast({
             message: "Änderungen wurden erfolgreich gespeichert.",
@@ -943,12 +1078,52 @@ export default {
         this.tenant.applications.push(this.pmPaymentApp);
       }
     },
+
+    async fetchWorkflow() {
+      this.workflow = (await ApiWorkflowService.getWorkflow(
+        this.tenant.id
+      )) || {
+        active: false,
+        states: [],
+        archive: [],
+        description: "",
+        name: "",
+        tenantId: this.tenant.id,
+      };
+    },
+
+    addStatus() {
+      this.workflow.states.push({
+        id: uuidv4(),
+        name: "",
+        tasks: [],
+        actions: [{ type: "email", sendTo: "" }],
+      });
+    },
+    removeStatus(idx) {
+      this.workflow.states.splice(idx, 1);
+    },
+    moveUp(idx) {
+      this.workflow.states.splice(
+        idx - 1,
+        0,
+        this.workflow.states.splice(idx, 1)[0]
+      );
+    },
+    moveDown(idx) {
+      this.workflow.states.splice(
+        idx + 1,
+        0,
+        this.workflow.states.splice(idx, 1)[0]
+      );
+    },
   },
-  mounted() {
-    this.fetchTenant();
+  async mounted() {
+    await this.fetchTenant();
     this.initializeGiroCockpit();
     this.initializeInvoiceApp();
     this.initializePmPayment();
+    await this.fetchWorkflow();
   },
 };
 </script>
