@@ -878,7 +878,7 @@ export default {
     tenantMailConfig: {
       get() {
         return {
-          mailTemplate: this.tenant.genericMailTemplate,
+          genericMailTemplate: this.tenant.genericMailTemplate,
           noreplyMail: this.tenant.noreplyMail,
           noreplyDisplayName: this.tenant.noreplyDisplayName,
           noreplyHost: this.tenant.noreplyHost,

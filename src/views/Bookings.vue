@@ -178,7 +178,7 @@ export default {
       bookables: [],
       openBookingDialog: false,
       currentView: "list",
-      workflow: [],
+      workflow: {},
     };
   },
   computed: {

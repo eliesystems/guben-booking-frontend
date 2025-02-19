@@ -3,7 +3,7 @@
     <v-row v-if="showValidation">
       <v-col class="">
         <v-card
-          v-if="!!selectedMailConfig.mailTemplate"
+          v-if="!!selectedMailConfig.genericMailTemplate"
           flat
           height="100"
         >

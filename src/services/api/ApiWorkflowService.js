@@ -17,7 +17,6 @@ export default {
       const workflow = await ApiClient.get(`api/${t}/workflow/states`, {
         withCredentials: true,
       });
-      console.log(workflow);
       return workflow.data;
     } catch (error) {
       console.error(error);
