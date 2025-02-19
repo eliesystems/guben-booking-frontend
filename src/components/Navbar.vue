@@ -94,17 +94,13 @@
             :items="tenants"
             item-text="name"
             item-value="id"
-            class="subtitle-1 font-weight-medium mt-2"
+            class="subtitle-1 font-weight-medium mt-2 text-truncate"
           >
             <template v-slot:prepend-item>
               <v-list-item class="my-2"> Mandant auswählen: </v-list-item>
               <v-divider></v-divider>
             </template>
-            <template v-slot:selection="{ item }">
-              <span class="subtitle-1 font-weight-medium primary--text ml-2">{{
-                item.name
-              }}</span>
-            </template>
+
           </v-select>
 
           <v-divider></v-divider>
