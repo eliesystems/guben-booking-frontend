@@ -41,12 +41,14 @@
                   <v-select
                     :items="workflow.states"
                     v-model="selectedBooking._populated.workflowStatus"
-                    chips
-                    small-chips
                     label="Workflow Status"
                     item-text="name"
                     item-value="id"
-                  ></v-select>
+                  >
+                    <template #selection="{ item }">
+                      <v-chip small text-color="black" color="secondary">{{item.name}}</v-chip>
+                    </template>
+                  </v-select>
                 </v-col>
                 <v-col>
                   <v-checkbox
