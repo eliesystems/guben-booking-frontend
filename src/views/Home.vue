@@ -1,5 +1,11 @@
 <template>
   <AdminLayout>
+    <v-progress-linear
+      v-if="loading"
+      indeterminate
+      color="primary"
+      class="mb-2"
+    ></v-progress-linear>
     <v-row gutters>
       <v-col
         v-for="tenant in tenants"
@@ -44,6 +50,7 @@
 import AdminLayout from "@/layouts/Admin";
 import { mapActions, mapGetters } from "vuex";
 import TenantCreate from "@/components/Tenant/TenantCreate.vue";
+import ApiTenantService from "@/services/api/ApiTenantService";
 
 export default {
   name: "HomeView",
@@ -53,7 +60,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       openCreateDialog: false,
     };
   },
@@ -70,7 +77,19 @@ export default {
   methods: {
     ...mapActions({
       select: "tenants/select",
+      setTenants: "tenants/setTenants",
     }),
+    async fetchTenants() {
+      try {
+        this.loading = true;
+        const response = await ApiTenantService.getTenants(true);
+        await this.setTenants(response.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
     async selectTenant(tenantId) {
       await this.select(tenantId);
       await this.$router.push({ name: "bookings" });
@@ -78,8 +97,9 @@ export default {
     onOpenCreateTenant() {
       this.openCreateDialog = true;
     },
-    onCloseCreateDialog() {
+    async onCloseCreateDialog() {
       this.openCreateDialog = false;
+      await this.fetchTenants();
     },
   },
 };

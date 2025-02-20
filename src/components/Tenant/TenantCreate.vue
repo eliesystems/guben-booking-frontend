@@ -848,7 +848,6 @@ export default {
     },
     async submitChanges() {
       if (this.$refs.form.validate()) {
-        console.log(this.tenant);
         this.replacePaymentApps();
         this.inProgress = true;
 

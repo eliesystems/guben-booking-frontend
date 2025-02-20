@@ -140,7 +140,6 @@ export default {
         });
     },
     onOpenEditTenant(tenantId) {
-      console.log(tenantId);
       this.selectedTenant = Object.assign(
         {},
         this.api.tenants.find((tenant) => tenant.id === tenantId)

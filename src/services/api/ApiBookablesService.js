@@ -38,8 +38,6 @@ export default {
       (item) => item.date !== null
     );
 
-    console.log(formData);
-
     return ApiClient.put(`api/${t}/bookables`, formData, {
       withCredentials: true,
     });
