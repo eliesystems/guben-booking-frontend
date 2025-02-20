@@ -39,14 +39,16 @@
               <v-row>
                 <v-col v-if="selectedBooking._populated && workflow.active">
                   <v-select
-                    :items="workflow.states"
+                    :items="[...workflow.states, {name: 'Archive', id: 'archive'}]"
                     v-model="selectedBooking._populated.workflowStatus"
                     label="Workflow Status"
                     item-text="name"
                     item-value="id"
                   >
                     <template #selection="{ item }">
-                      <v-chip small text-color="black" color="secondary">{{item.name}}</v-chip>
+                      <v-chip small text-color="black" color="secondary">{{
+                        item.name
+                      }}</v-chip>
                     </template>
                   </v-select>
                 </v-col>
@@ -165,7 +167,11 @@
                             prefix="€"
                             background-color="accent"
                             hide-details
-                            :label="isTimeRelated(bookableItem._bookableUsed) ? 'Preis pro Stunde' : 'Preis pro Stück'"
+                            :label="
+                              isTimeRelated(bookableItem._bookableUsed)
+                                ? 'Preis pro Stunde'
+                                : 'Preis pro Stück'
+                            "
                             type="number"
                           ></v-text-field>
                         </v-col>
