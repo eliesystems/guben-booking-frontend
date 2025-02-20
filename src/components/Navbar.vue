@@ -58,17 +58,17 @@
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title :href="item.link">{{
+                <v-list-item-title>{{
                   item.title
                 }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item>
+            <v-list-item  @click="logout">
               <v-list-item-icon>
                 <v-icon> mdi-logout </v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title @click="logout">Abmelden</v-list-item-title>
+                <v-list-item-title>Abmelden</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -100,7 +100,6 @@
               <v-list-item class="my-2"> Mandant auswählen: </v-list-item>
               <v-divider></v-divider>
             </template>
-
           </v-select>
 
           <v-divider></v-divider>
