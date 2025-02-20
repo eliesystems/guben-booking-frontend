@@ -109,14 +109,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      tenantId: "tenants/currentTenantId",
-    }),
     createDisabled() {
       return !this.BookablePermissionService.allowCreate();
     },
     ...mapGetters({
       loading: "loading/isLoading",
+      tenantId: "tenants/currentTenantId",
+      tenants: "tenants/tenants",
+      currentTenant: "tenants/currentTenant",
     }),
     BookablePermissionService() {
       return BookablePermissionService;

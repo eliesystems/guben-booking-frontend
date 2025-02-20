@@ -58,12 +58,10 @@
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>{{
-                  item.title
-                }}</v-list-item-title>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item  @click="logout">
+            <v-list-item @click="logout">
               <v-list-item-icon>
                 <v-icon> mdi-logout </v-icon>
               </v-list-item-icon>
@@ -178,18 +176,21 @@ export default {
             link: "tenant",
             icon: "mdi-domain",
             interfaceName: "tenants",
+            context: "tenant",
           },
           {
             title: "Mandant Benutzer",
             link: "user",
             icon: "mdi-account-group-outline",
             interfaceName: "users",
+            context: "tenant",
           },
           {
             title: "Mandant Rollen",
             link: "roles",
             icon: "mdi-account-key-outline",
             interfaceName: "roles",
+            context: "tenant",
           },
         ],
       },
@@ -201,42 +202,49 @@ export default {
             link: "bookings",
             icon: "mdi-book-outline",
             interfaceName: "bookings",
+            context: "tenant",
           },
           {
             title: "Gutscheine",
             link: "coupons",
             icon: "mdi-ticket-percent-outline",
             interfaceName: "coupons",
+            context: "tenant",
           },
           {
             title: "Veranstaltungsorte",
             link: "event-locations",
             icon: "mdi-map-marker-outline",
             interfaceName: "locations",
+            context: "tenant",
           },
           {
             title: "Räume",
             link: "rooms",
             icon: "mdi-door",
             interfaceName: "rooms",
+            context: "tenant",
           },
           {
             title: "Ressourcen",
             link: "resources",
             icon: "mdi-hammer-wrench",
             interfaceName: "resources",
+            context: "tenant",
           },
           {
             title: "Tickets",
             link: "tickets",
             icon: "mdi-ticket",
             interfaceName: "tickets",
+            context: "tenant",
           },
           {
             title: "Veranstaltungen",
             link: "events",
             icon: "mdi-calendar",
             interfaceName: "events",
+            context: "tenant",
           },
         ],
       },
@@ -329,7 +337,10 @@ export default {
               if (page.showAlways) {
                 return true;
               }
-              return this.isAuthorized(page.interfaceName);
+              return (
+                this.isAuthorized(page.interfaceName) &&
+                (page.context !== "tenant" || this.getCurrentTenant)
+              );
             }),
           };
         })

@@ -810,9 +810,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      tenantId: "tenants/currentTenantId",
-    }),
     openDialog: {
       get() {
         return this.open;
@@ -858,6 +855,12 @@ export default {
     },
   },
   watch: {
+    tenantId() {
+      this.fetchTenant();
+      this.initializeGiroCockpit();
+      this.initializeInvoiceApp();
+      this.initializePmPayment();
+    },
     tenant(val) {
       this.initializeGiroCockpit();
       this.initializeInvoiceApp();
