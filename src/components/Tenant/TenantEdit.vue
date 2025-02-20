@@ -915,6 +915,12 @@ export default {
     },
   },
   watch: {
+    async tenantId(val) {
+      if (val) {
+        this.tenant= {};
+        await this.fetchTenant();
+      }
+    },
     async tenant(val) {
       if (val) {
         this.initializeGiroCockpit();
