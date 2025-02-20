@@ -103,6 +103,16 @@
               </v-card-subtitle>
               <v-card-text>
                 <v-row>
+                  <v-col class="col-12 col-md-3">
+                    <v-text-field
+                      background-color="accent"
+                      filled
+                      label="E-Mail zum Empfangen von Sytem-E-Mails"
+                      v-model="instance.mailAddress"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
                   <v-col class="col-12">
                     <v-switch
                       v-model="instance.mailEnabled"
