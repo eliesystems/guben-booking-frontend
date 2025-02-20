@@ -1,20 +1,8 @@
 <template>
   <div>
-    <div class="mb-2">
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" @click="drawer = !drawer">
-            <v-icon>{{
-              drawer ? "mdi-arrow-collapse-left" : "mdi-arrow-expand-right"
-            }}</v-icon>
-          </v-btn>
-        </template>
-        <span>Backlog ein-/ausblenden</span>
-      </v-tooltip>
-    </div>
     <div class="d-flex overflow-x-auto my-scrollbar" style="width: 100%">
       <v-slide-x-transition>
-        <div v-if="drawer" class="mx-2 pa-1" style="background: #e5f5fc">
+        <div v-if="showBacklog" class="mx-2 pa-1" style="background: #e5f5fc">
           <div class="mb-4 d-flex">
             <div class="text-overline">
               Backlog {{ combinedBacklog.length }}
@@ -110,12 +98,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    showBacklog: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       workflow: {},
       backlog: [],
-      drawer: false,
       combinedWorkflow: [],
       combinedBacklog: [],
       internalLoading: true,

@@ -1,12 +1,9 @@
 <template>
-  <v-card
-    class="mb-2"
-    style="max-width: 450px"
-  >
+  <v-card class="mb-2" style="max-width: 450px">
     <v-app-bar flat color="white">
       <v-toolbar-title class="text-h6 pl-0">
-        <div v-if="element.bookingItem?.bookableItems">
-          {{ element.bookingItem.bookableItems[0]?._bookableUsed?.title }}
+        <div v-if="element.bookingItem">
+          {{ element.bookingItem.name || "Unbekannt" }}
         </div>
       </v-toolbar-title>
 
@@ -76,9 +73,17 @@
       </v-menu>
     </v-app-bar>
 
-    <v-card-text v-if="element.bookingItem">{{
-      element.bookingItem?.id
-    }}</v-card-text>
+    <v-card-text v-if="element.bookingItem">
+      <v-row no-gutters>
+        <v-col>
+          {{ element.bookingItem.bookableItems[0]?._bookableUsed?.title }}
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col> Buchungsnummer: {{ element.bookingItem?.id }} </v-col>
+      </v-row>
+    </v-card-text>
+
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-rating
@@ -99,8 +104,7 @@
             : 'success'
         "
         :value="durationInStatus(element.added)"
-      ></v-rating
-    >
+      ></v-rating>
     </v-card-actions>
   </v-card>
 </template>
@@ -112,10 +116,10 @@ export default {
     element: Object,
     backlog: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  methods:{
+  methods: {
     durationInStatus(dateAdded) {
       const now = Date.now();
       const diff = now - dateAdded;
@@ -151,7 +155,7 @@ export default {
     moveTask(event, status) {
       this.$emit("move-task", event, status);
     },
-  }
+  },
 };
 </script>
 

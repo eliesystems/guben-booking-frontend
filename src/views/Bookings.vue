@@ -2,33 +2,42 @@
   <AdminLayout>
     <v-row gutters align="stretch" class="mb-16">
       <v-col cols="12" class="mx-xs-auto d-flex flex-column" height="100%">
-        <v-btn-toggle v-model="currentView" mandatory rounded class="mb-4">
-          <v-btn
-            value="list"
-            :color="currentView === 'list' ? 'secondary' : ''"
-            :class="currentView === 'list' ? 'active-button' : ''"
+        <div class="d-flex align-center mb-3 justify-space-between">
+          <v-btn-toggle
+            v-model="currentView"
+            mandatory
+            rounded
+            active-class="active-button"
           >
-            <v-icon left> mdi-list-box-outline </v-icon>
-            Liste</v-btn
-          >
-          <v-btn
-            value="calendar"
-            :color="currentView === 'calendar' ? 'secondary' : ''"
-            :class="currentView === 'calendar' ? 'active-button' : ''"
-          >
-            <v-icon left> mdi-calendar-blank-outline </v-icon>
-            Kalender</v-btn
-          >
-          <v-btn
-            v-if="workflow.active"
-            value="kanban"
-            :color="currentView === 'kanban' ? 'secondary' : ''"
-            :class="currentView === 'kanban' ? 'active-button' : ''"
-          >
-            <v-icon left> mdi-table-column </v-icon>
-            Kanban
-          </v-btn>
-        </v-btn-toggle>
+            <v-btn value="list">
+              <v-icon left> mdi-list-box-outline </v-icon>
+              Liste
+            </v-btn>
+            <v-btn value="calendar">
+              <v-icon left> mdi-calendar-blank-outline </v-icon>
+              Kalender
+            </v-btn>
+            <v-btn v-if="workflow.active" value="kanban">
+              <v-icon left> mdi-table-column </v-icon>
+              Kanban
+            </v-btn>
+          </v-btn-toggle>
+
+          <v-tooltip v-if="currentView === 'kanban'" bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-on="on"
+                fab
+                small
+                class="ml-2 elevation-0 active-button"
+                @click="showBacklog = !showBacklog"
+              >
+                <v-icon>mdi-tray-full</v-icon>
+              </v-btn>
+            </template>
+            <span>Backlog ein-/ausblenden</span>
+          </v-tooltip>
+        </div>
 
         <v-text-field
           v-model="searchTerm"
@@ -71,6 +80,7 @@
           <BookingKanban
             :bookings="filteredBookings"
             :loading="loading"
+            :show-backlog="showBacklog"
             @open-booking="onOpenBooking"
             @open-edit-booking="onOpenEditBooking"
             @commit-booking="commitBooking"
@@ -147,6 +157,7 @@ export default {
   },
   data() {
     return {
+      showBacklog: false,
       fuse: null,
       value: "",
       searchTerm: "",
@@ -460,7 +471,7 @@ export default {
     },
     async fetchWorkflow() {
       this.workflow = await ApiWorkflowService.getWorkflowStates();
-    }
+    },
   },
   created() {
     this.fetchBookings();
@@ -474,7 +485,8 @@ export default {
 .search-field {
   border-radius: 15px;
 }
-.active-button {
+::v-deep .active-button {
   color: black !important;
+  background-color: var(--v-secondary-base) !important;
 }
 </style>
