@@ -5,7 +5,7 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <h2 class="mb-4">
-        Buchungsobjekt {{ this.mode == "create" ? "erstellen" : "bearbeiten" }}
+        Buchungsobjekt {{ this.mode === "create" ? "erstellen" : "bearbeiten" }}
       </h2>
     </div>
     <v-row>
@@ -1006,6 +1006,7 @@ export default {
       isLoading: "loading/isLoading",
       attachments: "bookables/attachments",
       bookableForm: "bookables/form",
+      currentTenantId: "tenants/currentTenantId",
     }),
     id: {
       get() {
@@ -1018,7 +1019,7 @@ export default {
     tenantId: {
       get() {
         if (this.mode === "create") {
-          return this.$store.state.tenants.data.id;
+          return this.currentTenantId;
         } else {
           return this.$store.state.bookables.form.tenantId;
         }
