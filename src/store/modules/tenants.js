@@ -15,7 +15,11 @@ const mutations = {
   },
   DELETE(state) {
     state.data = null;
+    state.tenants = null;
+    state.currentTenantId = null;
     PersistenceService.removeFromLocalStorage("tenant");
+    PersistenceService.removeFromLocalStorage("tenants");
+    PersistenceService.removeFromLocalStorage("currentTenantId");
   },
   SET_TENANTS(state, tenants) {
     state.tenants = tenants;
@@ -49,6 +53,9 @@ const actions = {
   replace({ commit }, tenant) {
     commit("REPLACE", tenant);
   },
+  reset({ commit }) {
+    commit("DELETE");
+  }
 };
 
 const getters = {

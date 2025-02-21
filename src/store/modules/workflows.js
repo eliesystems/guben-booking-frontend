@@ -23,6 +23,9 @@ const actions = {
   delete({ commit }) {
     commit("DELETE");
   },
+  reset({ commit }) {
+    commit("DELETE");
+  }
 }
 
 const getters = {

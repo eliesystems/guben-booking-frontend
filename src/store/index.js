@@ -21,4 +21,14 @@ export default new Vuex.Store({
     loading,
     instance
   },
+  actions: {
+    reset({ dispatch }) {
+      dispatch("user/reset");
+      dispatch("tenants/reset");
+      dispatch("toasts/reset");
+      dispatch("events/reset");
+      dispatch("bookables/reset");
+      dispatch("loading/reset");
+    }
+  }
 });

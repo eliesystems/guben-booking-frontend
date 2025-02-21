@@ -132,6 +132,9 @@ const actions = {
   },
   removeScheduleFromDay({ commit }, payload) {
     commit("REMOVE_SCHEDULE_FROM_DAY", payload);
+  },
+  reset({ commit }) {
+    commit("CLEAR");
   }
 };
 

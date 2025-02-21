@@ -124,6 +124,9 @@ const actions = {
   clearForm({ commit }) {
     commit("CLEAR");
   },
+  reset({ commit }) {
+    commit("CLEAR");
+  }
 };
 
 const getters = {

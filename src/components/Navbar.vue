@@ -294,10 +294,14 @@ export default {
       deleteUser: "user/delete",
       selectTenant: "tenants/select",
     }),
+    resetStores() {
+      this.$store.dispatch('reset');
+    },
     logout() {
       ApiAuthService.logout()
         .then(() => {
           this.addToast(ToastService.createToast("logout.success", "success"));
+          this.resetStores();
           this.$router.push({ name: "login" });
         })
         .finally(() => {
