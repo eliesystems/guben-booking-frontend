@@ -38,6 +38,13 @@
                 readonly
               ></v-checkbox>
             </template>
+            <template v-slot:item.isSuspended="{ item }">
+              <v-checkbox
+                v-model="item.isSuspended"
+                color="primary"
+                readonly
+              ></v-checkbox>
+            </template>
             <template v-slot:item.roles="{ item }">
               <v-chip
                 v-for="(role, index) in item.roles"
@@ -51,11 +58,11 @@
             </template>
             <template v-slot:item.created="{ item }">
               <span>{{
-                  Intl.DateTimeFormat("de-DE", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  }).format(new Date(item.created))
-                }}</span>
+                Intl.DateTimeFormat("de-DE", {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                }).format(new Date(item.created))
+              }}</span>
             </template>
             <template v-slot:item.controls="{ item }">
               <span v-if="item.id !== 'super-admin'">
@@ -137,6 +144,7 @@ export default {
         { text: "Nachname", value: "lastName" },
         { text: "E-Mail Adresse", value: "id" },
         { text: "Verifiziert", value: "isVerified" },
+        { text: "Suspendiert", value: "isSuspended" },
         { text: "Beigetreten", value: "created" },
         { text: "", value: "controls", sortable: false },
       ],

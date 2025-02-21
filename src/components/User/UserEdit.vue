@@ -105,6 +105,13 @@
                   color="primary"
                 ></v-checkbox>
               </v-col>
+              <v-col>
+                <v-checkbox
+                  label="Suspendiert"
+                  v-model="selectedUser.isSuspended"
+                  color="primary"
+                ></v-checkbox>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
