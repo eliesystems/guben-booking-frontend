@@ -123,8 +123,15 @@
       </v-row>
       <h3 class="mt-10">E-Mail-Konfiguration</h3>
       <v-divider class="mb-5"></v-divider>
+      <v-switch
+        v-model="tenant.useInstanceMail"
+        color="primary"
+        label="Instanz E-Mail-Konfiguration verwenden"
+        class="mt-2"
+      ></v-switch>
       <MailKonfiguration
         :mail-config="tenantMailConfig"
+        :show-validation="!tenant.useInstanceMail"
         @update="updateMailConfig"
       />
 
@@ -917,7 +924,7 @@ export default {
   watch: {
     async tenantId(val) {
       if (val) {
-        this.tenant= {};
+        this.tenant = {};
         await this.fetchTenant();
       }
     },
