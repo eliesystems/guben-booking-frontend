@@ -426,7 +426,7 @@ const routes = [
     },
   },
   {
-    path: "/willkommen/:tenantId",
+    path: "/willkommen",
     name: "welcome",
     component: lazyLoad("Auth/Welcome"),
     meta: {
