@@ -379,7 +379,7 @@ export default {
 
     async fetchLeadBookable() {
       try {
-        const response = await ApiBookablesService.getBookable(
+        const response = await ApiBookablesService.getPublicBookable(
           this.leadItem.bookableId,
           this.tenant
         );
@@ -401,7 +401,7 @@ export default {
     async fetchSubsequentBookables() {
       try {
         for (const bookableItem of this.subsequentItems) {
-          const { data } = await ApiBookablesService.getBookable(
+          const { data } = await ApiBookablesService.getPublicBookable(
             bookableItem.bookableId,
             this.tenant
           );
@@ -455,7 +455,7 @@ export default {
     },
 
     async addSubsequentItem(item) {
-      const { data } = await ApiBookablesService.getBookable(
+      const { data } = await ApiBookablesService.getPublicBookable(
         item.bookableId,
         this.tenant
       );

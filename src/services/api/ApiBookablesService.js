@@ -6,9 +6,21 @@ export default {
       withCredentials: true,
     });
   },
+  getPublicBookables(tenant, populate) {
+    const t = tenant || store.getters["tenants/currentTenantId"];
+    return ApiClient.get(`api/${t}/public/bookables?populate=${populate}`, {
+      withCredentials: true,
+    });
+  },
   getBookable(id, tenant, populate) {
     const t = tenant || store.getters["tenants/currentTenantId"];
     return ApiClient.get(`api/${t}/bookables/${id}?populate=${populate}`, {
+      withCredentials: true,
+    });
+  },
+  getPublicBookable(id, tenant, populate) {
+    const t = tenant || store.getters["tenants/currentTenantId"];
+    return ApiClient.get(`api/${t}/bookables/public/${id}?populate=${populate}`, {
       withCredentials: true,
     });
   },
