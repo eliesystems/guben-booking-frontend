@@ -98,6 +98,9 @@
             selectedEvent.name
           }}</v-list-item-title>
           <v-list-item-subtitle class="ml-2 mb-2"
+            ><strong>{{ selectedEvent.user }}</strong>
+          </v-list-item-subtitle>
+          <v-list-item-subtitle class="ml-2 mb-2"
             >Buchungsnummer: <strong>{{ selectedEvent.id }}</strong>
           </v-list-item-subtitle>
           <v-list-item
@@ -201,6 +204,7 @@ export default {
               !booking.isRejected && booking.timeBegin && booking.timeEnd
           )
           .map((booking) => {
+            console.log(booking);
             const start = Date.parse(booking.timeBegin) || booking.timeBegin;
             const end = Date.parse(booking.timeEnd) || booking.timeEnd;
             return {
@@ -210,6 +214,7 @@ export default {
               end: end,
               color: booking.isCommitted ? booking.color : "grey",
               timed: true,
+              user: booking.name,
             };
           }) || []
       );
@@ -246,7 +251,7 @@ export default {
       nativeEvent.stopPropagation();
     },
     getEventName(event) {
-      return `${event.input?.name} (${event.input?.id})`;
+      return `<span>${event.input?.user}</span><br><span>${event.input?.name}</span>`;
     },
     onOpenBooking(bookingId) {
       this.$emit("open-booking", bookingId);
