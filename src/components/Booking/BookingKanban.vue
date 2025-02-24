@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex overflow-x-auto my-scrollbar" style="width: 100%">
       <v-slide-x-transition>
-        <div v-if="showBacklog" class="mx-2 pa-1" style="background: #e5f5fc">
+        <div v-if="showBacklog" class="mx-2 pa-1 task-panel elevation-2">
           <div class="mb-4 d-flex">
             <div class="text-overline">
               Backlog {{ combinedBacklog.length }}
@@ -16,7 +16,7 @@
             ></v-progress-circular>
           </div>
           <draggable
-            style="height: 100%; max-height: 940px; overflow-y: auto"
+            style="height: 100%; max-height: 940px; overflow-y: auto;"
             :list="combinedBacklog"
             group="bookings"
             @change="moveTask($event, 'backlog')"
@@ -40,9 +40,8 @@
       </v-slide-x-transition>
       <div
         v-for="(status, id) in combinedWorkflow"
-        class="mx-2 pa-1"
+        class="mx-2 pa-1 task-panel elevation-1"
         :key="id"
-        style="background: #e5f5fc"
       >
         <div class="mb-4 d-flex">
           <div class="text-overline">
@@ -236,7 +235,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .my-scrollbar {
   &::-webkit-scrollbar {
     width: 8px;
@@ -250,4 +249,9 @@ export default {
     border-radius: 10px;
   }
 }
+
+.task-panel {
+  background-color: var(--v-accent-base) !important;
+}
+
 </style>

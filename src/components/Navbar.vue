@@ -92,7 +92,8 @@
             :items="tenants"
             item-text="name"
             item-value="id"
-            class="subtitle-1 font-weight-medium mt-2 text-truncate"
+            hide-details
+            class=" my-2 text-truncate"
           >
             <template v-slot:prepend-item>
               <v-list-item class="my-2"> Mandant auswählen: </v-list-item>

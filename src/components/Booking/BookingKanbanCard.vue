@@ -1,6 +1,6 @@
 <template>
   <v-card class="mb-2" style="max-width: 450px">
-    <v-app-bar flat color="white">
+    <v-app-bar flat>
       <v-toolbar-title class="text-h6 pl-0">
         <div v-if="element.bookingItem">
           {{ element.bookingItem.name || "Unbekannt" }}
