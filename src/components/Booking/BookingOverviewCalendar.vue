@@ -204,7 +204,6 @@ export default {
               !booking.isRejected && booking.timeBegin && booking.timeEnd
           )
           .map((booking) => {
-            console.log(booking);
             const start = Date.parse(booking.timeBegin) || booking.timeBegin;
             const end = Date.parse(booking.timeEnd) || booking.timeEnd;
             return {

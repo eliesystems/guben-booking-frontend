@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex overflow-x-auto my-scrollbar" style="width: 100%">
       <v-slide-x-transition>
-        <div v-if="showBacklog" class="mx-2 pa-1 task-panel elevation-2">
+        <div v-if="showBacklog" class="mx-2 pa-1 task-panel">
           <div class="mb-4 d-flex">
             <div class="text-overline">
               Backlog {{ combinedBacklog.length }}
@@ -40,7 +40,7 @@
       </v-slide-x-transition>
       <div
         v-for="(status, id) in combinedWorkflow"
-        class="mx-2 pa-1 task-panel elevation-1"
+        class="mx-2 pa-1 task-panel"
         :key="id"
       >
         <div class="mb-4 d-flex">
@@ -252,6 +252,7 @@ export default {
 
 .task-panel {
   background-color: var(--v-accent-base) !important;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 </style>
