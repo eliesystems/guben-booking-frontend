@@ -1,5 +1,4 @@
 import user from "@/store/modules/user";
-import store from "@/store";
 
 class UserPermissionService {
   static isSelf(userObject) {
@@ -10,11 +9,11 @@ class UserPermissionService {
     return true;
   }
 
-  static allowUpdate(userObject) {
+  static allowUpdate() {
     return true;
   }
 
-  static allowDelete(userObject) {
+  static allowDelete() {
     return true;
   }
 }

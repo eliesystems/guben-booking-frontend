@@ -1,6 +1,6 @@
 export default {
   async getUsers() {
-    const response = await ApiClient.get(`api/users`, {
+    const response = await ApiClient.get("api/users", {
       withCredentials: true,
     });
     return response.data;
@@ -27,6 +27,6 @@ export default {
     return ApiClient.delete(`api/users/${user.id}`, { withCredentials: true });
   },
   updateMe(user) {
-    return ApiClient.put(`api/user`, user, { withCredentials: true });
+    return ApiClient.put("api/user", user, { withCredentials: true });
   },
 };
