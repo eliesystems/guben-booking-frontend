@@ -388,7 +388,7 @@ export default {
         street: null,
         timeBegin: Date.now(),
         timeCreated: Date.now(),
-        timeEnd: null,
+        timeEnd: Date.now(),
         vatIncludedEur: null,
         zipCode: null,
       };

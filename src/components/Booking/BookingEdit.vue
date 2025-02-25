@@ -39,7 +39,10 @@
               <v-row>
                 <v-col v-if="selectedBooking._populated && workflow.active">
                   <v-select
-                    :items="[...workflow.states, {name: 'Archive', id: 'archive'}]"
+                    :items="[
+                      ...workflow.states,
+                      { name: 'Archive', id: 'archive' },
+                    ]"
                     v-model="selectedBooking._populated.workflowStatus"
                     label="Workflow Status"
                     item-text="name"
@@ -75,17 +78,6 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col class="col-3">
-                  <v-text-field
-                    background-color="accent"
-                    filled
-                    hide-details
-                    label="Preis"
-                    v-model.number="selectedBooking.priceEur"
-                    prefix="€"
-                    type="number"
-                  ></v-text-field>
-                </v-col>
                 <v-col>
                   <v-select
                     :items="activePaymentApps"
@@ -167,11 +159,7 @@
                             prefix="€"
                             background-color="accent"
                             hide-details
-                            :label="
-                              isTimeRelated(bookableItem._bookableUsed)
-                                ? 'Preis pro Stunde'
-                                : 'Preis pro Stück'
-                            "
+                            :label="isTimeRelated(bookableItem._bookableUsed)"
                             type="number"
                           ></v-text-field>
                         </v-col>
@@ -905,11 +893,16 @@ export default {
       }
     },
     isTimeRelated(bookable) {
-      return (
-        bookable.isScheduleRelated ||
-        bookable.isTimePeriodRelated ||
-        bookable.isLongRange
-      );
+      switch (bookable.priceCategory) {
+      case "per-item":
+        return "pro Stück";
+      case "per-hour":
+        return "pro Stunde";
+      case "per-day":
+        return "pro Tag";
+      default:
+        return "pro Stück";
+      }
     },
   },
   mounted() {
