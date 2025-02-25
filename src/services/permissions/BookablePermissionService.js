@@ -8,7 +8,12 @@ class BookablePermissionService {
     );
   }
 
+  static isInstanceOwner() {
+    return user.state.data.permissions.instanceOwner
+  }
+
   static allowCreate() {
+    if (BookablePermissionService.isInstanceOwner()) return true;
     const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
@@ -20,6 +25,7 @@ class BookablePermissionService {
   }
 
   static allowUpdate(bookable) {
+    if (BookablePermissionService.isInstanceOwner()) return true;
     const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
@@ -35,6 +41,7 @@ class BookablePermissionService {
   }
 
   static allowDelete(bookable) {
+    if (BookablePermissionService.isInstanceOwner()) return true;
     const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId

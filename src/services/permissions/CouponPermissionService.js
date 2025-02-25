@@ -6,7 +6,12 @@ class CouponPermissionService {
     return coupon.ownerUserId === user.state.data.user.id;
   }
 
+  static isInstanceOwner() {
+    return user.state.data.permissions.instanceOwner
+  }
+
   static allowCreate() {
+    if (CouponPermissionService.isInstanceOwner()) return true;
     const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
@@ -18,6 +23,7 @@ class CouponPermissionService {
   }
 
   static allowUpdate(coupon) {
+    if (CouponPermissionService.isInstanceOwner()) return true;
     const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
@@ -33,6 +39,7 @@ class CouponPermissionService {
   }
 
   static allowDelete(coupon) {
+    if (CouponPermissionService.isInstanceOwner()) return true;
     const tenantId = store.getters["tenants/currentTenantId"];
     const permissions = user.state.data.permissions.tenants.find(
       (p) => p.tenantId === tenantId
