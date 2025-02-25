@@ -720,9 +720,23 @@
                     ></v-switch>
                   </v-col>
                 </v-row>
+                <v-row v-if="workflow.states" no-gutters class="mt-4">
+                  <v-col cols="2">
+                    <span class="text-caption"> Status für neue Buchungen</span>
+                  </v-col>
+                </v-row>
 
                 <div v-for="(status, idx) in workflow.states" :key="status.id">
                   <v-row>
+                    <v-col cols="2">
+                      <v-checkbox
+                        v-model="workflow.defaultState"
+                        :value="workflow.states[idx].id"
+                        color="primary"
+                        :label="idx === 0 ? '' : ''"
+                        class="mt-2"
+                      ></v-checkbox>
+                    </v-col>
                     <v-col class="col-2 d-flex align-center justify-center">
                       <v-btn
                         v-if="idx !== 0"
@@ -753,6 +767,8 @@
                         label="Statusname"
                         v-model="workflow.states[idx].name"
                       ></v-text-field>
+                    </v-col>
+                    <v-col class="d-flex justify-center">
                       <v-text-field
                         class="mx-1"
                         background-color="accent"
@@ -763,7 +779,6 @@
                         v-model="workflow.states[idx].actions[0].sendTo"
                       ></v-text-field>
                     </v-col>
-
                     <v-col class="col-auto d-flex align-center justify-center">
                       <v-btn
                         color="error"
@@ -873,6 +888,7 @@ export default {
       },
       workflow: {
         active: false,
+        defaultState: "",
         states: [],
       },
       tenant: {},
@@ -973,12 +989,12 @@ export default {
         try {
           await ApiTenantService.submitTenant(this.tenant);
           if (this.workflow.id) {
-            await ApiWorkflowService.updateWorkflow(
+            this.workflow = await ApiWorkflowService.updateWorkflow(
               this.workflow,
               this.tenant.id
             );
           } else {
-            await ApiWorkflowService.createWorkflow(
+            this.workflow = await ApiWorkflowService.createWorkflow(
               this.workflow,
               this.tenant.id
             );
@@ -1093,16 +1109,20 @@ export default {
     },
 
     async fetchWorkflow() {
-      this.workflow = (await ApiWorkflowService.getWorkflow(
-        this.tenant.id
-      )) || {
-        active: false,
-        states: [],
-        archive: [],
-        description: "",
-        name: "",
-        tenantId: this.tenant.id,
-      };
+      const data = await ApiWorkflowService.getWorkflow(this.tenant.id);
+      if (data.id) {
+        this.workflow = data;
+      } else {
+        this.workflow = {
+          active: false,
+          states: [],
+          archive: [],
+          description: "",
+          name: "",
+          defaultState: "",
+          tenantId: this.tenant.id,
+        };
+      }
     },
 
     addStatus() {
