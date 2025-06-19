@@ -62,8 +62,7 @@ const getters = {
   tenants: (state) => state.tenants,
   currentTenantId: (state) => state.currentTenantId,
   currentTenant: (state) => {
-    if (!state.data) return null;
-    return state.tenants.find((t) => t.id === state.currentTenantId);
+    return state.tenants?.find((t) => t.id === state.currentTenantId);
   },
 };
 
