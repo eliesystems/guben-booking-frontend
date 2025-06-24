@@ -94,8 +94,9 @@
             hide-details
             dense
             filled
-            label="Telefon"
+            label="Telefon*"
             v-model="contactDetails.phone"
+            :rules="validationRules.required"
           ></v-text-field>
         </v-col>
       </v-row>
