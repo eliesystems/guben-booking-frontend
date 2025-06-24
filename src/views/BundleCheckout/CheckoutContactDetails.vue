@@ -94,8 +94,9 @@
             hide-details
             dense
             filled
-            label="Telefon"
+            label="Telefon*"
             v-model="contactDetails.phone"
+            :rules="validationRules.required"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -175,6 +176,7 @@
         <LoginCard
           :tenant="tenant"
           @success="onSuccess"
+          :sso-active="ssoActive"
           style="width: 520px; max-width: 100vw"
         ></LoginCard>
       </div>
@@ -241,13 +243,12 @@ export default {
     back() {
       this.$emit("back");
     },
-
     goToLogin() {
       this.showLogin = true;
     },
     async signOut(showLogin) {
       try {
-        await ApiAuthService.logout(this.me?.tenant);
+        await ApiAuthService.logout();
         await this.deleteUser();
         if (showLogin) {
           this.showLogin = true;
@@ -261,8 +262,14 @@ export default {
   computed: {
     ...mapGetters({
       tenant: "tenants/currentTenant",
-      user: "user/user",
+      instance: "instance/instance",
+      user: "user/getUser",
     }),
+    ssoActive() {
+      return !!this.instance?.applications.find(
+        (app) => app?.id === "keycloak" && app.active
+      );
+    },
     isNextButtonDisabled() {
       return !this.valid || (this.isRestrictedBookable && !this.user);
     },
