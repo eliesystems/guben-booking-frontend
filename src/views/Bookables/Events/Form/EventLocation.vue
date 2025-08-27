@@ -126,24 +126,38 @@
               <h4 data-v-eca9f636="" class="title">Adresse</h4>
             </v-col>
             <v-col cols="12" md="8">
-              <v-text-field
-                v-model="street"
-                background-color="accent"
-                filled
-                label="Straße"
-                required
-                type="text"
-              ></v-text-field>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Straße*"
+                rules="required"
+              >
+                <v-text-field
+                  v-model="street"
+                  background-color="accent"
+                  :error-messages="errors"
+                  filled
+                  label="Straße*"
+                  required
+                  type="text"
+                ></v-text-field>
+              </validation-provider>
             </v-col>
             <v-col cols="12" md="4">
-              <v-text-field
-                v-model="houseNumber"
-                background-color="accent"
-                filled
-                label="Hausnummer"
-                required
-                type="text"
-              ></v-text-field>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Hausnummer*"
+                rules="required"
+              >
+                <v-text-field
+                  v-model="houseNumber"
+                  background-color="accent"
+                  :error-messages="errors"
+                  filled
+                  label="Hausnummer*"
+                  required
+                  type="text"
+                ></v-text-field>
+              </validation-provider>
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -156,24 +170,38 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="4">
-              <v-text-field
-                v-model="zip"
-                background-color="accent"
-                filled
-                label="Postleitzahl"
-                required
-                type="number"
-              ></v-text-field>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Postleitzahl*"
+                rules="required"
+              >
+                <v-text-field
+                  v-model="zip"
+                  background-color="accent"
+                  :error-messages="errors"
+                  filled
+                  label="Postleitzahl*"
+                  required
+                  type="number"
+                ></v-text-field>
+              </validation-provider>
             </v-col>
             <v-col cols="12" md="8">
-              <v-text-field
-                v-model="city"
-                background-color="accent"
-                filled
-                label="Stadt"
-                required
-                type="text"
-              ></v-text-field>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Stadt*"
+                rules="required"
+              >
+                <v-text-field
+                  v-model="city"
+                  background-color="accent"
+                  :error-messages="errors"
+                  filled
+                  label="Stadt*"
+                  required
+                  type="text"
+                ></v-text-field>
+              </validation-provider>
             </v-col>
             <v-col class="col-12 text-subtitle-2">*Pflichtfelder</v-col>
           </v-row>
