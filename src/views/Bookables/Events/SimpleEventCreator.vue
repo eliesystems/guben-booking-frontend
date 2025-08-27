@@ -491,9 +491,10 @@ export default {
             v-model="street"
             background-color="accent"
             filled
-            label="Straße"
+            label="Straße*"
             required
             type="text"
+            :rules="[rules.required]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
@@ -501,9 +502,10 @@ export default {
             v-model="houseNumber"
             background-color="accent"
             filled
-            label="Hausnummer"
+            label="Hausnummer*"
             required
             type="text"
+            :rules="[rules.required]"
           ></v-text-field>
         </v-col>
         <v-col cols="12">
@@ -521,9 +523,10 @@ export default {
             v-model="zip"
             background-color="accent"
             filled
-            label="Postleitzahl"
+            label="Postleitzahl*"
             required
             type="number"
+            :rules="[rules.required]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="8">
@@ -531,9 +534,10 @@ export default {
             v-model="city"
             background-color="accent"
             filled
-            label="Stadt"
+            label="Stadt*"
             required
             type="text"
+            :rules="[rules.required]"
           ></v-text-field>
         </v-col>
       </v-row>
