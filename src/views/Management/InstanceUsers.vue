@@ -144,7 +144,7 @@ export default {
         { text: "Nachname", value: "lastName" },
         { text: "E-Mail Adresse", value: "id" },
         { text: "Verifiziert", value: "isVerified" },
-        { text: "Suspendiert", value: "isSuspended" },
+        { text: "Gesperrt", value: "isSuspended" },
         { text: "Beigetreten", value: "created" },
         { text: "", value: "controls", sortable: false },
       ],
