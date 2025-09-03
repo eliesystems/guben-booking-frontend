@@ -19,7 +19,7 @@
           small
           @click="submit"
         >
-          Zur Zusammenfassung
+          Weiter
           <v-icon right small>mdi-arrow-right</v-icon>
         </v-btn>
       </div>
@@ -94,9 +94,8 @@
             hide-details
             dense
             filled
-            label="Telefon*"
+            label="Telefon"
             v-model="contactDetails.phone"
-            :rules="validationRules.required"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -229,6 +228,13 @@ export default {
     }),
     onSuccess() {
       this.showLogin = false;
+      this.contactDetails.name = this.user.firstName + " " + this.user.lastName;
+      this.contactDetails.mail = this.user.id;
+      this.contactDetails.company = this.user.company;
+      this.contactDetails.phone = this.user.phone;
+      this.contactDetails.street = this.user.address;
+      this.contactDetails.zipCode = this.user.zipCode;
+      this.contactDetails.location = this.user.city;
     },
     submit() {
       if (

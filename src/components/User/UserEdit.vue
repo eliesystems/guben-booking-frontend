@@ -107,7 +107,7 @@
               </v-col>
               <v-col>
                 <v-checkbox
-                  label="Suspendiert"
+                  label="Gesperrt"
                   v-model="selectedUser.isSuspended"
                   color="primary"
                 ></v-checkbox>

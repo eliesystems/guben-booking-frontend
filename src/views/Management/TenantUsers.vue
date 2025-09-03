@@ -33,6 +33,14 @@
             </v-col>
           </v-row>
         </v-form>
+        <v-text-field
+          v-model="search"
+          label="Benutzer suchen..."
+          append-icon="mdi-magnify"
+          solo
+          clearable
+          class="search-field"
+        ></v-text-field>
 
         <v-data-table
           :headers="headers"
@@ -43,6 +51,7 @@
           }"
           class="accent elevation-1"
           fixed-header
+          :search="search"
           :loading="loading"
           loading-text="Daten werden geladen..."
         >
@@ -142,6 +151,7 @@ export default {
           (v) => /.+@.+\..+/.test(v) || "E-Mail muss gültig sein",
         ],
       },
+      search : "",
       showEditRolesDialog: false,
       selectedUser: null,
       isLoading: false,
