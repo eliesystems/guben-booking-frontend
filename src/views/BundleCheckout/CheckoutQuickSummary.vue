@@ -520,6 +520,13 @@ export default {
       }
 
       switch (finalBooking.paymentProvider) {
+        case "epaybl": {
+          const paymentUrl = paymentResponse.data?.paymentData[0]?.url;
+          if (paymentUrl) {
+            window.location.href = paymentUrl;
+          }
+          break;
+        }
         case "giroCockpit": {
           const paymentUrl = paymentResponse.data?.paymentData[0]?.url;
           if (paymentUrl) {

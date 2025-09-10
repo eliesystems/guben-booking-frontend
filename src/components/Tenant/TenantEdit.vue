@@ -200,7 +200,84 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-expansion-panels flat multiple v-if="apps.giroCockpit">
+          <v-expansion-panels flat multiple v-if="apps.ePayBL">
+            <v-expansion-panel>
+              <v-expansion-panel-header
+                color="accent"
+                expand-icon="mdi-menu-down"
+                class="panel-header"
+              >
+                <template v-slot:default="{ open }">
+                  <v-row no-gutters align="center">
+                    <v-col cols="4">
+                      <span class="text-subtitle-1">ePayBL</span>
+                    </v-col>
+                    <v-col class="col-2">
+                      <v-fade-transition leave-absolute>
+                        <div v-if="!open">
+                          <v-icon
+                            v-if="apps.ePayBL?.active"
+                            color="success">
+                            mdi-check
+                          </v-icon>
+                          <span v-if="apps.ePayBL?.active" class="ml-2">Aktiv</span>
+                          <v-icon
+                            v-if="apps.ePayBL?.active === false"
+                            color="error">
+                            mdi-close
+                          </v-icon>
+                          <span v-if="apps.ePayBL?.active === false" class="ml-2">Inaktiv</span>
+                        </div>
+                      </v-fade-transition>
+                    </v-col>
+                  </v-row>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content class="mt-3">
+                <v-row>
+                  <v-col class="col-12">
+                    <v-switch
+                      v-model="apps.ePayBL.active"
+                      color="primary"
+                      hide-details
+                      label="ePayBL als Zahlungsdienstleister aktivieren"
+                      class="mt-2">
+                    </v-switch>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      background-color="accent"
+                      filled
+                      label="Mandantennummer"
+                      v-model="apps.ePayBL.paymentMerchantId">
+                    </v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      background-color="accent"
+                      filled
+                      label="Bewirtschafternummer"
+                      v-model="apps.ePayBL.paymentProjectId">
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      background-color="accent"
+                      filled
+                      prefix="[Buchungsnummer] - "
+                      :rules="validationRules.paymentPurposeSuffix"
+                      v-model="apps.ePayBL.paymentPurposeSuffix"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <v-expansion-panels flat multiple class="mt-8" v-if="apps.giroCockpit">
             <v-expansion-panel>
               <v-expansion-panel-header
                 color="accent"
@@ -930,6 +1007,15 @@ export default {
         ],
       },
       defaultApps: {
+        ePayBL: {
+          type: "payment",
+          id: "ePayBL",
+          title: "ePayBL",
+          paymentMerchantId: "",
+          paymentProjectId: "",
+          paymentPurposeSuffix: "",
+          active: false,
+        },
         giroCockpit: {
           type: "payment",
           id: "giroCockpit",
