@@ -213,6 +213,83 @@
                         <template v-slot:default="{ open }">
                           <v-row no-gutters align="center">
                             <v-col cols="4">
+                              <span class="text-subtitle-1">ePayBL</span>
+                            </v-col>
+                            <v-col class="col-2">
+                              <v-fade-transition leave-absolute>
+                                <div v-if="!open">
+                                  <v-icon
+                                    v-if="ePayBLApp?.active"
+                                    color="success">
+                                    mdi-check
+                                  </v-icon>
+                                  <span v-if="ePayBLApp?.active" class="ml-2">Aktiv</span>
+                                  <v-icon
+                                    v-if="ePayBLApp?.active === false"
+                                    color="error">
+                                    mdi-close
+                                  </v-icon>
+                                  <span v-if="ePayBLApp?.active === false" class="ml-2">Inaktiv</span>
+                                </div>
+                              </v-fade-transition>
+                            </v-col>
+                          </v-row>
+                        </template>
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content class="mt-3">
+                        <v-row>
+                          <v-col class="col-12">
+                            <v-switch
+                              v-model="ePayBLApp.active"
+                              color="primary"
+                              hide-details
+                              label="ePayBL als Zahlungsdienstleister aktivieren"
+                              class="mt-2">
+                            </v-switch>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              label="Mandantennummer"
+                              v-model="ePayBLApp.paymentMerchantId">
+                            </v-text-field>
+                          </v-col>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              label="Bewirtschafternummer"
+                              v-model="ePayBLApp.paymentProjectId">
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col>
+                            <v-text-field
+                              background-color="accent"
+                              filled
+                              prefix="[Buchungsnummer] - "
+                              :rules="validationRules.paymentPurposeSuffix"
+                              v-model="ePayBLApp.paymentPurposeSuffix"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                  <v-expansion-panels flat multiple class="mt-8">
+                    <v-expansion-panel>
+                      <v-expansion-panel-header
+                        color="accent"
+                        expand-icon="mdi-menu-down"
+                        class="panel-header"
+                      >
+                        <template v-slot:default="{ open }">
+                          <v-row no-gutters align="center">
+                            <v-col cols="4">
                               <span class="text-subtitle-1">
                                 S-Public Services
                               </span>
@@ -783,6 +860,14 @@ export default {
             "Ungültige URL.",
         ],
       },
+      ePayBLApp: {
+        type: "payment",
+        id: "ePayBL",
+        title: "ePayBL",
+        paymentMerchantId: "",
+        paymentProjectId: "",
+        active: false,
+      },
       giroCockpitApp: {
         type: "payment",
         id: "giroCockpit",
@@ -864,11 +949,13 @@ export default {
   watch: {
     tenantId() {
       this.fetchTenant();
+      this.initializeEPayBL();
       this.initializeGiroCockpit();
       this.initializeInvoiceApp();
       this.initializePmPayment();
     },
     tenant(val) {
+      this.initializeEPayBL();
       this.initializeGiroCockpit();
       this.initializeInvoiceApp();
       this.initializePmPayment();
@@ -930,6 +1017,23 @@ export default {
         setTimeout(() => {
           this.$refs.form.resetValidation();
         }, 4000);
+      }
+    },
+    initializeEPayBL() {
+      const application = this.tenant.applications?.find(
+        (app) => app.id === "ePayBL"
+      );
+      if (application) {
+        this.ePayBLApp = application;
+      } else {
+        this.ePayBLApp = {
+          type: "payment",
+          id: "ePayBL",
+          title: "ePayBL",
+          paymentMerchantId: "",
+          paymentProjectId: "",
+          active: false,
+        };
       }
     },
     initializeGiroCockpit() {
@@ -994,12 +1098,15 @@ export default {
     replacePaymentApps() {
       const appIds = this.tenant.applications.map((app) => app.id);
       const invoiceAppExists = appIds.includes("invoice");
+      const ePayBLAppExists = appIds.includes("ePayBL");
       const giroCockpitAppExists = appIds.includes("giroCockpit");
       const pmPaymentAppExists = appIds.includes("pmPayment");
 
       this.tenant.applications = this.tenant.applications.map((app) => {
         if (app.id === "invoice") {
           return this.invoiceApp;
+        } else if (app.id === "ePayBL") {
+          return this.ePayBLApp;
         } else if (app.id === "giroCockpit") {
           return this.giroCockpitApp;
         } else if (app.id === "pmPayment") {
@@ -1013,6 +1120,10 @@ export default {
         this.tenant.applications.push(this.invoiceApp);
       }
 
+      if (!ePayBLAppExists) {
+        this.tenant.applications.psuh(this.ePayBLApp);
+      }
+
       if (!giroCockpitAppExists) {
         this.tenant.applications.push(this.giroCockpitApp);
       }
@@ -1024,6 +1135,7 @@ export default {
   },
   mounted() {
     this.fetchTenant();
+    this.initializeEPayBL();
     this.initializeGiroCockpit();
     this.initializeInvoiceApp();
     this.initializePmPayment();
